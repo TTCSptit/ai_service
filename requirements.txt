@@ -1,0 +1,11 @@
+fastapi
+uvicorn
+python-multipart
+langchain-google-genai
+chromadb
+pdfplumber==0.10.3
+python-dotenv
+pydantic
+sentence-transformers
+sqlalchemy>=2.0
+psycopg2-binary

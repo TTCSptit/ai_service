@@ -1,0 +1,556 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NextGen AI Recruiter</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+      :root {
+        --primary: #4F46E5;
+        --primary-hover: #4338CA;
+        --bg-grad-1: #c9defd;
+        --bg-grad-2: #e2c9fb;
+        --glass-bg: rgba(255, 255, 255, 0.7);
+        --glass-border: rgba(255, 255, 255, 0.5);
+        --text-main: #1F2937;
+        --text-muted: #6B7280;
+        --bot-msg-bg: #FFFFFF;
+        --user-msg-bg: linear-gradient(135deg, #6366F1, #8B5CF6);
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        font-family: 'Inter', sans-serif;
+        margin: 0;
+        height: 100vh;
+        background: linear-gradient(135deg, var(--bg-grad-1) 0%, var(--bg-grad-2) 100%);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        color: var(--text-main);
+      }
+
+      .app-container {
+        display: flex;
+        width: 100%;
+        max-width: 1400px;
+        height: 95vh;
+        gap: 20px;
+      }
+
+      /* Glassmorphism Panels */
+      .panel {
+        background: var(--glass-bg);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid var(--glass-border);
+        border-radius: 24px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
+
+      .chat-section { flex: 2; }
+      .dashboard-section { flex: 1; padding: 25px; display: flex; flex-direction: column; gap: 20px; overflow-y: auto;}
+
+      /* Header */
+      .header {
+        padding: 20px 25px;
+        border-bottom: 1px solid var(--glass-border);
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        background: rgba(255,255,255,0.4);
+      }
+      .header-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 12px;
+        background: var(--user-msg-bg);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 20px;
+      }
+      .header h2 { margin: 0; font-size: 1.2rem; font-weight: 600; }
+      .header p { margin: 2px 0 0 0; font-size: 0.85rem; color: var(--text-muted); }
+
+      /* Chat Box */
+      .chat-box {
+        flex: 1;
+        padding: 25px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        scroll-behavior: smooth;
+      }
+      
+      .chat-box::-webkit-scrollbar { width: 6px; }
+      .chat-box::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+
+      .message-wrapper {
+        display: flex;
+        width: 100%;
+        animation: fadeIn 0.3s ease-out forwards;
+      }
+      .message-wrapper.bot-wrapper { justify-content: flex-start; }
+      .message-wrapper.user-wrapper { justify-content: flex-end; }
+
+      .message {
+        max-width: 80%;
+        padding: 14px 20px;
+        border-radius: 20px;
+        font-size: 0.95rem;
+        line-height: 1.5;
+        position: relative;
+        word-wrap: break-word;
+      }
+
+      .bot-msg {
+        background: var(--bot-msg-bg);
+        color: var(--text-main);
+        border-bottom-left-radius: 4px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      }
+      
+      .user-msg {
+        background: var(--user-msg-bg);
+        color: white;
+        border-bottom-right-radius: 4px;
+        box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+      }
+
+      /* AI Generative UI / Interactive Widget Styles */
+      .gen-ui-widget {
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 15px;
+        margin-top: 10px;
+        font-family: inherit;
+        overflow: hidden;
+      }
+      .ui-roadmap-node {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px;
+        background: white;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        margin-bottom: 8px;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      .ui-roadmap-node:hover {
+        border-color: var(--primary);
+        transform: translateX(5px);
+      }
+      .ui-roadmap-node i { color: var(--primary); }
+
+      /* Input Area */
+      .input-area {
+        padding: 20px 25px;
+        background: rgba(255,255,255,0.6);
+        border-top: 1px solid var(--glass-border);
+        display: flex;
+        gap: 15px;
+        align-items: center;
+      }
+
+      .file-upload {
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 45px;
+        height: 45px;
+        background: white;
+        border-radius: 12px;
+        color: var(--primary);
+        cursor: pointer;
+        transition: all 0.2s;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+      }
+      .file-upload:hover { background: #f3f4f6; }
+      .file-upload input[type="file"] {
+        position: absolute;
+        top: 0; left: 0; opacity: 0; width: 100%; height: 100%; cursor: pointer;
+      }
+
+      .text-input-wrapper {
+        flex: 1;
+        position: relative;
+      }
+      .text-input-wrapper input {
+        width: 100%;
+        padding: 15px 20px;
+        border: 1px solid #e2e8f0;
+        border-radius: 15px;
+        font-size: 0.95rem;
+        outline: none;
+        transition: border-color 0.2s;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+      }
+      .text-input-wrapper input:focus { border-color: var(--primary); }
+
+      .send-btn {
+        width: 45px;
+        height: 45px;
+        border-radius: 12px;
+        background: var(--user-msg-bg);
+        color: white;
+        border: none;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.1rem;
+        transition: transform 0.2s, box-shadow 0.2s;
+      }
+      .send-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4); }
+
+      /* Dashboard */
+      .dash-card {
+        background: white;
+        border-radius: 16px;
+        padding: 20px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+      }
+      .dash-card h3 { margin: 0 0 15px 0; font-size: 1.1rem; color: var(--text-main); display: flex; align-items: center; gap: 8px;}
+      
+      .score-circle {
+        width: 80px; height: 80px;
+        border-radius: 50%;
+        background: conic-gradient(var(--primary) calc(var(--score) * 1%), #e2e8f0 0);
+        display: flex; align-items: center; justify-content: center;
+        margin: 0 auto 20px auto;
+        position: relative;
+      }
+      .score-circle::before {
+        content: ""; position: absolute; inset: 6px; background: white; border-radius: 50%;
+      }
+      .score-value { position: relative; font-size: 1.5rem; font-weight: 700; color: var(--primary); }
+
+      .info-row { display: flex; margin-bottom: 10px; font-size: 0.9rem; }
+      .info-label { width: 80px; color: var(--text-muted); font-weight: 500;}
+      .info-val { font-weight: 600; color: var(--text-main); }
+
+      .tags-container { display: flex; flex-wrap: wrap; gap: 8px; }
+      .tag {
+        padding: 6px 12px; background: #e0e7ff; color: #4338ca; border-radius: 20px; font-size: 0.8rem; font-weight: 500;
+        animation: scaleIn 0.3s ease-out;
+      }
+      .tag.missing { background: #fee2e2; color: #b91c1c; }
+
+      @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+      @keyframes scaleIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+      
+      .typing-indicator span {
+        display: inline-block; width: 6px; height: 6px; background: var(--text-muted); border-radius: 50%; margin: 0 2px;
+        animation: bounce 1.4s infinite ease-in-out both;
+      }
+      .typing-indicator span:nth-child(1) { animation-delay: -0.32s; }
+      .typing-indicator span:nth-child(2) { animation-delay: -0.16s; }
+      @keyframes bounce { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1); } }
+    </style>
+  </head>
+  <body>
+    <div class="app-container">
+      
+      <!-- Left: Chat Interface -->
+      <div class="panel chat-section">
+        <div class="header">
+          <div class="header-icon"><i class="fa-solid fa-robot"></i></div>
+          <div>
+            <h2>AI Recruiter & Mentor</h2>
+            <p>Hệ thống đánh giá & thiết kế lộ trình sinh động</p>
+          </div>
+        </div>
+
+        <div class="chat-box" id="chat-box">
+          <div class="message-wrapper bot-wrapper">
+            <div class="message bot-msg">
+              Chào bạn! Tôi là AI Tech Lead. Gửi cho tôi CV của bạn hoặc hỏi bất kỳ câu hỏi nào về chuyên môn nhé. 
+              <br><br><em>(Lưu ý: Hệ thống đã hỗ trợ render Generative UI components trực tiếp trong khung chat!)</em>
+            </div>
+          </div>
+        </div>
+
+        <div class="input-area">
+          <div class="file-upload" title="Đính kèm CV (PDF)">
+            <i class="fa-solid fa-paperclip"></i>
+            <input type="file" id="cv-file" accept=".pdf" onchange="updateFileStatus(this)" />
+          </div>
+          <div class="text-input-wrapper">
+            <input type="text" id="user-input" placeholder="Nhập tin nhắn..." onkeypress="handleKeyPress(event)" />
+          </div>
+          <button class="send-btn" onclick="sendMessage()"><i class="fa-solid fa-paper-plane"></i></button>
+        </div>
+      </div>
+
+      <!-- Right: Extraction Dashboard -->
+      <div class="panel dashboard-section">
+        <div class="dash-card">
+          <h3><i class="fa-solid fa-id-card"></i> Hồ sơ Ứng viên</h3>
+          <div class="score-circle" id="score-circle" style="--score: 0;">
+            <div class="score-value" id="c-score">0</div>
+          </div>
+          <div class="info-row"><div class="info-label">Tên:</div><div class="info-val" id="c-name">Chưa có</div></div>
+          <div class="info-row"><div class="info-label">Email:</div><div class="info-val" id="c-email">Chưa có</div></div>
+        </div>
+
+        <div class="dash-card">
+          <h3><i class="fa-solid fa-check-circle" style="color:#4caf50;"></i> Kỹ năng đã có</h3>
+          <div class="tags-container" id="c-skills"><span class="tag">Chưa phân tích</span></div>
+        </div>
+
+        <div class="dash-card">
+          <h3><i class="fa-solid fa-circle-exclamation" style="color:#f44336;"></i> Cần bổ sung</h3>
+          <div class="tags-container" id="c-missing"><span class="tag missing">Chưa phân tích</span></div>
+        </div>
+      </div>
+
+    </div>
+
+    <script>
+      const sessionId = "SESSION-" + Math.random().toString(36).substr(2, 9);
+      
+      function updateFileStatus(input) {
+        if(input.files.length > 0) {
+          input.parentElement.style.background = '#e0e7ff';
+          input.parentElement.style.color = '#4338ca';
+        }
+      }
+
+      function handleKeyPress(e) {
+        if (e.key === "Enter") sendMessage();
+      }
+
+      function renderGenerativeUI(rawText) {
+        let htmlSnippet = rawText;
+        
+        // 1. Roadmap [ROADMAP] Node 1, Node 2 [/ROADMAP]
+        const roadmapRegex = /\[ROADMAP\]([\s\S]*?)\[\/ROADMAP\]/g;
+        htmlSnippet = htmlSnippet.replace(roadmapRegex, (match, p1) => {
+          let nodes = p1.split(',').map(n => n.trim()).filter(n => n);
+          let roadmapHtml = `<div class="gen-ui-widget"><strong><i class="fa-solid fa-map-location-dot"></i> Lộ trình cá nhân hóa:</strong><br><br>`;
+          nodes.forEach((node, i) => {
+            roadmapHtml += `<div class="ui-roadmap-node" onclick="alert('Đã chọn mốc: ${node}')">
+              <i class="fa-solid fa-check-circle"></i> Bước ${i+1}: ${node}
+            </div>`;
+          });
+          roadmapHtml += `</div>`;
+          return roadmapHtml;
+        });
+
+        // 2. Trắc nghiệm Quiz [QUIZ] Câu hỏi | Đáp án 1 | Đáp án 2 [/QUIZ]
+        const quizRegex = /\[QUIZ\]([\s\S]*?)\[\/QUIZ\]/g;
+        htmlSnippet = htmlSnippet.replace(quizRegex, (match, p1) => {
+          let parts = p1.split('|').map(n => n.trim());
+          let question = parts[0];
+          let options = parts.slice(1);
+          let quizHtml = `<div class="gen-ui-widget" style="background:#f0fdf4; border-color:#bbf7d0;">
+            <strong style="color:#166534;"><i class="fa-solid fa-clipboard-question"></i> Trắc nghiệm (Interactive Quiz):</strong>
+            <p style="margin: 10px 0; font-size: 0.95rem; font-weight: 500;">${question}</p><div style="display:flex; flex-direction:column; gap:8px;">`;
+          options.forEach((opt, idx) => {
+            let letter = String.fromCharCode(65 + idx);
+            // Replace single quotes and nested quotes
+            let safeOpt = opt.replace(/'/g, "\\'").replace(/"/g, "&quot;");
+            quizHtml += `<button onclick="this.style.background='#dcfce7'; window.submitQuizAnswer('${letter}', '${safeOpt}')" 
+              style="text-align:left; padding:10px 15px; border:1px solid #d1fae5; background:white; border-radius:8px; cursor:pointer; font-size:0.9rem; transition: background 0.2s;"
+              onmouseover="this.style.background='#f0fdf4'" onmouseout="this.style.background='white'">
+              <span style="font-weight:bold; color:#16a34a; margin-right:8px;">${letter}.</span> ${opt}
+            </button>`;
+          });
+          quizHtml += `</div></div>`;
+          return quizHtml;
+        });
+
+        // 3. Thực hành Code Editor [CODE_EDITOR] Đề bài | Ngôn ngữ [/CODE_EDITOR]
+        const codeRegex = /\[CODE_EDITOR\]([\s\S]*?)\[\/CODE_EDITOR\]/g;
+        htmlSnippet = htmlSnippet.replace(codeRegex, (match, p1) => {
+          let parts = p1.split('|').map(n => n.trim());
+          let prompt = parts[0];
+          let lang = parts[1] || 'python';
+          return `<div class="gen-ui-widget" style="background:#1e1e1e; border-color:#3f3f46; color:white; padding:0;">
+            <div style="background:#2d2d30; padding:10px 15px; border-bottom:1px solid #3f3f46; border-top-left-radius:12px; border-top-right-radius:12px; display:flex; justify-content:space-between; align-items:center;">
+              <strong><i class="fa-brands fa-${lang.toLowerCase() === 'python' ? 'python' : 'js'}"></i> Thử thách Code (${lang}):</strong>
+            </div>
+            <div style="padding:15px;">
+              <p style="font-size:0.9rem; color:#a1a1aa; margin:0 0 10px 0;">${prompt}</p>
+              <textarea placeholder="// Viết code giải của bạn ở đây..." style="width:100%; height:150px; font-family:monospace; padding:15px; background:#000; color:#4ade80; border-radius:8px; border:1px solid #3f3f46; resize:vertical; outline:none; font-size:0.95rem;"></textarea>
+              <button onclick="window.submitCodeChallenge(this, '${lang}')" style="margin-top:15px; width:100%; padding:12px; background:#3b82f6; color:white; border:none; border-radius:8px; cursor:pointer; font-weight:bold; font-size:0.95rem;">
+                <i class="fa-solid fa-play"></i> Chạy & Nộp bài (Run Testcases)
+              </button>
+            </div>
+          </div>`;
+        });
+
+        return htmlSnippet.replace(/\n(?!\s*<)|(?<!>)\n/g, "<br>");
+      }
+
+      window.submitQuizAnswer = function(letter, optionText) {
+        const inputField = document.getElementById("user-input");
+        inputField.value = `Tôi chọn đáp án ${letter}: ${optionText}`;
+        sendMessage();
+      };
+
+      window.submitCodeChallenge = function(buttonElement, lang) {
+        const textarea = buttonElement.previousElementSibling;
+        const code = textarea.value.trim();
+        if (!code) {
+          alert("Vui lòng nhập code trước khi nộp bài!");
+          return;
+        }
+        const inputField = document.getElementById("user-input");
+        inputField.value = `Đây là mã nguồn giải bài tập của tôi bằng ngôn ngữ ${lang}:\n\n${code}\n\nNhờ hệ thống chấm điểm và nhận xét giúp tôi.`;
+        sendMessage();
+        
+        textarea.value = ""; // Clear editor
+      };
+
+      async function sendMessage() {
+        const inputField = document.getElementById("user-input");
+        const fileField = document.getElementById("cv-file");
+        const chatBox = document.getElementById("chat-box");
+        const message = inputField.value.trim();
+
+        if (!message && fileField.files.length === 0) return;
+
+        // Render User Message
+        if(message) {
+          const safeMessage = message.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+          chatBox.innerHTML += `
+            <div class="message-wrapper user-wrapper">
+              <div class="message user-msg" style="white-space: pre-wrap;">${safeMessage}</div>
+            </div>`;
+        } else {
+           chatBox.innerHTML += `
+            <div class="message-wrapper user-wrapper">
+              <div class="message user-msg"><i class="fa-solid fa-file-pdf"></i> Đã gửi CV: ${fileField.files[0].name}</div>
+            </div>`;
+        }
+        
+        inputField.value = "";
+        
+        // Render Bot Placeholder with Typing Indicator
+        const botMessageId = "bot-" + Date.now();
+        chatBox.innerHTML += `
+          <div class="message-wrapper bot-wrapper">
+            <div class="message bot-msg" id="${botMessageId}">
+              <div class="typing-indicator"><span></span><span></span><span></span></div>
+            </div>
+          </div>`;
+        chatBox.scrollTop = chatBox.scrollHeight;
+
+        const formData = new FormData();
+        formData.append("message", message || "Hãy phân tích file CV tôi vừa gửi.");
+        formData.append("session_id", sessionId);
+        if (fileField.files.length > 0) formData.append("cv_file", fileField.files[0]);
+
+        try {
+          const response = await fetch("http://localhost:8000/api/chat", {
+            method: "POST",
+            body: formData,
+          });
+
+          const reader = response.body.getReader();
+          const decoder = new TextDecoder();
+          const botBubble = document.getElementById(botMessageId);
+          botBubble.innerHTML = ""; // Clear typing indicator
+
+          let isDataMode = false;
+          let fullRawResponse = "";
+          let buffer = "";
+
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+
+            buffer += decoder.decode(value, { stream: true });
+            const lines = buffer.split("\n");
+            buffer = lines.pop(); // Keep incomplete line
+
+            for (let line of lines) {
+              if (line.startsWith("data: ")) {
+                let text = line.substring(6);
+                if (text === "[DONE]") continue;
+
+                let originalText = text.replace(/\\n/g, "\n");
+                fullRawResponse += originalText;
+
+                if (originalText.includes("---DATA---")) {
+                  isDataMode = true;
+                  continue;
+                }
+
+                if (!isDataMode) {
+                  // Render using the Generative UI formatter
+                  botBubble.innerHTML = renderGenerativeUI(fullRawResponse);
+                  chatBox.scrollTop = chatBox.scrollHeight;
+                }
+              }
+            }
+          }
+
+          // RENDER JSON TO DASHBOARD
+          if (fullRawResponse) {
+            try {
+              let jsonString = "";
+              if (fullRawResponse.includes("---DATA---")) {
+                jsonString = fullRawResponse.split("---DATA---")[1].trim();
+              } else {
+                const firstBracket = fullRawResponse.indexOf("{");
+                const lastBracket = fullRawResponse.lastIndexOf("}");
+                if (firstBracket !== -1 && lastBracket !== -1) {
+                  jsonString = fullRawResponse.substring(firstBracket, lastBracket + 1);
+                }
+              }
+
+              // Cleanup markdown
+              if (jsonString.startsWith("```json")) jsonString = jsonString.slice(7, -3);
+              else if (jsonString.startsWith("```")) jsonString = jsonString.slice(3, -3);
+
+              if (jsonString) {
+                const aiData = JSON.parse(jsonString.trim());
+
+                document.getElementById("c-name").innerText = aiData.candidate_info?.name || "Không rõ";
+                document.getElementById("c-email").innerText = aiData.candidate_info?.email || "Không rõ";
+                
+                // Update Score Circular Progress
+                const score = aiData.matching_score || 0;
+                document.getElementById("score-circle").style.setProperty('--score', score);
+                document.getElementById("c-score").innerText = score;
+
+                // Update Skills
+                const skills = aiData.extracted_skills || [];
+                document.getElementById("c-skills").innerHTML = skills.length > 0 
+                  ? skills.map(s => `<span class="tag">${s}</span>`).join("")
+                  : "-";
+
+                // Update Missing Skills
+                const missing = aiData.missing_skills || [];
+                document.getElementById("c-missing").innerHTML = missing.length > 0
+                  ? missing.map(s => `<span class="tag missing">${s}</span>`).join("")
+                  : "-";
+              }
+            } catch (e) {
+              console.error("Lỗi parse JSON Data Extraction:", e);
+            }
+          }
+        } catch (error) {
+          document.getElementById(botMessageId).innerHTML = "❌ Lỗi kết nối đến Server AI!";
+        }
+      }
+    </script>
+  </body>
+</html>

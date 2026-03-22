@@ -1,0 +1,121 @@
+import os
+import chromadb
+from chromadb.utils import embedding_functions
+import asyncio
+from typing import List
+from pydantic import BaseModel, Field
+from langchain_core.messages import HumanMessage
+from app.core.llm import get_llm_cheap
+from app.core.logger import logger
+BASE_DIR = os.getcwd()
+DB_PATH = os.path.join(BASE_DIR, "vector_db")
+DATA_PATH = os.path.join(BASE_DIR, "data")
+
+chroma_client = chromadb.PersistentClient(path=DB_PATH)
+embedding_fn = None
+collection = None
+
+def get_collection():
+    global embedding_fn, collection
+    if collection is None:
+        embedding_fn = embedding_functions.SentenceTransformerEmbeddingFunction(
+            model_name="all-MiniLM-L6-v2"
+        )
+        collection = chroma_client.get_or_create_collection(
+            name="career_knowledge", embedding_function=embedding_fn
+        )
+    return collection
+
+
+def init_database():
+    col = get_collection()
+    if col.count() == 0:
+        if not os.path.exists(DATA_PATH):
+            os.makedirs(DATA_PATH)
+
+        documents = []
+        metadatas = []
+        ids = []
+
+        for filename in os.listdir(DATA_PATH):
+            if filename.endswith(".txt"):
+                file_path = os.path.join(DATA_PATH, filename)
+                with open(file_path, "r", encoding="utf-8") as f:
+                    text = f.read()
+                    if text.strip():
+                        documents.append(text)
+                        metadatas.append({"source": filename})
+                        ids.append(filename)
+        if documents:
+            col.add(documents=documents, metadatas=metadatas, ids=ids)
+            print("nap success")
+        else:
+            print("nap failue")
+
+
+"""Hàm tìm kiếm tài liệu liên quan đến câu hỏi của người dùng"""
+
+class QueryVariations(BaseModel):
+    queries: List[str]= Field(
+        description="Danh sách 3 phiên bản viết lại của câu hỏi gốc, dùng từ khóa chuyên ngành IT, mở rộng ngữ cảnh."       
+    )
+async def generate_multi_queries(original_query: str) ->List[str]:
+    prompt = f"""Bạn là một chuyên gia tra cứu tài liệu IT.
+    Người dùng đang hỏi: "{original_query}"
+    Nhiệm vụ: Viết lại câu hỏi này thành 3 phiên bản khác nhau để tối ưu hóa việc tìm kiếm trong Vector Database. 
+    Ví dụ: "Docker là gì?" -> ["Định nghĩa Containerization và Docker", "Ứng dụng của Docker trong CI/CD DevOps", "Kiến trúc hoạt động của Docker engine"]."""
+    try:
+        llm = get_llm_cheap()
+        structured_llm =  llm.with_structured_output(QueryVariations)
+        result: QueryVariations = await structured_llm.ainvoke([HumanMessage(content=prompt)])
+        return result.queries
+    except Exception as e:
+        logger.error(f"[Multi-Query Lỗi]: {e}")
+        
+        return []
+async def search_knowledge_advanced(query:str,k:int =2)->str:
+    col = get_collection()
+    if col.count() ==0:
+        return ""
+    logger.info(f"[RAG] Bắt đầu tìm kiếm Multi-Query cho: {query}")
+
+    variations = await generate_multi_queries(query)
+    all_queries = [query] + variations
+    logger.info(f"[RAG] Đã phân thân thành {len(all_queries)} luồng tìm kiếm!")
+    unique_docs = set()
+
+    for q in all_queries:
+        if not q.strip():
+            continue
+
+        results = col.query(
+            query_texts=[q],
+            n_results=k
+        )
+
+        docs = results.get("documents", [[]])[0]
+
+        for doc in docs:
+            content = getattr(doc, "page_content", doc)
+
+            if content not in unique_docs:
+                unique_docs.add(content)
+    
+    final_contexts = list(unique_docs)
+    best_contexts = final_contexts[:4]
+
+    result_text = "\n---\n".join(best_contexts)
+    logger.info(f"[RAG] Gom thành công {len(best_contexts)} đoạn tài liệu cốt lõi nhất.")
+    
+    return result_text
+
+
+def search_knowledge(query: str, n_results: int = 1) -> str:
+    col = get_collection()
+    if col.count() == 0:
+        return ""
+
+    results = col.query(query_texts=[query], n_results=n_results)
+    if results["documents"] and results["documents"][0]:
+        return "\n".join(results["documents"][0])
+    return ""
