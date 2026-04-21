@@ -38,7 +38,7 @@ def init_database():
         ids = []
 
         for filename in os.listdir(DATA_PATH):
-            if filename.endswith(".txt"):
+            if filename.endswith((".txt", ".md")):
                 file_path = os.path.join(DATA_PATH, filename)
                 with open(file_path, "r", encoding="utf-8") as f:
                     text = f.read()
@@ -73,16 +73,19 @@ async def generate_multi_queries(original_query: str) ->List[str]:
         logger.error(f"[Multi-Query Lỗi]: {e}")
         
         return []
-async def search_knowledge_advanced(query:str,k:int =2)->str:
+async def search_knowledge_advanced(query: str, k: int = 2) -> str:
     col = get_collection()
-    if col.count() ==0:
+    if col.count() == 0:
         return ""
     logger.info(f"[RAG] Bắt đầu tìm kiếm Multi-Query cho: {query}")
 
     variations = await generate_multi_queries(query)
     all_queries = [query] + variations
     logger.info(f"[RAG] Đã phân thân thành {len(all_queries)} luồng tìm kiếm!")
-    unique_docs = set()
+
+    # FIX Bug 8: dùng dict để lưu cả doc và distance score tốt nhất (thấp nhất)
+    RELEVANCE_THRESHOLD = 1.2  # L2 distance — thấp hơn = liên quan hơn
+    best_docs: dict[str, float] = {}  # {content: best_distance}
 
     for q in all_queries:
         if not q.strip():
@@ -90,24 +93,33 @@ async def search_knowledge_advanced(query:str,k:int =2)->str:
 
         results = col.query(
             query_texts=[q],
-            n_results=k
+            n_results=k,
+            include=["documents", "distances"]  # FIX: lấy distances để filter
         )
 
         docs = results.get("documents", [[]])[0]
+        distances = results.get("distances", [[]])[0]
 
-        for doc in docs:
+        for doc, dist in zip(docs, distances):
             content = getattr(doc, "page_content", doc)
+            # Chỉ giữ nếu đủ liên quan, hoặc nếu tìm thấy match tốt hơn
+            if dist <= RELEVANCE_THRESHOLD:
+                if content not in best_docs or dist < best_docs[content]:
+                    best_docs[content] = dist
 
-            if content not in unique_docs:
-                unique_docs.add(content)
-    
-    final_contexts = list(unique_docs)
-    best_contexts = final_contexts[:4]
+    # Sắp xếp theo độ liên quan (distance thấp nhất trước)
+    sorted_docs = sorted(best_docs.items(), key=lambda x: x[1])
+    best_contexts = [doc for doc, _ in sorted_docs[:4]]
+
+    if not best_contexts:
+        logger.warning(f"[RAG] Không tìm thấy tài liệu nào đủ liên quan (threshold={RELEVANCE_THRESHOLD}).")
+        return ""
 
     result_text = "\n---\n".join(best_contexts)
-    logger.info(f"[RAG] Gom thành công {len(best_contexts)} đoạn tài liệu cốt lõi nhất.")
+    logger.info(f"[RAG] Gom thành công {len(best_contexts)} đoạn tài liệu cốt lõi (sau khi filter score).")
     
     return result_text
+
 
 
 def search_knowledge(query: str, n_results: int = 1) -> str:

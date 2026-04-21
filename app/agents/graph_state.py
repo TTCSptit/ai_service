@@ -2,6 +2,7 @@ from typing import TypedDict, List
 from langchain_core.messages import BaseMessage
 
 class AgentState(TypedDict):
+    is_valid_topic: bool
     message: str
     cv_text: str
     history: List[BaseMessage]
@@ -10,6 +11,7 @@ class AgentState(TypedDict):
     knowledge: str
     graph_context:str
     internet_context: str
+    market_context: str
     ai_data_json: str
     
     system_prompt_ref: str  

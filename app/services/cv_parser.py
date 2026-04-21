@@ -8,7 +8,6 @@ async def extract_text_from_cv(file: UploadFile) -> str:
     Hàm đọc và trích xuất văn bản từ file PDF tải lên.
     Trả về chuỗi văn bản (text) đã được làm sạch.
     """
-    # 1. Kiểm tra định dạng file
     if not file.filename.lower().endswith(".pdf"):
         raise HTTPException(status_code=400, detail="Hệ thống chỉ hỗ trợ file PDF.")
 

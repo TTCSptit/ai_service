@@ -1,15 +1,16 @@
 from langchain_core.messages import HumanMessage
 from app.core.llm import get_llm_cheap
-from app.prompts.system_prompts import get_memory_prompt,old_memmory_prompt
-from app.core.database import SessionLocal, UserMemory,SessionSummary
+from app.prompts.system_prompts import get_memory_prompt, old_memmory_prompt
+from app.core.database import SessionLocal, UserMemory, SessionSummary, UserSkill
+from app.schemas.payload import SkillUpdate
 from app.core.logger import logger
 from typing import List
 from pydantic import BaseModel, Field
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_chroma import Chroma
-from app.core.llm import get_llm_cheap
 class FactList(BaseModel):
     facts: List[str]=Field(
+        default_factory=list,
         description="Danh sách các sự thật cụ thể về ứng viên (Kinh nghiệm, kỹ năng, mong muốn, dự án, điểm yếu...). Trả về danh sách rỗng [] nếu câu chat chỉ là chào hỏi xã giao hoặc không có thông tin mới."
     )
 class VectorMemoryAgent:
@@ -101,3 +102,47 @@ class MemoryAgent:
                 db_bg.close()
         except Exception as e:
            logger.error(f"[Thư ký Session Lỗi]: {e}")
+
+    async def evaluate_and_update_skills(self, user_id: str, latest_chat: str):
+        logger.info(f"[Skill Tracker] Bắt đầu đánh giá nạp EXP cho user {user_id}...")
+        prompt = f"""Đoạn hội thoại vừa diễn ra: {latest_chat}
+        Hãy đóng vai trọng tài. Nếu Tech Lead vừa khen ngợi ứng viên trả lời/giải quyết tốt một kỹ năng (ví dụ: Python, SQL, React, Thuật toán, System Design), hoặc cho qua bản nháp khó, hãy quyết định cộng điểm EXP (Từ 10 đến 50 điểm tùy tâm).
+        Chỉ return JSON hợp lệ The schema SkillUpdate.
+        Nếu không có gì đặc biệt (chỉ chitchat), hãy set triggered=False."""
+        try:
+            structured_llm = get_llm_cheap().with_structured_output(SkillUpdate)
+            result: SkillUpdate = await structured_llm.ainvoke([HumanMessage(content=prompt)])
+            
+            if result.triggered:
+                logger.info(f"[LEVEL UP] User {user_id} được cộng {result.exp_earned} EXP cho kỹ năng '{result.skill_name}'. Lý do: {result.reason}")
+                db_bg = SessionLocal()
+                try:
+                    # Check if skill exists
+                    record = db_bg.query(UserSkill).filter(
+                        UserSkill.user_id == user_id, 
+                        UserSkill.skill_name.ilike(result.skill_name)
+                    ).first()
+                    
+                    if record:
+                        record.exp_point += result.exp_earned
+                        new_level = (record.exp_point // 100) + 1
+                        if new_level > record.level:
+                            logger.info(f"[RANK UP] Kỹ năng '{record.skill_name}' của User {user_id} đã thăng cấp lên LEVEL {new_level}!")
+                            record.level = new_level
+                    else:
+                        new_level = (result.exp_earned // 100) + 1
+                        new_skill = UserSkill(
+                            user_id=user_id, 
+                            skill_name=result.skill_name.title(), 
+                            exp_point=result.exp_earned, 
+                            level=new_level
+                        )
+                        db_bg.add(new_skill)
+                        
+                    db_bg.commit()
+                finally:
+                    db_bg.close()
+            else:
+                logger.info(f"[Skill Tracker] Không có điểm EXP nào được cộng thêm ở lượt này.")
+        except Exception as e:
+            logger.error(f"[Skill Tracker Lỗi]: {e}")

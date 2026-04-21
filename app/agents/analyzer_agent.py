@@ -1,7 +1,7 @@
 from typing import List, Optional
 from pydantic import BaseModel, Field
 from langchain_core.messages import HumanMessage
-from app.core.llm import get_llm_cheap
+from app.core.llm import get_llm_cheap_v1
 from app.prompts.system_prompts import get_analyzer_prompt
 from app.core.logger import logger
 
@@ -23,7 +23,7 @@ class CVAnalyzerAgent:
             return '{"candidate_info":{},"matching_score":0,"extracted_skills":[],"missing_skills":[],"suggested_questions":[]}'
         prompt = get_analyzer_prompt(cv_text, knowledge)
         try:
-            llm = get_llm_cheap()
+            llm = get_llm_cheap_v1()
             structured_llm = llm.with_structured_output(CVSchema)
             
             result: CVSchema = await structured_llm.ainvoke([HumanMessage(content=prompt)])

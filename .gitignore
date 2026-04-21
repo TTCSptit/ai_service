@@ -5,7 +5,10 @@ __pycache__/
 
 # C extensions
 *.so
-
+chroma_memory_db/
+*.bin
+__pycache__/
+*.pyc
 # Distribution / packaging
 .Python
 build/
@@ -74,3 +77,5 @@ vector_db/
 chroma/
 *.sqlite3
 *.db
+.env
+.env

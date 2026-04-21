@@ -28,4 +28,9 @@ class AIChatResponse(BaseModel):
         description="Điểm đánh giá độ phù hợp của CV với lộ trình (0-100)",
         ge=0,le=100
     )
+class SkillUpdate(BaseModel):
+    triggered: bool = Field(description="Ứng viên có vừa trả lời đúng/thể hiện tốt kỹ năng nào không?")
+    skill_name: str = Field(description="Tên kỹ năng được thể hiện (vd: Docker, SQL...)")
+    exp_earned: int = Field(description="Số điểm kinh nghiệm đạt được (Từ 10-50 điểm tùy độ khó)")
+    reason: str = Field(description="Lý do cộng điểm")
 

@@ -5,12 +5,15 @@ from app.api import chat
 from app.services.rag_engine import init_database
 from contextlib import asynccontextmanager
 from app.core.database import init_db
+from app.core.rabbitmq import rabbitmq
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     init_db()
     init_database()
+    await rabbitmq.connect()
     yield
+    await rabbitmq.close()
 
 
 app = FastAPI(title="AI Career Advisor API", lifespan=lifespan)

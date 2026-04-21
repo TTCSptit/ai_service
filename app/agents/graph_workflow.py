@@ -5,25 +5,48 @@ from app.agents.graph_state import AgentState
 from app.agents.router_agent import RouterAgent
 from app.agents.analyzer_agent import CVAnalyzerAgent
 from app.agents.evaluator_agent import TechLeadEvaluator
+from app.agents.market_agent import MarketAnalyzerAgent
 from app.prompts.system_prompts import get_hr_advisor_prompt, get_final_revision_prompt
 from app.core.logger import logger
 from app.services.graph_rag import query_knowledge_graph
 router_agent = RouterAgent()
 analyzer_agent = CVAnalyzerAgent()
 evaluator_agent = TechLeadEvaluator()
+market_agent = MarketAnalyzerAgent()
 
 async def node_prepare_context(state: AgentState):
     logger.info("[Node 1] Đang chuẩn bị Context...")
     router_decision = await router_agent.execute(state["message"])
+    is_valid_topic = router_decision.get("is_valid_topic", True)
+    
+    if not is_valid_topic:
+        logger.warning("[Router Guardrail] Câu hỏi ngoài lề. Chặn luồng xử lý RAG/LLM.")
+        return {
+            "internet_context": "",
+            "market_context": "",
+            "ai_data_json": '{"candidate_info":{},"matching_score":0,"extracted_skills":[],"missing_skills":[],"suggested_questions":[]}',
+            "graph_context": "",
+            "system_prompt_ref": "Bạn là AI hỗ trợ nhân sự và công nghệ. Câu hỏi của người dùng ngoài luồng công việc (phiếm chuyện/chitchat). Hãy từ chối trả lời lịch sự, thân thiện và hướng họ quay lại các chủ đề như tư vấn lộ trình học, review đánh giá CV kỹ năng lập trình hoặc phỏng vấn thử (Mock Interview).",
+            "user_prompt_ref": state["message"],
+            "retry_count": 0,
+            "draft_text": "",
+            "feedback": "",
+            "eval_pass": True,
+            "final_prompt": "",
+            "is_valid_topic": False
+        }
+        
     internet_ctx = router_decision.get("internet_context", "")
     
     task_analyzer = analyzer_agent.execute(state["cv_text"], state["knowledge"]) if (router_decision.get("needs_cv") and state["cv_text"]) else asyncio.sleep(0)
     task_graph = query_knowledge_graph(state["message"]) if router_decision.get("needs_graph") else asyncio.sleep(0)
+    task_market = market_agent.execute(state["message"]) if router_decision.get("needs_market_data") else asyncio.sleep(0)
     
-    results = await asyncio.gather(task_analyzer, task_graph)
+    results = await asyncio.gather(task_analyzer, task_graph, task_market)
     
     ai_json = results[0] if (router_decision.get("needs_cv") and state["cv_text"]) else '{"candidate_info":{},"matching_score":0,"extracted_skills":[],"missing_skills":[],"suggested_questions":[]}'
     graph_ctx = results[1] if router_decision.get("needs_graph") else ""
+    market_ctx = results[2] if router_decision.get("needs_market_data") else ""
     
     sys_prompt = get_hr_advisor_prompt(state["knowledge"],state["user_memory"])
     if state["session_summary"]:
@@ -31,16 +54,18 @@ async def node_prepare_context(state: AgentState):
         
     usr_prompt = f"Câu hỏi hiện tại: {state['message']}\n"
     if internet_ctx: usr_prompt += f"[Thông tin Internet]: {internet_ctx}\n"
-    if graph_ctx: usr_prompt += f"[Kiến thức từ Graph Database]: {graph_ctx}\n" # BƠM KIẾN THỨC ĐỒ THỊ VÀO
-    if state["cv_text"]: usr_prompt += f"CV:\n{state['cv_text']}"
+    if graph_ctx: usr_prompt += f"[Kiến thức từ Graph Database]: {graph_ctx}\n" 
+    if market_ctx: usr_prompt += f"[Dữ liệu Thị trường thực tế]: {market_ctx}\n"
 
     return {
         "internet_context": internet_ctx,
+        "market_context": market_ctx,
         "ai_data_json": ai_json,
         "graph_context": graph_ctx,
         "system_prompt_ref": sys_prompt,
         "user_prompt_ref": usr_prompt,
-        "retry_count": 0
+        "retry_count": 0,
+        "is_valid_topic": True
     }
 async def node_drafring(state: AgentState):
     logger.info("[Node 2] Đang viết nháp (Lần {state['retry_count'] + 1})...")
@@ -80,8 +105,22 @@ workflow.add_node("evaluate",node_evaluating)
 workflow.add_node("revise",node_revising)
 workflow.add_node("finalize",node_finalize)
 
+def should_continue_from_prepare(state: AgentState):
+    if state.get("is_valid_topic", True) == False:
+        logger.warning("Bỏ qua đánh giá, rẽ nhánh thẳng đến điểm kết thúc.")
+        return "end"
+    return "draft"
+
 workflow.set_entry_point("prepare")
-workflow.add_edge("prepare","draft")
+
+workflow.add_conditional_edges(
+    "prepare",
+    should_continue_from_prepare,
+    {
+        "draft": "draft",
+        "end": END
+    }
+)
 workflow.add_edge("draft","evaluate")
 
 workflow.add_conditional_edges(

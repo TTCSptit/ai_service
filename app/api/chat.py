@@ -5,18 +5,19 @@ from fastapi.responses import StreamingResponse
 
 from app.core.llm import get_llm_vip
 from langchain_core.messages import HumanMessage, SystemMessage, AIMessage
-from app.core.database import SessionLocal, ChatHistory 
+from app.core.database import SessionLocal, ChatHistory, UserSkill
 from app.services.rag_engine import search_knowledge_advanced
 from app.services.cv_parser import extract_text_from_cv
 
-from app.prompts.system_prompts import get_hr_advisor_prompt, get_final_revision_prompt
+from app.prompts.system_prompts import get_hr_advisor_prompt, get_final_revision_prompt, sanitize_input
 from app.agents.router_agent import RouterAgent
 from app.agents.analyzer_agent import CVAnalyzerAgent
 from app.agents.evaluator_agent import TechLeadEvaluator
 from app.agents.memory_agent import MemoryAgent,VectorMemoryAgent
-from starlette.background import BackgroundTasks
 from app.core.logger import logger
 from app.agents.graph_workflow import app_graph
+from app.services.semantic_cache import semantic_cache
+from app.core.rabbitmq import rabbitmq
 
 router = APIRouter()
 
@@ -25,12 +26,17 @@ analyzer_agent = CVAnalyzerAgent()
 evaluator_agent = TechLeadEvaluator()
 memory_agent = MemoryAgent()
 vector_memory_agent  = VectorMemoryAgent()
+
+# Các tiến trình ngầm (cập nhật DB, RAG) đã được chuyển sang RabbitMQ Worker.
+
+
 def get_db():
     db = SessionLocal()
     try:
         yield db
     finally:
         db.close()
+
 
 @router.post("/chat")
 async def chat_endpoint(
@@ -41,17 +47,50 @@ async def chat_endpoint(
     db = Depends(get_db) 
 ):
     try:
+        # FIX Bug 6: sanitize input trước khi xử lý
+        message = sanitize_input(message, max_length=2000)
+        logger.info(f"\n[API] === NHẬN YÊU CẦU MỚI: {message} ===")
+        cache_result = semantic_cache.check_cache(message)
+        if cache_result["is_hit"]:
+            async def generate_cached_response():
+                cached_text = cache_result["cached_response"]
+                if cached_text:
+                    chunk_size = 20
+                    for i in range(0, len(cached_text), chunk_size):
+                        chunk = cached_text[i:i+chunk_size].replace("\n", "\\n")
+                        yield f"data: {chunk}\n\n"
+                        await asyncio.sleep(0.01)
+                yield "data: ---DATA---\n\n"
+                
+                cached_json = cache_result['cached_ai_data_json']
+                if isinstance(cached_json, dict):
+                    import json
+                    cached_json = json.dumps(cached_json)
+                    
+                yield f"data: {cached_json}\n\n"
+                yield "data: [DONE]\n\n"
+            return StreamingResponse(generate_cached_response(), media_type="text/event-stream")
+            
         if not session_id:
             session_id = str(uuid.uuid4())
             
-        db_messages = db.query(ChatHistory).filter(ChatHistory.session_id == session_id).order_by(ChatHistory.created_at.asc()).limit(6).all()
+        # FIX Bug 5: tăng từ 6 → 12 messages để giữ context tốt hơn
+        db_messages = db.query(ChatHistory).filter(ChatHistory.session_id == session_id).order_by(ChatHistory.created_at.asc()).limit(12).all()
         history = [HumanMessage(content=m.content) if m.role == 'user' else AIMessage(content=m.content) for m in db_messages]
 
+        logger.info(f"[API] Bắt đầu lấy user_memory")
         user_memory = memory_agent.get_memory(user_id,db)
+        logger.info(f"[API] Bắt đầu lấy vector_memory")
         user_memory += vector_memory_agent.get_relevant_memory(user_id, message)
+        logger.info(f"[API] Bắt đầu lấy session_summary")
         session_summary = memory_agent.get_session_summary(session_id,db)
+        logger.info(f"[API] Bắt đầu search_knowledge_advanced")
         knowledge = await search_knowledge_advanced(message)
+        logger.info(f"[API] Bắt đầu extract_text_from_cv")
         cv_text = await extract_text_from_cv(cv_file) if cv_file else ""
+        # FIX Bug 6: sanitize CV text (giới hạn 10000 chars)
+        if cv_text:
+            cv_text = sanitize_input(cv_text, max_length=10000)
         initial_state = {
             "message": message,
             "cv_text": cv_text,
@@ -59,26 +98,51 @@ async def chat_endpoint(
             "user_memory": user_memory,
             "session_summary": session_summary,
             "knowledge": knowledge,
+            "graph_context": "", "market_context": "",
             "internet_context": "", "ai_data_json": "", "draft_text": "", 
             "feedback": "", "eval_pass": True, "retry_count": 0, "final_prompt": "",
             "system_prompt_ref": "", "user_prompt_ref": ""
         }
-        logger.info("[API] Bàn giao toàn bộ logic cho LangGraph xử lý...")
-        
-        final_state = await app_graph.ainvoke(initial_state)
-
-       
-        ai_data_json = final_state["ai_data_json"]
-        system_prompt = final_state["system_prompt_ref"]
-        revision_instruction = final_state["final_prompt"]
-        user_prompt = final_state["user_prompt_ref"] + revision_instruction
-        
-        final_messages = [SystemMessage(content=system_prompt)] + history + [HumanMessage(content=user_prompt)]
-
+        logger.info("[API] Chuẩn bị streaming trạng thái LangGraph lên UI...")
         
         full_ai_response_ref = {"content": ""}
+        ai_data_json_ref = {"data": "{}"}
+        
         async def generate_response():
+            user_prompt = message # Giá trị dự phòng nếu có Exception
             try:
+                final_state = initial_state.copy()
+                async for output in app_graph.astream(initial_state):
+                    for node_name, state_update in output.items():
+                        final_state.update(state_update)
+                        
+                        if node_name == "prepare":
+                            if "Dữ liệu Thị trường thực tế" in final_state.get("user_prompt_ref", ""):
+                                yield f"data: *Đang lấy dữ liệu thị trường thực tế (Market Data)...*\\n\\n\n\n"
+                            yield f"data: *Hệ thống đang thu thập Context...*\\n\\n\n\n"
+                        elif node_name == "draft":
+                            yield f"data: *AI đang viết nháp cấu trúc...*\\n\\n\n\n"
+                        elif node_name == "evaluate":
+                            if state_update.get("eval_pass"):
+                                yield f"data: *Tech Lead đã phê duyệt bản nháp!*\\n\\n---\\n\\n\n\n"
+                            else:
+                                yield f"data: *Tech Lead yêu cầu viết lại...*\\n\\n\n\n"
+                        elif node_name == "revise":
+                            yield f"data: *Đang sửa lại theo phản hồi...*\\n\\n\n\n"
+                        await asyncio.sleep(0.01)
+
+                ai_data_json_ref["data"] = final_state.get("ai_data_json", "{}")
+                system_prompt = final_state.get("system_prompt_ref", "")
+                revision_instruction = final_state.get("final_prompt", "")
+                user_prompt_base = final_state.get("user_prompt_ref", "")
+                if revision_instruction:
+                    user_prompt = f"{user_prompt_base}\n\n[HỆ THỐNG YÊU CẦU BỔ SUNG TỪ TECH LEAD]:\n{revision_instruction}"
+                else:
+                    user_prompt = user_prompt_base
+                
+                final_messages = [SystemMessage(content=system_prompt)] + history + [HumanMessage(content=user_prompt)]
+                
+                # 3. Bắt đầu stream LLM VIP
                 chunk_count = 0
                 async for chunk in get_llm_vip().astream(final_messages):
                     chunk_count += 1
@@ -95,7 +159,7 @@ async def chat_endpoint(
                     yield f"data: {fallback_msg}\n\n"
 
                 yield "data: ---DATA---\n\n"
-                yield f"data: {ai_data_json}\n\n"
+                yield f"data: {ai_data_json_ref['data']}\n\n"
                 yield "data: [DONE]\n\n"
             except Exception as stream_err:
                 logger.error(f"Lỗi khi Stream LLM: {stream_err}")
@@ -103,9 +167,10 @@ async def chat_endpoint(
                 full_ai_response_ref["content"] += "\n(Bị lỗi)"
                 yield f"data: {error_msg}\n\n"
                 yield "data: ---DATA---\n\n"
-                yield f"data: {ai_data_json}\n\n"
+                yield f"data: {ai_data_json_ref['data']}\n\n"
                 yield "data: [DONE]\n\n"
             finally:
+                # Lưu lịch sử chat vào DB
                 session_stream = SessionLocal()
                 try:
                     session_stream.add(ChatHistory(user_id=user_id, session_id=session_id, role="user", content=user_prompt))
@@ -116,16 +181,21 @@ async def chat_endpoint(
                 finally:
                     session_stream.close()
 
-        bg_tasks = BackgroundTasks()
-        async def run_bg_tasks():
-            latest_chat_str = f"User: {message}\nAI: {full_ai_response_ref['content']}"
-            await memory_agent.update_memory_task(user_id, user_memory, latest_chat_str)
-            await memory_agent.update_session_summary_task(session_id, session_summary, latest_chat_str)
-            bg_tasks.add_task(vector_memory_agent.extract_and_store_facts, user_id, latest_chat_str)
+                # Chuyển dữ liệu lịch sử và logic cập nhật background sang hàng đợi RabbitMQ Cloud
+                latest_chat_str = f"User: {message}\nAI: {full_ai_response_ref['content']}"
+                payload = {
+                    "user_id": user_id,
+                    "session_id": session_id,
+                    "message": message,
+                    "user_memory": user_memory,
+                    "session_summary": session_summary,
+                    "latest_chat_str": latest_chat_str,
+                    "ai_response": full_ai_response_ref["content"],
+                    "ai_data_json": ai_data_json_ref["data"]
+                }
+                asyncio.create_task(rabbitmq.publish_message("update_background", payload))
 
-        
-        bg_tasks.add_task(run_bg_tasks)
-        return StreamingResponse(generate_response(), media_type="text/event-stream", background=bg_tasks)
+        return StreamingResponse(generate_response(), media_type="text/event-stream")
 
     except Exception as e:
         logger.critical("Hệ thống sập toàn tập!", exc_info=True)
@@ -144,4 +214,26 @@ async def get_user_chat_history(user_id:str = Path(...),db = Depends(get_db)):
                 "created_at" :msg.created_at
             }
     return {"user_id": user_id, "sessions": list(sessions.values())}
+
+@router.get("/skills/{user_id}")
+async def get_user_skills(user_id: str = Path(...), db = Depends(get_db)):
+    skills = db.query(UserSkill).filter(UserSkill.user_id == user_id).all()
+    
+    if not skills:
+        return {"labels": [], "data": [], "full_data": []}
+        
+    labels = []
+    data = []
+    full_data = []
+    
+    for skill in skills:
+        labels.append(skill.skill_name)
+        data.append(skill.level)
+        full_data.append({
+            "skill_name": skill.skill_name,
+            "level": skill.level,
+            "exp_point": skill.exp_point
+        })
+        
+    return {"labels": labels, "data": data, "full_data": full_data}
 
