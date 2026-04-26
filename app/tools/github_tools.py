@@ -1,5 +1,5 @@
 import os
-import httpx  # FIX Bug 2: dùng httpx thay requests (hỗ trợ HTTP/2, timeout tốt hơn)
+import httpx 
 import base64
 import concurrent.futures
 from langchain_core.tools import tool
@@ -8,7 +8,6 @@ from app.core.logger import logger
 from app.core.config import settings
 from app.core.llm import get_llm_cheap_v1, get_llm_cheap_v2
 
-# Timeout toàn cục cho mọi request GitHub
 _GITHUB_TIMEOUT = httpx.Timeout(10.0, connect=5.0)
 
 

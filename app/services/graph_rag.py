@@ -9,17 +9,18 @@ _qa_chain = None
 _graph = None
 _is_initialized = False
 
-def get_qa_chain():
-    """Hàm khởi tạo lazy (Lazy Initialization) cho Neo4j và QA Chain"""
+def init_graph_db():
+    """Hàm khởi tạo (Pre-load) cho Neo4j và QA Chain lúc startup server"""
     global _qa_chain, _graph, _is_initialized
     
     if not _is_initialized:
         try:
-            logger.info("[GraphRAG] Bắt đầu kết nối Neo4j và khởi tạo Chain (Lazy Load)...")
+            logger.info("[GraphRAG] Bắt đầu kết nối Neo4j và khởi tạo Chain (Pre-load)...")
             _graph = Neo4jGraph(
                 url=settings.NEO4J_URI,
                 username=settings.NEO4J_USERNAME,
-                password=settings.NEO4J_PASSWORD
+                password=settings.NEO4J_PASSWORD,
+                database=settings.NEO4J_DATABASE
             )
             _qa_chain = GraphCypherQAChain.from_llm(
                 llm=get_llm_vip(),           
@@ -38,8 +39,14 @@ def get_qa_chain():
             _qa_chain = None
         finally:
             _is_initialized = True
-            
+
+def get_qa_chain():
+    """Lấy thể hiện QA Chain đã được khởi tạo"""
+    global _qa_chain, _is_initialized
+    if not _is_initialized:
+        init_graph_db()
     return _qa_chain
+
 
 def _run_graph_query_sync(user_question: str) -> str:
     """Hàm chạy đồng bộ (Synchronous) thực hiện gọi Neo4j"""

@@ -39,7 +39,7 @@ def get_llm_cheap_v2():
     global _llm_cheap_v2
     if _llm_cheap_v2 is None:
         _llm_cheap_v2 = ChatGroq(
-            api_key=settings.GROQ_API_KEY_V2,  # FIX Bug 3: dùng đúng KEY_V2
+            api_key=settings.GROQ_API_KEY_V2,  
             model_name="llama-3.3-70b-versatile",
             temperature=0.3,
             streaming=True

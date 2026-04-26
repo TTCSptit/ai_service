@@ -7,6 +7,7 @@ from pydantic import BaseModel, Field
 from langchain_core.messages import HumanMessage
 from app.core.llm import get_llm_cheap
 from app.core.logger import logger
+from langsmith import traceable
 BASE_DIR = os.getcwd()
 DB_PATH = os.path.join(BASE_DIR, "vector_db")
 DATA_PATH = os.path.join(BASE_DIR, "data")
@@ -15,12 +16,12 @@ chroma_client = chromadb.PersistentClient(path=DB_PATH)
 embedding_fn = None
 collection = None
 
+from app.core.embeddings import get_chroma_native_embeddings
+
 def get_collection():
     global embedding_fn, collection
     if collection is None:
-        embedding_fn = embedding_functions.SentenceTransformerEmbeddingFunction(
-            model_name="all-MiniLM-L6-v2"
-        )
+        embedding_fn = get_chroma_native_embeddings()
         collection = chroma_client.get_or_create_collection(
             name="career_knowledge", embedding_function=embedding_fn
         )
@@ -59,6 +60,7 @@ class QueryVariations(BaseModel):
     queries: List[str]= Field(
         description="Danh sách 3 phiên bản viết lại của câu hỏi gốc, dùng từ khóa chuyên ngành IT, mở rộng ngữ cảnh."       
     )
+@traceable(run_type="tool", name="Generate Multi Queries")
 async def generate_multi_queries(original_query: str) ->List[str]:
     prompt = f"""Bạn là một chuyên gia tra cứu tài liệu IT.
     Người dùng đang hỏi: "{original_query}"
@@ -73,6 +75,7 @@ async def generate_multi_queries(original_query: str) ->List[str]:
         logger.error(f"[Multi-Query Lỗi]: {e}")
         
         return []
+@traceable(run_type="tool", name="Advanced RAG Search")
 async def search_knowledge_advanced(query: str, k: int = 2) -> str:
     col = get_collection()
     if col.count() == 0:

@@ -97,18 +97,24 @@ async def node_finalize(state: AgentState):
     final_prompt = get_final_revision_prompt(state["system_prompt_ref"], state["feedback"], state["draft_text"])
     return {"final_prompt": final_prompt}
 
+async def node_rejection(state: AgentState):
+    logger.info("[Node] Xử lý câu hỏi ngoài lề...")
+    draft = await evaluator_agent.generate_draft(state["history"], state["system_prompt_ref"], state["user_prompt_ref"])
+    return {"draft_text": draft}
+
 workflow = StateGraph(AgentState)
 
 workflow.add_node("prepare",node_prepare_context)
 workflow.add_node("draft",node_drafring)
 workflow.add_node("evaluate",node_evaluating)
 workflow.add_node("revise",node_revising)
+workflow.add_node("rejection",node_rejection)
 workflow.add_node("finalize",node_finalize)
 
 def should_continue_from_prepare(state: AgentState):
     if state.get("is_valid_topic", True) == False:
         logger.warning("Bỏ qua đánh giá, rẽ nhánh thẳng đến điểm kết thúc.")
-        return "end"
+        return "rejection"
     return "draft"
 
 workflow.set_entry_point("prepare")
@@ -118,10 +124,11 @@ workflow.add_conditional_edges(
     should_continue_from_prepare,
     {
         "draft": "draft",
-        "end": END
+        "rejection": "rejection"
     }
 )
 workflow.add_edge("draft","evaluate")
+workflow.add_edge("rejection", "finalize")
 
 workflow.add_conditional_edges(
     "evaluate",

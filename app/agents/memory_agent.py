@@ -6,7 +6,7 @@ from app.schemas.payload import SkillUpdate
 from app.core.logger import logger
 from typing import List
 from pydantic import BaseModel, Field
-from langchain_huggingface import HuggingFaceEmbeddings
+from app.core.embeddings import get_langchain_embeddings
 from langchain_chroma import Chroma
 class FactList(BaseModel):
     facts: List[str]=Field(
@@ -15,7 +15,7 @@ class FactList(BaseModel):
     )
 class VectorMemoryAgent:
     def __init__(self):
-        self.embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
+        self.embeddings = get_langchain_embeddings()
 
         self.vector_db = Chroma(
             collection_name="user_long_term_memory",
@@ -61,8 +61,7 @@ class MemoryAgent:
         try:
             response = await get_llm_cheap().ainvoke([HumanMessage(content=prompt)])
             new_memory = response.content.strip()
-            db_bg = SessionLocal()
-            try:
+            with SessionLocal() as db_bg:
                 record = db_bg.query(UserMemory).filter(UserMemory.user_id==user_id).first()
                 if record:
                     record.long_term_memory = new_memory
@@ -72,8 +71,6 @@ class MemoryAgent:
                 
                 db_bg.commit()
                 logger.info(f"[Memory Agent] Đã lưu KÝ ỨC THỰC TẾ vào PostgreSQL cho {user_id}!")
-            finally:
-                db_bg.close() 
         except Exception as e:
             logger.error(f" [Memory Agent Lỗi]: {e}")
     def get_session_summary(self,session_id:str,db)->str:
@@ -88,8 +85,7 @@ class MemoryAgent:
             response = await get_llm_cheap().ainvoke([HumanMessage(content=prompt)])
             new_summary = response.content.strip()
 
-            db_bg =SessionLocal()
-            try:
+            with SessionLocal() as db_bg:
                 record = db_bg.query(SessionSummary).filter(SessionSummary.session_id==session_id).first()
                 if record:
                     record.summary_text = new_summary
@@ -98,8 +94,6 @@ class MemoryAgent:
                     db_bg.add(new_record)
                 db_bg.commit()
                 logger.info(f"[Thư ký Session] Đã cập nhật xong biên bản: {new_summary}")
-            finally:
-                db_bg.close()
         except Exception as e:
            logger.error(f"[Thư ký Session Lỗi]: {e}")
 
@@ -115,8 +109,7 @@ class MemoryAgent:
             
             if result.triggered:
                 logger.info(f"[LEVEL UP] User {user_id} được cộng {result.exp_earned} EXP cho kỹ năng '{result.skill_name}'. Lý do: {result.reason}")
-                db_bg = SessionLocal()
-                try:
+                with SessionLocal() as db_bg:
                     # Check if skill exists
                     record = db_bg.query(UserSkill).filter(
                         UserSkill.user_id == user_id, 
@@ -140,8 +133,6 @@ class MemoryAgent:
                         db_bg.add(new_skill)
                         
                     db_bg.commit()
-                finally:
-                    db_bg.close()
             else:
                 logger.info(f"[Skill Tracker] Không có điểm EXP nào được cộng thêm ở lượt này.")
         except Exception as e:

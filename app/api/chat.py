@@ -1,6 +1,6 @@
 import uuid
 import asyncio
-from fastapi import APIRouter, Form, File, UploadFile, HTTPException, Depends, Path
+from fastapi import APIRouter, Form, File, UploadFile, HTTPException, Depends, Path, WebSocket, WebSocketDisconnect
 from fastapi.responses import StreamingResponse
 
 from app.core.llm import get_llm_vip
@@ -18,6 +18,9 @@ from app.core.logger import logger
 from app.agents.graph_workflow import app_graph
 from app.services.semantic_cache import semantic_cache
 from app.core.rabbitmq import rabbitmq
+from app.core.redis_conf import ws_manager
+import json
+from langsmith import traceable
 
 router = APIRouter()
 
@@ -39,6 +42,7 @@ def get_db():
 
 
 @router.post("/chat")
+@traceable(run_type="chain", name="Chat Endpoint")
 async def chat_endpoint(
     message: str = Form(..., min_length=2),
     session_id: str = Form(default=""), 
@@ -171,15 +175,13 @@ async def chat_endpoint(
                 yield "data: [DONE]\n\n"
             finally:
                 # Lưu lịch sử chat vào DB
-                session_stream = SessionLocal()
-                try:
-                    session_stream.add(ChatHistory(user_id=user_id, session_id=session_id, role="user", content=user_prompt))
-                    session_stream.add(ChatHistory(user_id=user_id, session_id=session_id, role="ai", content=full_ai_response_ref["content"]))
-                    session_stream.commit()
-                except Exception as db_err:
-                    logger.error(f"Lỗi lưu DB cuối luồng STREAM: {db_err}")
-                finally:
-                    session_stream.close()
+                with SessionLocal() as session_stream:
+                    try:
+                        session_stream.add(ChatHistory(user_id=user_id, session_id=session_id, role="user", content=user_prompt))
+                        session_stream.add(ChatHistory(user_id=user_id, session_id=session_id, role="ai", content=full_ai_response_ref["content"]))
+                        session_stream.commit()
+                    except Exception as db_err:
+                        logger.error(f"Lỗi lưu DB cuối luồng STREAM: {db_err}")
 
                 # Chuyển dữ liệu lịch sử và logic cập nhật background sang hàng đợi RabbitMQ Cloud
                 latest_chat_str = f"User: {message}\nAI: {full_ai_response_ref['content']}"
@@ -194,6 +196,13 @@ async def chat_endpoint(
                     "ai_data_json": ai_data_json_ref["data"]
                 }
                 asyncio.create_task(rabbitmq.publish_message("update_background", payload))
+                if cv_text:
+                    hunt_payload = {
+                        "user_id": user_id, 
+                        "cv_text": cv_text,
+                        "ai_data_json": ai_data_json_ref["data"]
+                    }
+                    asyncio.create_task(rabbitmq.publish_message("hunt_jobs_for_cv", hunt_payload))
 
         return StreamingResponse(generate_response(), media_type="text/event-stream")
 
@@ -236,4 +245,125 @@ async def get_user_skills(user_id: str = Path(...), db = Depends(get_db)):
         })
         
     return {"labels": labels, "data": data, "full_data": full_data}
+
+
+
+@router.websocket("/ws/chat/{user_id}")
+async def websocket_chat_endpoint(websocket: WebSocket, user_id: str, db = Depends(get_db)):
+    await ws_manager.connect(websocket, user_id)
+    try:
+        while True:
+            data = await websocket.receive_text()
+            try:
+                payload = json.loads(data)
+            except json.JSONDecodeError:
+                await websocket.send_text(json.dumps({"error": "Invalid JSON format"}))
+                continue
+                
+            message = payload.get("message", "")
+            session_id = payload.get("session_id", "")
+            cv_id = payload.get("cv_id", "")
+            
+            if not message or len(message) < 2:
+                await websocket.send_text(json.dumps({"error": "Tin nhắn quá ngắn"}))
+                continue
+                
+            message = sanitize_input(message, max_length=2000)
+            
+            cv_text = ""
+            if cv_id and ws_manager.redis_client:
+                cv_text = await ws_manager.redis_client.get(f"cv:{cv_id}")
+                if not cv_text:
+                    cv_text = ""
+            
+            if not session_id:
+                session_id = str(uuid.uuid4())
+                
+            with SessionLocal() as db_session:
+                db_messages = db_session.query(ChatHistory).filter(ChatHistory.session_id == session_id).order_by(ChatHistory.created_at.asc()).limit(12).all()
+                history = [HumanMessage(content=m.content) if m.role == 'user' else AIMessage(content=m.content) for m in db_messages]
+
+                user_memory = memory_agent.get_memory(user_id, db_session)
+                session_summary = memory_agent.get_session_summary(session_id, db_session)
+            
+            user_memory += vector_memory_agent.get_relevant_memory(user_id, message)
+            knowledge = await search_knowledge_advanced(message)
+            
+            initial_state = {
+                "message": message,
+                "cv_text": cv_text,
+                "history": history,
+                "user_memory": user_memory,
+                "session_summary": session_summary,
+                "knowledge": knowledge,
+                "draft": "",
+                "evaluation": "",
+                "retry_count": 0,
+                "status": "DRAFTING"
+            }
+            
+            full_ai_response = {"content": ""}
+            ai_data_json = {"data": None}
+            cached_draft_text = ""
+            
+            await websocket.send_text(json.dumps({"status": "AI đang suy nghĩ..."}))
+            
+            async for output in app_graph.astream(initial_state):
+                for node_name, state in output.items():
+                    if node_name == "draft" or node_name == "rejection":
+                        await websocket.send_text(json.dumps({"status": "Đang viết câu trả lời..."}))
+                        cached_draft_text = state.get("draft_text", cached_draft_text)
+                    elif node_name == "evaluate":
+                        await websocket.send_text(json.dumps({"status": "Tech Lead đang chấm điểm..."}))
+                    elif node_name == "revise":
+                        await websocket.send_text(json.dumps({"status": "Đang sửa lại theo ý Tech Lead..."}))
+                        cached_draft_text = state.get("draft_text", cached_draft_text)
+                    elif node_name == "finalize":
+                        final_response = cached_draft_text
+                        ai_data_json["data"] = state.get("ai_data_json")
+                        
+                        chunk_size = 20
+                        for i in range(0, len(final_response), chunk_size):
+                            chunk = final_response[i:i+chunk_size]
+                            await websocket.send_text(json.dumps({"chunk": chunk}))
+                            await asyncio.sleep(0.01)
+                            
+                        full_ai_response["content"] = final_response
+                        
+            await websocket.send_text(json.dumps({"ai_data_json": ai_data_json["data"], "done": True, "session_id": session_id}))
+            
+            # Lưu DB
+            with SessionLocal() as session_stream:
+                try:
+                    session_stream.add(ChatHistory(user_id=user_id, session_id=session_id, role="user", content=message))
+                    session_stream.add(ChatHistory(user_id=user_id, session_id=session_id, role="ai", content=full_ai_response["content"]))
+                    session_stream.commit()
+                except Exception as db_err:
+                    logger.error(f"Lỗi lưu DB cuối luồng WS: {db_err}")
+            
+            # Đẩy Background task
+            latest_chat_str = f"User: {message}\nAI: {full_ai_response['content']}"
+            payload_bg = {
+                "user_id": user_id,
+                "session_id": session_id,
+                "user_memory": user_memory,
+                "session_summary": session_summary,
+                "latest_chat_str": latest_chat_str,
+                "ai_response": full_ai_response["content"],
+                "ai_data_json": ai_data_json["data"]
+            }
+            asyncio.create_task(rabbitmq.publish_message("update_background", payload_bg))
+            if cv_text:
+                hunt_payload = {
+                    "user_id": user_id, 
+                    "cv_text": cv_text,
+                    "ai_data_json": ai_data_json["data"]
+                }
+                asyncio.create_task(rabbitmq.publish_message("hunt_jobs_for_cv", hunt_payload))
+
+    except WebSocketDisconnect:
+        ws_manager.disconnect(websocket, user_id)
+    except Exception as e:
+        logger.error(f"Lỗi Websocket: {e}")
+        ws_manager.disconnect(websocket, user_id)
 

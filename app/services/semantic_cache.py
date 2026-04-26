@@ -1,19 +1,17 @@
 import uuid
 from datetime import datetime, timezone
-from langchain_community.vectorstores import Chroma
-from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_chroma import Chroma
+from app.core.embeddings import get_langchain_embeddings
 from app.core.config import settings
 from app.core.logger import logger
+from langsmith import traceable
 
-# FIX Bug 4: Thêm TTL cho cache — entries cũ hơn CACHE_TTL_HOURS sẽ bị bỏ qua
 CACHE_TTL_HOURS = 24
 
 
 class SemanticCache:
     def __init__(self):
-        self.embedding_function = HuggingFaceEmbeddings(
-            model_name="sentence-transformers/all-MiniLM-L6-v2",
-        )
+        self.embedding_function = get_langchain_embeddings()
 
         self.cache_db = Chroma(
             collection_name="semantic_cache",
@@ -23,12 +21,12 @@ class SemanticCache:
 
         self.SIMILARITY_THRESHOLD = 0.95
 
+    @traceable(run_type="tool", name="Semantic Cache Check")
     def check_cache(self, user_message: str) -> dict:
         results = self.cache_db.similarity_search_with_relevance_scores(user_message, k=1)
         if results:
             best_match_doc, score = results[0]
             if score >= self.SIMILARITY_THRESHOLD:
-                # FIX Bug 4: Kiểm tra TTL — bỏ qua nếu cache đã quá cũ
                 cached_at_str = best_match_doc.metadata.get("cached_at")
                 if cached_at_str:
                     try:
@@ -38,7 +36,7 @@ class SemanticCache:
                             logger.info(f"[Semantic Cache] Expired (age={age_hours:.1f}h > {CACHE_TTL_HOURS}h): {user_message[:50]}")
                             return {"is_hit": False, "cached_response": "", "cached_ai_data_json": "{}"}
                     except (ValueError, TypeError):
-                        pass  # Nếu lỗi parse timestamp, bỏ qua check TTL
+                        pass  
 
                 logger.info(f"[Semantic Cache] Hit (score={score:.3f}): {user_message[:50]}")
                 return {
@@ -52,20 +50,29 @@ class SemanticCache:
             "cached_ai_data_json": "{}"
         }
 
+    @traceable(run_type="tool", name="Semantic Cache Save")
     def save_cache(self, user_message: str, ai_response: str, ai_data_json: str):
+        safe_user_message = str(user_message) if user_message else ""
+        safe_ai_response = str(ai_response) if ai_response is not None else ""
+        safe_ai_data_json = str(ai_data_json) if ai_data_json is not None else "{}"
+
+        if not safe_user_message.strip():
+            logger.warning("[Semantic Cache] Bỏ qua lưu cache vì user_message rỗng.")
+            return
+
         try:
-            self.cache_db.add_documents(
-                documents=[user_message],
+            self.cache_db.add_texts(
+                texts=[safe_user_message],
                 metadatas=[
                     {
-                        "ai_response": ai_response,
-                        "ai_data_json": ai_data_json,
-                        "cached_at": datetime.now(timezone.utc).isoformat()  # FIX Bug 4: lưu timestamp
+                        "ai_response": safe_ai_response,
+                        "ai_data_json": safe_ai_data_json,
+                        "cached_at": datetime.now(timezone.utc).isoformat()
                     }
                 ],
                 ids=[str(uuid.uuid4())]
             )
-            logger.info(f"[Semantic Cache] Saved: {user_message[:50]}")
+            logger.info(f"[Semantic Cache] Saved: {safe_user_message[:50]}")
         except Exception as e:
             logger.error(f"[Semantic Cache] Error saving: {e}")
 

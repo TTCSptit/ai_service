@@ -1,11 +1,9 @@
-import os
-from groq import Groq
+from neo4j import GraphDatabase
 
-client = Groq(api_key="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")
-
-res = client.chat.completions.create(
-    model="mixtral-8x7b",
-    messages=[{"role": "user", "content": "hi"}]
+# Ghi thẳng pass cũ của bạn vào đây, không dùng os.getenv nữa
+driver = GraphDatabase.driver(
+    "neo4j+s://f7d40e28.databases.neo4j.io", 
+    auth=("neo4j", "5A6B22jjvwzpFUsAJDSiKqDdnoFLQIXc3GVCDHoNyOs") 
 )
-
-print(res)
+driver.verify_connectivity()
+print("Kết nối thành công!")

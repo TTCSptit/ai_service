@@ -11,7 +11,7 @@ from app.tools.github_tools import analyze_github_profile
 COMBINED_TOOLS = INTERVIEW_TOOLS + [execute_code_sandbox, analyze_github_profile]
 
 class EvaluationResult(BaseModel):
-    is_pass: bool = Field(alias="pass", description="Đánh giá xem bản nháp có đạt yêu cầu không (True/False)")
+    is_pass: bool = Field(description="Đánh giá xem bản nháp có đạt yêu cầu không (True/False)")
     feedback: str = Field(description="Góp ý chi tiết để HR sửa lại bản nháp")
 
 class TechLeadEvaluator:

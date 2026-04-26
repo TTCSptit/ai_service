@@ -3,6 +3,9 @@ import io
 from fastapi import UploadFile, HTTPException
 
 
+from langsmith import traceable
+
+@traceable(run_type="tool", name="Parse CV File")
 async def extract_text_from_cv(file: UploadFile) -> str:
     """
     Hàm đọc và trích xuất văn bản từ file PDF tải lên.
