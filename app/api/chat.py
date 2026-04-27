@@ -30,7 +30,6 @@ evaluator_agent = TechLeadEvaluator()
 memory_agent = MemoryAgent()
 vector_memory_agent  = VectorMemoryAgent()
 
-# Các tiến trình ngầm (cập nhật DB, RAG) đã được chuyển sang RabbitMQ Worker.
 
 
 def get_db():
@@ -249,7 +248,7 @@ async def get_user_skills(user_id: str = Path(...), db = Depends(get_db)):
 
 
 @router.websocket("/ws/chat/{user_id}")
-async def websocket_chat_endpoint(websocket: WebSocket, user_id: str, db = Depends(get_db)):
+async def websocket_chat_endpoint(websocket: WebSocket, user_id: str):
     await ws_manager.connect(websocket, user_id)
     try:
         while True:

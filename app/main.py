@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, WebSocket
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 from app.api import chat
@@ -20,7 +20,6 @@ async def lifespan(app: FastAPI):
     init_graph_db()
     await rabbitmq.connect()
     
-    # Khởi tạo Redis và Websocket Pub/Sub
     await ws_manager.connect_redis()
     if ws_manager.redis_client:
         await FastAPILimiter.init(ws_manager.redis_client)
@@ -46,6 +45,12 @@ app.add_middleware(
 app.include_router(chat.router, prefix="/api")
 from app.api import upload
 app.include_router(upload.router, prefix="/api")
+
+from app.api.chat import websocket_chat_endpoint
+@app.websocket("/ws/chat/{user_id}")
+async def websocket_fallback(websocket: WebSocket, user_id: str):
+    """Fallback route cho trường hợp proxy strip mất prefix /api"""
+    await websocket_chat_endpoint(websocket, user_id)
 
 
 @app.get("/")
