@@ -305,17 +305,17 @@ async def websocket_chat_endpoint(websocket: WebSocket, user_id: str):
             ai_data_json = {"data": None}
             cached_draft_text = ""
             
-            await websocket.send_text(json.dumps({"status": "AI đang suy nghĩ..."}))
+            await websocket.send_text(json.dumps({"type": "status", "status": "AI đang suy nghĩ..."}))
             
             async for output in app_graph.astream(initial_state):
                 for node_name, state in output.items():
                     if node_name == "draft" or node_name == "rejection":
-                        await websocket.send_text(json.dumps({"status": "Đang viết câu trả lời..."}))
+                        await websocket.send_text(json.dumps({"type": "status", "status": "Đang viết câu trả lời..."}))
                         cached_draft_text = state.get("draft_text", cached_draft_text)
                     elif node_name == "evaluate":
-                        await websocket.send_text(json.dumps({"status": "Tech Lead đang chấm điểm..."}))
+                        await websocket.send_text(json.dumps({"type": "status", "status": "Tech Lead đang chấm điểm..."}))
                     elif node_name == "revise":
-                        await websocket.send_text(json.dumps({"status": "Đang sửa lại theo ý Tech Lead..."}))
+                        await websocket.send_text(json.dumps({"type": "status", "status": "Đang sửa lại theo ý Tech Lead..."}))
                         cached_draft_text = state.get("draft_text", cached_draft_text)
                     elif node_name == "finalize":
                         final_response = cached_draft_text
@@ -324,12 +324,12 @@ async def websocket_chat_endpoint(websocket: WebSocket, user_id: str):
                         chunk_size = 20
                         for i in range(0, len(final_response), chunk_size):
                             chunk = final_response[i:i+chunk_size]
-                            await websocket.send_text(json.dumps({"chunk": chunk}))
+                            await websocket.send_text(json.dumps({"type": "content", "content": chunk}))
                             await asyncio.sleep(0.01)
                             
                         full_ai_response["content"] = final_response
                         
-            await websocket.send_text(json.dumps({"ai_data_json": ai_data_json["data"], "done": True, "session_id": session_id}))
+            await websocket.send_text(json.dumps({"type": "end", "session_id": session_id, "data": ai_data_json["data"]}))
             
             # Lưu DB
             with SessionLocal() as session_stream:
