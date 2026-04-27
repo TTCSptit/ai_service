@@ -8,7 +8,7 @@ import json
 
 router = APIRouter()
 
-@router.post("/cv/upload", dependencies=[Depends(RateLimiter(times=5, seconds=60))])
+@router.post("/cv/upload")
 async def upload_cv(cv_file: UploadFile = File(...)):
     """API Upload CV. Phân tích text và lưu tạm vào Redis."""
     try:
