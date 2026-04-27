@@ -1,6 +1,5 @@
 import uuid
 from fastapi import APIRouter, File, UploadFile, Depends
-from fastapi_limiter.depends import RateLimiter
 from app.services.cv_parser import extract_text_from_cv
 from app.core.redis_conf import ws_manager
 from app.prompts.system_prompts import sanitize_input

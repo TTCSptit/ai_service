@@ -5,8 +5,12 @@ from app.core.config import settings
 from sqlalchemy.sql import func
 DATABASE_URL = settings.DATABASE_URL
 
-engine = create_engine(DATABASE_URL)
-SessionLocal = sessionmaker(autocommit=False,autoflush=False,bind=engine)
+engine = create_engine(
+    DATABASE_URL,
+    pool_pre_ping=True,
+    pool_recycle=1800
+)
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
 class ChatHistory(Base):
