@@ -40,6 +40,29 @@ def get_db():
         db.close()
 
 
+@router.post("/upload-cv")
+async def upload_cv_for_ws(cv_file: UploadFile = File(...)):
+    """
+    Upload CV file, extract text, store in Redis with TTL=30min.
+    Returns cv_id to be sent via WebSocket payload.
+    """
+    try:
+        cv_text = await extract_text_from_cv(cv_file)
+        cv_id = str(uuid.uuid4())
+        
+        if ws_manager.redis_client:
+            await ws_manager.redis_client.setex(f"cv:{cv_id}", 1800, cv_text)  # TTL 30 phút
+            logger.info(f"[CV Upload] Đã lưu CV vào Redis với key cv:{cv_id}")
+        else:
+            logger.warning("[CV Upload] Redis không khả dụng, cv_text sẽ không được lưu.")
+            return {"error": "Redis không khả dụng, không thể xử lý CV qua WebSocket."}, 503
+        
+        return {"cv_id": cv_id, "preview": cv_text[:200] + "..." if len(cv_text) > 200 else cv_text}
+    except Exception as e:
+        logger.error(f"[CV Upload Lỗi]: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
 @router.post("/chat")
 @traceable(run_type="chain", name="Chat Endpoint")
 async def chat_endpoint(
