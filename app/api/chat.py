@@ -307,19 +307,21 @@ async def websocket_chat_endpoint(websocket: WebSocket, user_id: str):
             
             await websocket.send_text(json.dumps({"type": "status", "status": "AI đang suy nghĩ..."}))
             
+            current_state = initial_state.copy()
             async for output in app_graph.astream(initial_state):
-                for node_name, state in output.items():
+                for node_name, state_update in output.items():
+                    current_state.update(state_update)
                     if node_name == "draft" or node_name == "rejection":
                         await websocket.send_text(json.dumps({"type": "status", "status": "Đang viết câu trả lời..."}))
-                        cached_draft_text = state.get("draft_text", cached_draft_text)
+                        cached_draft_text = current_state.get("draft_text", cached_draft_text)
                     elif node_name == "evaluate":
                         await websocket.send_text(json.dumps({"type": "status", "status": "Tech Lead đang chấm điểm..."}))
                     elif node_name == "revise":
                         await websocket.send_text(json.dumps({"type": "status", "status": "Đang sửa lại theo ý Tech Lead..."}))
-                        cached_draft_text = state.get("draft_text", cached_draft_text)
+                        cached_draft_text = current_state.get("draft_text", cached_draft_text)
                     elif node_name == "finalize":
                         final_response = cached_draft_text
-                        ai_data_json["data"] = state.get("ai_data_json")
+                        ai_data_json["data"] = current_state.get("ai_data_json")
                         
                         chunk_size = 20
                         for i in range(0, len(final_response), chunk_size):

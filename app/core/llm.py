@@ -21,6 +21,22 @@ def get_llm_cheap():
     return _llm_cheap
 
 
+_llm_structured = None
+
+def get_llm_structured():
+    """Groq Llama 70B, streaming=False — dùng cho structured output / tool calling (FactList, SkillUpdate).
+    Groq KHÔNG hỗ trợ streaming=True khi dùng with_structured_output."""
+    global _llm_structured
+    if _llm_structured is None:
+        _llm_structured = ChatGroq(
+            api_key=settings.GROQ_API_KEY_V1,
+            model_name="llama-3.3-70b-versatile",
+            temperature=0.1,
+            streaming=False  # PHẢI là False khi dùng with_structured_output
+        )
+    return _llm_structured
+
+
 def get_llm_cheap_v1():
     """Groq Llama 70B (Key V1) — dùng cho draft generation, tool calling."""
     global _llm_cheap_v1

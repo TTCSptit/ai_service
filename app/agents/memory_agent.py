@@ -1,5 +1,5 @@
 from langchain_core.messages import HumanMessage
-from app.core.llm import get_llm_cheap
+from app.core.llm import get_llm_cheap, get_llm_structured
 from app.prompts.system_prompts import get_memory_prompt, old_memmory_prompt
 from app.core.database import SessionLocal, UserMemory, SessionSummary, UserSkill
 from app.schemas.payload import SkillUpdate
@@ -28,7 +28,7 @@ class VectorMemoryAgent:
             Đoạn chat: {latest_chat}
             Yêu cầu: Viết các sự thật dưới góc nhìn ngôi thứ ba (Ví dụ: "Ứng viên có 3 năm kinh nghiệm ReactJS", "Ứng viên muốn mức lương 2000$"). Chỉ lấy thông tin mới có giá trị."""
         try:
-            structured_llm = get_llm_cheap().with_structured_output(FactList)
+            structured_llm = get_llm_structured().with_structured_output(FactList)
             result: FactList = await structured_llm.ainvoke([HumanMessage(content=prompt)])
             if result.facts:
                 metadatas = [{"user_id": user_id} for _ in result.facts]
@@ -104,7 +104,7 @@ class MemoryAgent:
         Chỉ return JSON hợp lệ The schema SkillUpdate.
         Nếu không có gì đặc biệt (chỉ chitchat), hãy set triggered=False."""
         try:
-            structured_llm = get_llm_cheap().with_structured_output(SkillUpdate)
+            structured_llm = get_llm_structured().with_structured_output(SkillUpdate)
             result: SkillUpdate = await structured_llm.ainvoke([HumanMessage(content=prompt)])
             
             if result.triggered:
