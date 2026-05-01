@@ -69,6 +69,7 @@ async def chat_endpoint(
     message: str = Form(..., min_length=2),
     session_id: str = Form(default=""), 
     user_id: str = Form(default="guest"),
+    cv_id: str = Form(default=None),
     cv_file: UploadFile = File(None),
     db = Depends(get_db) 
 ):
@@ -113,7 +114,13 @@ async def chat_endpoint(
         logger.info(f"[API] Bắt đầu search_knowledge_advanced")
         knowledge = await search_knowledge_advanced(message)
         logger.info(f"[API] Bắt đầu extract_text_from_cv")
-        cv_text = await extract_text_from_cv(cv_file) if cv_file else ""
+        cv_text = ""
+        if cv_file:
+            cv_text = await extract_text_from_cv(cv_file)
+        elif cv_id and ws_manager.redis_client:
+            cv_text_bytes = await ws_manager.redis_client.get(f"cv:{cv_id}")
+            cv_text = cv_text_bytes if cv_text_bytes else ""
+        
         # FIX Bug 6: sanitize CV text (giới hạn 10000 chars)
         if cv_text:
             cv_text = sanitize_input(cv_text, max_length=10000)
