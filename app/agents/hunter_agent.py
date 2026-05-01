@@ -14,8 +14,9 @@ class CareerHunterAgent:
         logger.info("[Hunter Agent] Bắt đầu phân tích CV để tìm việc...")
         try:
             # Bước 1: Phân tích CV và lấy ra 2-3 chức danh công việc phù hợp nhất
+            cv_preview = cv_text[:5000]  # Giới hạn 5000 ký tự để tiết kiệm context
             extract_prompt = f"""Dưới đây là nội dung CV của ứng viên:
-{cv_text[:5000]}  # Giới hạn 5000 ký tự để tiết kiệm context
+{cv_preview}
 
 Nhiệm vụ: Dựa vào kinh nghiệm và kỹ năng trong CV này, hãy gợi ý 1 CỤM TỪ TÌM KIẾM NGẮN GỌN (tối đa 5-6 từ) bằng tiếng Việt hoặc tiếng Anh để tìm kiếm tin tuyển dụng phù hợp nhất.
 Ví dụ: "Tuyển dụng Backend Developer Nodejs" hoặc "Tuyển dụng Data Analyst SQL".

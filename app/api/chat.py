@@ -77,7 +77,8 @@ async def chat_endpoint(
         # FIX Bug 6: sanitize input trước khi xử lý
         message = sanitize_input(message, max_length=2000)
         logger.info(f"\n[API] === NHẬN YÊU CẦU MỚI: {message} ===")
-        cache_result = semantic_cache.check_cache(message)
+        # BUG FIX: Truyền user_id để check_cache chỉ trả về cache của đúng user
+        cache_result = semantic_cache.check_cache(message, user_id=user_id)
         if cache_result["is_hit"]:
             async def generate_cached_response():
                 cached_text = cache_result["cached_response"]
@@ -88,12 +89,11 @@ async def chat_endpoint(
                         yield f"data: {chunk}\n\n"
                         await asyncio.sleep(0.01)
                 yield "data: ---DATA---\n\n"
-                
+
                 cached_json = cache_result['cached_ai_data_json']
-                if isinstance(cached_json, dict):
-                    import json
+                if isinstance(cached_json, dict):  # đảm bảo là string trước khi yield
                     cached_json = json.dumps(cached_json)
-                    
+
                 yield f"data: {cached_json}\n\n"
                 yield "data: [DONE]\n\n"
             return StreamingResponse(generate_cached_response(), media_type="text/event-stream")

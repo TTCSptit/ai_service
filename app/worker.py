@@ -32,22 +32,24 @@ async def process_message(message: aio_pika.IncomingMessage):
                 ai_data_json = payload.get("ai_data_json")
 
                 logger.info(f"[RabbitMQ Worker] Bắt đầu xử lý background cho user: {user_id}")
-                
-                # Chạy các task xử lý nặng nề
-                # 1. Cập nhật trí nhớ dài hạn (LLM)
-                await memory_agent.update_memory_task(user_id, user_memory, latest_chat_str)
-                
-                # 2. Cập nhật tóm tắt phiên chat (LLM)
-                await memory_agent.update_session_summary_task(session_id, session_summary, latest_chat_str)
-                
-                # 3. Lưu cache ngữ nghĩa (Vector DB)
-                semantic_cache.save_cache(msg_text, ai_response, ai_data_json)
-                
-                # 4. Trích xuất và lưu sự thật vào Vector Memory
-                await vector_memory_agent.extract_and_store_facts(user_id, latest_chat_str)
-                
-                # 5. Đánh giá và cập nhật kỹ năng (LLM)
-                await memory_agent.evaluate_and_update_skills(user_id, latest_chat_str)
+
+                # BUG FIX: Chạy song song tất cả LLM tasks thay vì tuần tự.
+                # Trước: 4 LLM calls tuần tự → ~4-6 giây mỗi lượt
+                # Sau: asyncio.gather → ~1-2 giây (chờ task chậm nhất)
+                await asyncio.gather(
+                    # 1. Cập nhật trí nhớ dài hạn (LLM)
+                    memory_agent.update_memory_task(user_id, user_memory, latest_chat_str),
+                    # 2. Cập nhật tóm tắt phiên chat (LLM)
+                    memory_agent.update_session_summary_task(session_id, session_summary, latest_chat_str),
+                    # 3. Trích xuất và lưu sự thật vào Vector Memory (LLM)
+                    vector_memory_agent.extract_and_store_facts(user_id, latest_chat_str),
+                    # 4. Đánh giá và cập nhật kỹ năng (LLM)
+                    memory_agent.evaluate_and_update_skills(user_id, latest_chat_str),
+                )
+
+                # 5. Lưu cache ngữ nghĩa sau khi các task LLM hoàn tất (sync, không cần gather)
+                # BUG FIX: Truyền user_id để cache được scoped đúng user, tránh data leak
+                semantic_cache.save_cache(msg_text, ai_response, ai_data_json, user_id=user_id)
 
                 logger.info(f"[RabbitMQ Worker] Hoàn tất xử lý cho user: {user_id}")
                 await ws_manager.publish_user_notification(user_id, '{"action": "background_update", "status": "completed", "message": "Hồ sơ cá nhân và kỹ năng đã được cập nhật thành công!"}')
