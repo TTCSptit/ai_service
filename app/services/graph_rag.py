@@ -42,7 +42,6 @@ def init_graph_db():
 
 def get_qa_chain():
     """Lấy thể hiện QA Chain đã được khởi tạo"""
-    global _qa_chain, _is_initialized
     if not _is_initialized:
         init_graph_db()
     return _qa_chain
