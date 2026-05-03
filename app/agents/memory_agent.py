@@ -38,7 +38,7 @@ class VectorMemoryAgent:
                 logger.info(f"[Vector Memory] Không có thông tin mới để lưu.")
         except Exception as e:
             logger.error(f"[Vector Memory Lỗi]: {e}", exc_info=True)
-    def get_relevant_memory(self,user_id:str,current_message:str,k:int =3)->str:
+    def get_relevant_memory(self,user_id:str,current_message:str,k:int =5)->str:
         results = self.vector_db.similarity_search(
             query=current_message,
             k=k,

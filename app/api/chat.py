@@ -169,7 +169,7 @@ async def chat_endpoint(
                 revision_instruction = final_state.get("final_prompt", "")
                 user_prompt_base = final_state.get("user_prompt_ref", "")
                 if revision_instruction:
-                    user_prompt = f"{user_prompt_base}\n\n[HỆ THỐNG YÊU CẦU BỔ SUNG TỪ TECH LEAD]:\n{revision_instruction}"
+                    user_prompt = f"{user_prompt_base}\n{revision_instruction}"
                 else:
                     user_prompt = user_prompt_base
                 

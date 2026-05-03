@@ -6,6 +6,11 @@ from app.prompts.system_prompts import get_router_prompt
 from app.core.logger import logger
 
 class RouterDecision(BaseModel):
+    reasoning: str = Field(description="Suy luận logic để quyết định chọn nguồn dữ liệu nào. Giải thích tại sao lại bật/tắt các cờ (needs_internet, needs_graph...).")
+    response_length: str = Field(
+        default="medium",
+        description="'short' (1-3 câu, cho greeting/chitchat), 'medium' (200-400 từ, cho câu hỏi thông thường), 'long' (500+ từ, cho review CV đầy đủ hoặc giải thích sâu)."
+    )
     is_valid_topic: bool = Field(description="True nếu câu hỏi liên quan đến IT, lập trình, công việc, phỏng vấn, sự nghiệp, học tập, đánh giá CV. False nếu là chitchat, đùa cợt, hỏi thăm cá nhân ngoài lề.")
     needs_internet: bool
     needs_graph: bool

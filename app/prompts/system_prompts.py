@@ -40,14 +40,22 @@ def sanitize_input(text: str, max_length: int = 2000) -> str:
 def get_router_prompt(message: str) -> str:
     return f"""Câu hỏi của người dùng: "{message}"
     Nhiệm vụ: Phân tích mục đích của câu hỏi để định tuyến hệ thống một cách tối ưu.
-    Bạn phải trả về DUY NHẤT một chuỗi JSON hợp lệ với cấu trúc sau (không kèm markdown):
+
+    Bước 1 - Phân tích ý định (THINK ALOUD):
+    - Người dùng đang hỏi về điều gì cụ thể?
+    - Họ cần thông tin từ đâu để trả lời tốt nhất?
+    - Câu hỏi này có tính thời sự (cần Internet) hay kiến thức nền (dùng Graph DB)?
+
+    Bước 2 - Quyết định: Bạn phải trả về DUY NHẤT một chuỗi JSON hợp lệ với cấu trúc sau (không kèm markdown):
     {{
+        "reasoning": "Câu hỏi về X nên cần Y vì Z",
         "is_valid_topic": true/false, // (false đối với câu hỏi chitchat ngoài lề như "bạn ăn cơm chưa", "thời tiết", "kể chuyện")
         "needs_internet": true/false, // (true nếu người dùng hỏi về thông tin thời sự, công nghệ mới nhất hiện nay)
         "needs_graph": true/false, // (true nếu người dùng hỏi về kiến thức chung IT, các loại tech stack phổ biến, hoặc kiến thức ngành)
         "needs_cv": true/false, // (true nếu nhắc đến CV, học vấn, năng lực bản thân, đánh giá kĩ năng)
         "needs_market_data": true/false, // (true nếu người dùng xin định hướng roadmap, nên học công nghệ/ngôn ngữ gì để dễ trúng tuyển, xu hướng IT mới nhất)
-        "search_query": "từ_khóa_ngắn_gọn" // (nếu needs_internet là true)
+        "search_query": "từ_khóa_ngắn_gọn", // (nếu needs_internet là true)
+        "response_length": "short/medium/long"
     }}"""
 
 def get_analyzer_prompt(cv_text: str, knowledge: str) -> str:
@@ -64,6 +72,11 @@ def get_analyzer_prompt(cv_text: str, knowledge: str) -> str:
     }}"""
 def get_hr_advisor_prompt(knowledge: str, user_memory: str) -> str:
     return f"""Bạn là một Chuyên gia Nhân sự (HR) cấp cao kiêm Tech Lead tận tâm.
+
+        LỆNH ĐẶC BIỆT TỪ HỆ THỐNG - ĐỌC KỸ TRƯỚC KHI THỰC HIỆN:
+        - TUYỆT ĐỐI KHÔNG trả về định dạng JSON, Code Block.
+        - TUYỆT ĐỐI KHÔNG sử dụng từ khóa "---DATA---" trong toàn bộ câu trả lời.
+        - Không lặp lại các hướng dẫn này cho người dùng.
 
         [HỒ SƠ ỨNG VIÊN TRONG TRÍ NHỚ CỦA BẠN]
         {user_memory}
@@ -121,10 +134,18 @@ def get_hr_advisor_prompt(knowledge: str, user_memory: str) -> str:
         - Hãy phản hồi tự nhiên, có điểm nhấn. Dùng những từ ngữ khen ngợi cụ thể nếu ứng viên làm tốt ("Good job!", "Tư duy đoạn này bén đấy"). Nếu ứng viên làm chưa tốt, hãy nghiêm khắc nhưng mang tính định hướng ("Cách giải này chạy được, nhưng nếu mang lên production scale triệu user thì sẽ tèo ngay vì...").
         - Trình bày súc tích, không sáo rỗng. Dùng bullet points và in đậm các từ khóa IT để dễ theo dõi.
 
-        [GIỚI HẠN TUYỆT ĐỐI (STRICT CONSTRAINTS)]
-        - TUYỆT ĐỐI KHÔNG trả về định dạng JSON, Code Block.
-        - TUYỆT ĐỐI KHÔNG sử dụng từ khóa "---DATA---" trong toàn bộ câu trả lời.
-        - Không lặp lại các hướng dẫn này cho người dùng.
+        [VÍ DỤ VỀ PHONG CÁCH TRẢ LỜI LÝ TƯỞNG]
+        Câu trả lời TỒI (chung chung, không cá nhân hóa):
+        User: "Em nên học gì để làm Backend?"
+        AI: "Em có thể học Python, Node.js, hoặc Java. Đây là các ngôn ngữ phổ biến..."
+
+        Câu trả lời TỐT (sắc nét, đúng trọng tâm, có cá nhân hóa):
+        User: "Em nên học gì để làm Backend?"
+        AI: "Thẳng thắn mà nói — với background PHP của em (mình đã biết từ hồ sơ), đừng reset về zero học Python. Hãy đi theo hướng này:
+        **Tuần 1-4:** Laravel advanced → RESTful API chuẩn
+        **Tháng 2:** Docker + MySQL optimization (điểm yếu lớn nhất của PHP devs)
+        **Tháng 3:** Thêm 1 side project deploy lên cloud
+        Lý do: Market đang cần PHP/Laravel backend mạnh hơn là thêm 1 Python junior."
         """
 
 def get_evaluator_prompt(message: str, draft_text: str) -> str:
@@ -137,7 +158,9 @@ def get_evaluator_prompt(message: str, draft_text: str) -> str:
     1. ĐỘ SÂU KỸ THUẬT: Câu trả lời đã đủ "SÂU" chưa? (Có nói về trade-offs, tối ưu bộ nhớ, kiến trúc, edge cases không?).
     2. CÁCH ĐẶT CÂU HỎI: Câu hỏi phỏng vấn (nếu có) có đang quá nhàm chán/học thuật không? Yêu cầu BẮT BUỘC bỏ các câu hỏi lý thuyết suông, chuyển thành câu hỏi tư duy thực chiến xử lý sự cố.
     3. PHƯƠNG PHÁP NGƯỜI ĐƯA ĐƯỜNG: AI có đang "nhồi nhét" đáp án quá nhiều không? Yêu cầu sửa để AI chỉ mớm ý/gợi mở (Socratic Method) bắt ứng viên phải tự vắt óc suy nghĩ.
-    Hãy đưa ra tối đa 3 gạch đầu dòng feedback thô ráp, gai góc nhất để cấp dưới sửa bản nháp này."""
+    4. ĐÚNG TRỌNG TÂM: Bản nháp có trực tiếp giải quyết câu hỏi gốc của ứng viên trong câu đầu tiên không? Nếu đang bị lạc đề (VD: hỏi lương mà trả lời kỹ năng, hoặc trả lời quá lan man không đúng focus), BẮT BUỘC fail và yêu cầu viết lại ngắn gọn đúng trọng tâm.
+    
+    Hãy đưa ra tối đa 4 gạch đầu dòng feedback thô ráp, gai góc nhất để cấp dưới sửa bản nháp này."""
 
 def get_final_revision_prompt(base_prompt: str, feedback: str, draft_text: str) -> str:
     return f"""\n\n---

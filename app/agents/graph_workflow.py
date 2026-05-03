@@ -52,10 +52,23 @@ async def node_prepare_context(state: AgentState):
     if state["session_summary"]:
         sys_prompt += f"\n\n[BIÊN BẢN SESSION]\n{state['session_summary']}"
         
-    usr_prompt = f"Câu hỏi hiện tại: {state['message']}\n"
-    if internet_ctx: usr_prompt += f"[Thông tin Internet]: {internet_ctx}\n"
-    if graph_ctx: usr_prompt += f"[Kiến thức từ Graph Database]: {graph_ctx}\n" 
-    if market_ctx: usr_prompt += f"[Dữ liệu Thị trường thực tế]: {market_ctx}\n"
+    length_instruction = {
+        "short": "Trả lời NGẮN GỌN trong 1-3 câu.",
+        "medium": "Trả lời trong khoảng 200-400 từ, đủ chi tiết nhưng không padding.",
+        "long": "Trả lời toàn diện, có thể dài, dùng headers và bullet points để dễ đọc."
+    }
+    sys_prompt += f"\n\n[ĐỘ DÀI YÊU CẦU]: {length_instruction.get(router_decision.get('response_length', 'medium'), length_instruction['medium'])}"
+        
+    usr_prompt = f"""Câu hỏi hiện tại: {state['message']}
+
+[NGUỒN DỮ LIỆU - ĐỘ ƯU TIÊN GIẢM DẦN KHI MÂU THUẪN]
+Ưu tiên 1 (Cao nhất - từ CV ứng viên): Đã được inject qua system prompt
+Ưu tiên 2 (Dữ liệu thị trường thực tế): {market_ctx or 'Không có'}
+Ưu tiên 3 (Kiến thức Graph DB): {graph_ctx or 'Không có'}  
+Ưu tiên 4 (Tham khảo Internet): {internet_ctx or 'Không có'}
+
+Hãy ưu tiên 1->2->3->4 khi các nguồn mâu thuẫn nhau.
+"""
 
     return {
         "internet_context": internet_ctx,

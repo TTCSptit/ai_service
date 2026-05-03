@@ -112,14 +112,40 @@ async def search_knowledge_advanced(query: str, k: int = 2) -> str:
 
     # Sắp xếp theo độ liên quan (distance thấp nhất trước)
     sorted_docs = sorted(best_docs.items(), key=lambda x: x[1])
-    best_contexts = [doc for doc, _ in sorted_docs[:4]]
+    top_candidates = [doc for doc, _ in sorted_docs[:8]]  # Lấy top 8 để rerank
 
-    if not best_contexts:
+    if not top_candidates:
         logger.warning(f"[RAG] Không tìm thấy tài liệu nào đủ liên quan (threshold={RELEVANCE_THRESHOLD}).")
         return ""
 
+    # Reranking with LLM
+    if len(top_candidates) > 3:
+        logger.info(f"[RAG] Đang dùng LLM để Re-rank {len(top_candidates)} tài liệu...")
+        numbered = "\n\n".join(f"[{i+1}] {c[:500]}..." for i, c in enumerate(top_candidates))
+        rerank_prompt = f"""Câu hỏi: "{query}"
+
+Các đoạn tài liệu sau, hãy chọn 3 đoạn LIÊN QUAN NHẤT đến câu hỏi trên.
+CHỈ trả về danh sách số thứ tự cách nhau bằng dấu phẩy, ví dụ: 2, 4, 7
+
+{numbered}
+
+Các đoạn liên quan nhất (chỉ số):"""
+        try:
+            llm = get_llm_cheap()
+            resp = await llm.ainvoke([HumanMessage(content=rerank_prompt)])
+            indices = [int(x.strip())-1 for x in resp.content.split(",") if x.strip().isdigit()]
+            best_contexts = [top_candidates[i] for i in indices if i < len(top_candidates)][:3]
+        except Exception as e:
+            logger.error(f"[RAG Rerank Lỗi]: {e}. Dùng mặc định top 3.")
+            best_contexts = top_candidates[:3]
+    else:
+        best_contexts = top_candidates
+
+    if not best_contexts:
+        best_contexts = top_candidates[:3]
+
     result_text = "\n---\n".join(best_contexts)
-    logger.info(f"[RAG] Gom thành công {len(best_contexts)} đoạn tài liệu cốt lõi (sau khi filter score).")
+    logger.info(f"[RAG] Đã gom thành công {len(best_contexts)} đoạn tài liệu cốt lõi sau khi re-rank.")
     
     return result_text
 
