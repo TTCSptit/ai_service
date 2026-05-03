@@ -12,6 +12,9 @@ from app.core.redis_conf import ws_manager
 from fastapi_limiter import FastAPILimiter
 import asyncio
 from app.worker import main as worker_main
+from fastapi.exceptions import RequestValidationError
+from fastapi.responses import JSONResponse
+from app.core.logger import logger as system_logger
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -42,6 +45,15 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(request, exc):
+    system_logger.error(f"❌ [Validation Error] {request.method} {request.url}")
+    system_logger.error(f"Chi tiết lỗi: {exc.errors()}")
+    return JSONResponse(
+        status_code=422,
+        content={"detail": exc.errors(), "body": str(exc)},
+    )
+
 app.include_router(chat.router, prefix="/api")
 from app.api import upload
 app.include_router(upload.router, prefix="/api")
