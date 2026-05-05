@@ -94,7 +94,7 @@ async def process_message(message: aio_pika.IncomingMessage):
                 
                 # 2. Gửi Email thông qua SMTP
                 if email_html_content:
-                    email_sender.send_job_notification(final_email, email_html_content)
+                    await asyncio.to_thread(email_sender.send_job_notification, final_email, email_html_content)
                 
                 logger.info(f"[RabbitMQ Worker] Đã hoàn tất luồng săn việc cho: {final_email}")
                 await ws_manager.publish_user_notification(user_id, '{"action": "job_hunt", "status": "completed", "message": "Đã tìm thấy công việc phù hợp, vui lòng kiểm tra Email!"}')

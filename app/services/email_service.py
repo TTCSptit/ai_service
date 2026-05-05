@@ -29,7 +29,7 @@ class EmailSender:
             # Đính kèm nội dung HTML
             msg.attach(MIMEText(job_content_html, 'html'))
 
-            server = smtplib.SMTP(SMTP_SERVER, SMTP_PORT)
+            server = smtplib.SMTP(SMTP_SERVER, SMTP_PORT, timeout=15)
             server.starttls()
             server.login(SMTP_EMAIL, SMTP_PASSWORD)
             server.send_message(msg)
