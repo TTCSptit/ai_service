@@ -149,20 +149,10 @@ async def chat_endpoint(
                     for node_name, state_update in output.items():
                         final_state.update(state_update)
                         
-                        if node_name == "prepare":
-                            if "Dữ liệu Thị trường thực tế" in final_state.get("user_prompt_ref", ""):
-                                yield f"data: *Đang lấy dữ liệu thị trường thực tế (Market Data)...*\\n\\n\n\n"
-                            yield f"data: *Hệ thống đang thu thập Context...*\\n\\n\n\n"
-                        elif node_name == "draft":
-                            yield f"data: *AI đang viết nháp cấu trúc...*\\n\\n\n\n"
-                        elif node_name == "evaluate":
-                            if state_update.get("eval_pass"):
-                                yield f"data: *Tech Lead đã phê duyệt bản nháp!*\\n\\n---\\n\\n\n\n"
-                            else:
-                                yield f"data: *Tech Lead yêu cầu viết lại...*\\n\\n\n\n"
-                        elif node_name == "revise":
-                            yield f"data: *Đang sửa lại theo phản hồi...*\\n\\n\n\n"
-                        await asyncio.sleep(0.01)
+                        pass
+                    # Skip internal status yields as requested by user
+                    # if node_name == "prepare": ...
+                    await asyncio.sleep(0.01)
 
                 ai_data_json_ref["data"] = final_state.get("ai_data_json", "{}")
                 system_prompt = final_state.get("system_prompt_ref", "")
