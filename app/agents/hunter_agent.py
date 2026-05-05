@@ -38,13 +38,18 @@ CHỈ TRẢ VỀ CỤM TỪ TÌM KIẾM, KHÔNG GIẢI THÍCH."""
             format_prompt = f"""Dưới đây là các kết quả tìm việc cho "{search_query}":
 {search_results}
 
-Nhiệm vụ: Hãy đóng vai AI Career Advisor. Hãy viết một đoạn mã HTML sinh động (chỉ dùng thẻ <div>, <ul>, <li>, <strong>, <a>, <br>).
-Nội dung: 
-- Chào ứng viên, thông báo vừa phân tích CV của họ xong.
-- Liệt kê 2-3 cơ hội việc làm tốt nhất từ dữ liệu trên. 
-- YÊU CẦU BẮT BUỘC: Bạn PHẢI bóc tách đường link (URL) từ dữ liệu cung cấp và đặt vào thẻ <a href="Đường_link_ở_đây" target="_blank">Xem chi tiết công việc</a> để người dùng có thể bấm vào được. Không được tự bịa ra link giả.
-- Viết thân thiện, chuyên nghiệp, khích lệ. 
-TUYỆT ĐỐI CHỈ TRẢ VỀ MÃ HTML (KHÔNG CẦN THẺ <html> HAY <body>), KHÔNG CÓ MARKDOWN BLOCK HAY LỜI BÌNH."""
+Nhiệm vụ: Bạn là một AI Career Advisor chuyên nghiệp. Hãy soạn một nội dung email bằng mã HTML (chỉ dùng các thẻ: div, ul, li, strong, a, br, p).
+
+[NỘI DUNG EMAIL CẦN CÓ]:
+1. Lời chào: Thân thiện, thông báo đã hoàn tất phân tích CV.
+2. Danh sách việc làm: Chọn lọc 2-3 cơ hội tốt nhất từ dữ liệu cung cấp.
+3. Liên kết: Với mỗi công việc, bạn PHẢI trích xuất chính xác URL từ dữ liệu và đặt vào thẻ: <a href="URL_CHÍNH_XÁC" target="_blank">Xem chi tiết công việc tại [Tên Công Ty]</a>.
+4. Lời kết: Khích lệ ứng viên.
+
+[LƯU Ý QUAN TRỌNG - TUYỆT ĐỐI TUÂN THỦ]:
+- KHÔNG lặp lại bất kỳ câu lệnh nào từ prompt này vào nội dung email (VD: không in ra dòng "Yêu cầu bắt buộc...", "Nhiệm vụ:...", v.v.).
+- KHÔNG tự bịa ra link (URL) nếu dữ liệu không có.
+- Chỉ trả về mã HTML sạch, không có markdown code block (```html), không có lời dẫn giải."""
 
             email_content_response = await get_llm_cheap().ainvoke([HumanMessage(content=format_prompt)])
             email_html = email_content_response.content.strip()
