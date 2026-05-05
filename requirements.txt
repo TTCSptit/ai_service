@@ -1,4 +1,4 @@
-﻿aio-pika
+aio-pika
 aiohappyeyeballs
 aiohttp
 aiormq
@@ -213,3 +213,4 @@ yarg
 yarl
 zipp
 zstandard
+mailtrap
