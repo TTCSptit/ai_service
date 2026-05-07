@@ -216,7 +216,13 @@ async def chat_endpoint(
                 with SessionLocal() as session_stream:
                     try:
                         session_stream.add(ChatHistory(user_id=user_id, session_id=session_id, role="user", content=user_prompt))
-                        session_stream.add(ChatHistory(user_id=user_id, session_id=session_id, role="ai", content=full_ai_response_ref["content"]))
+                        session_stream.add(ChatHistory(
+                            user_id=user_id, 
+                            session_id=session_id, 
+                            role="ai", 
+                            content=full_ai_response_ref["content"],
+                            ai_data_json=ai_data_json_ref["data"]
+                        ))
                         session_stream.commit()
                     except Exception as db_err:
                         logger.error(f"Lỗi lưu DB cuối luồng STREAM: {db_err}")
@@ -364,11 +370,13 @@ async def websocket_chat_endpoint(websocket: WebSocket, user_id: str):
             
             await websocket.send_text(json.dumps({"type": "status", "status": "AI đang suy nghĩ..."}))
             
+            final_state = initial_state.copy()
             async for output in app_graph.astream(initial_state):
                 for node_name, state_update in output.items():
-                    # current_state.update(state_update) # Không cần update thủ công vì astream đã handle
-                    pass
+                    final_state.update(state_update)
                 await asyncio.sleep(0.01)
+
+            ai_data_json["data"] = final_state.get("ai_data_json", "{}")
 
             # Sau khi graph chạy xong, lấy kết quả cuối cùng từ state
             # Lưu ý: Trong WS hiện tại logic hơi khác HTTP, ta cần chạy LLM để ra text cuối nếu graph chưa ra text
@@ -383,7 +391,13 @@ async def websocket_chat_endpoint(websocket: WebSocket, user_id: str):
             with SessionLocal() as session_stream:
                 try:
                     session_stream.add(ChatHistory(user_id=user_id, session_id=session_id, role="user", content=message))
-                    session_stream.add(ChatHistory(user_id=user_id, session_id=session_id, role="ai", content=full_ai_response["content"]))
+                    session_stream.add(ChatHistory(
+                        user_id=user_id, 
+                        session_id=session_id, 
+                        role="ai", 
+                        content=full_ai_response["content"],
+                        ai_data_json=ai_data_json["data"]
+                    ))
                     session_stream.commit()
                 except Exception as db_err:
                     logger.error(f"Lỗi lưu DB cuối luồng WS: {db_err}")

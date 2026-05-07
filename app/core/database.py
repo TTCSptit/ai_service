@@ -21,6 +21,7 @@ class ChatHistory(Base):
     session_id = Column(String,index=True)
     role = Column(String)
     content = Column(Text)
+    ai_data_json = Column(Text, nullable=True)
     created_at = Column(DateTime,default=datetime.now)
 class UserMemory(Base):
     __tablename__ = "user_memories"
