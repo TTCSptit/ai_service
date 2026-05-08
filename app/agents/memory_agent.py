@@ -1,7 +1,8 @@
 from langchain_core.messages import HumanMessage
 from app.core.llm import get_llm_cheap, get_llm_structured
 from app.prompts.system_prompts import get_memory_prompt, old_memmory_prompt
-from app.core.database import SessionLocal, UserMemory, SessionSummary, UserSkill
+from app.core.database import AsyncSessionLocal, UserMemory, SessionSummary, UserSkill
+from sqlalchemy import select
 from app.schemas.payload import SkillUpdate
 from app.core.logger import logger
 from typing import List
@@ -50,8 +51,9 @@ class VectorMemoryAgent:
         return "\n".join(f"- {text}" for text in memory_texts)
 
 class MemoryAgent:
-    def get_memory(self, user_id: str,db) -> str:
-        record = db.query(UserMemory).filter(UserMemory.user_id==user_id).first()
+    async def get_memory(self, user_id: str, db) -> str:
+        result = await db.execute(select(UserMemory).where(UserMemory.user_id == user_id))
+        record = result.scalars().first()
         if record:
             return record.long_term_memory
         return "Chưa có thông tin gì về ứng viên này. Hãy làm quen từ đầu."
@@ -61,38 +63,41 @@ class MemoryAgent:
         try:
             response = await get_llm_cheap().ainvoke([HumanMessage(content=prompt)])
             new_memory = response.content.strip()
-            with SessionLocal() as db_bg:
-                record = db_bg.query(UserMemory).filter(UserMemory.user_id==user_id).first()
+            async with AsyncSessionLocal() as db_bg:
+                result = await db_bg.execute(select(UserMemory).where(UserMemory.user_id == user_id))
+                record = result.scalars().first()
                 if record:
                     record.long_term_memory = new_memory
                 else:
-                    new_record = UserMemory(user_id=user_id,long_term_memory=new_memory)
+                    new_record = UserMemory(user_id=user_id, long_term_memory=new_memory)
                     db_bg.add(new_record)
                 
-                db_bg.commit()
+                await db_bg.commit()
                 logger.info(f"[Memory Agent] Đã lưu KÝ ỨC THỰC TẾ vào PostgreSQL cho {user_id}!")
         except Exception as e:
             logger.error(f" [Memory Agent Lỗi]: {e}")
-    def get_session_summary(self,session_id:str,db)->str:
-        record = db.query(SessionSummary).filter(SessionSummary.session_id == session_id).first()
+    async def get_session_summary(self, session_id: str, db) -> str:
+        result = await db.execute(select(SessionSummary).where(SessionSummary.session_id == session_id))
+        record = result.scalars().first()
         if record:
             return record.summary_text
         return ""
-    async def update_session_summary_task(self,session_id:str, old_summary:str,latest_chat:str):
+    async def update_session_summary_task(self, session_id: str, old_summary: str, latest_chat: str):
         print(f"[Thư ký Session] Đang nén ý chính cho phiên chat {session_id}...")
-        prompt= old_memmory_prompt(old_summary,latest_chat)
+        prompt = old_memmory_prompt(old_summary, latest_chat)
         try:
             response = await get_llm_cheap().ainvoke([HumanMessage(content=prompt)])
             new_summary = response.content.strip()
 
-            with SessionLocal() as db_bg:
-                record = db_bg.query(SessionSummary).filter(SessionSummary.session_id==session_id).first()
+            async with AsyncSessionLocal() as db_bg:
+                result = await db_bg.execute(select(SessionSummary).where(SessionSummary.session_id == session_id))
+                record = result.scalars().first()
                 if record:
                     record.summary_text = new_summary
                 else:
-                    new_record = SessionSummary(session_id=session_id,summary_text=new_summary)
+                    new_record = SessionSummary(session_id=session_id, summary_text=new_summary)
                     db_bg.add(new_record)
-                db_bg.commit()
+                await db_bg.commit()
                 logger.info(f"[Thư ký Session] Đã cập nhật xong biên bản: {new_summary}")
         except Exception as e:
            logger.error(f"[Thư ký Session Lỗi]: {e}")
@@ -109,12 +114,14 @@ class MemoryAgent:
             
             if result.triggered:
                 logger.info(f"[LEVEL UP] User {user_id} được cộng {result.exp_earned} EXP cho kỹ năng '{result.skill_name}'. Lý do: {result.reason}")
-                with SessionLocal() as db_bg:
+                async with AsyncSessionLocal() as db_bg:
                     # Check if skill exists
-                    record = db_bg.query(UserSkill).filter(
+                    q = select(UserSkill).where(
                         UserSkill.user_id == user_id, 
                         UserSkill.skill_name.ilike(result.skill_name)
-                    ).first()
+                    )
+                    res = await db_bg.execute(q)
+                    record = res.scalars().first()
                     
                     if record:
                         record.exp_point += result.exp_earned
@@ -132,7 +139,7 @@ class MemoryAgent:
                         )
                         db_bg.add(new_skill)
                         
-                    db_bg.commit()
+                    await db_bg.commit()
             else:
                 logger.info(f"[Skill Tracker] Không có điểm EXP nào được cộng thêm ở lượt này.")
         except Exception as e:

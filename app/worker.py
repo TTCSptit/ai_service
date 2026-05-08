@@ -49,7 +49,7 @@ async def process_message(message: aio_pika.IncomingMessage):
 
                 # 5. Lưu cache ngữ nghĩa sau khi các task LLM hoàn tất (sync, không cần gather)
                 # BUG FIX: Truyền user_id để cache được scoped đúng user, tránh data leak
-                semantic_cache.save_cache(msg_text, ai_response, ai_data_json, user_id=user_id)
+                await semantic_cache.save_cache(msg_text, ai_response, ai_data_json, user_id=user_id)
 
                 logger.info(f"[RabbitMQ Worker] Hoàn tất xử lý cho user: {user_id}")
                 await ws_manager.publish_user_notification(user_id, '{"action": "background_update", "status": "completed", "message": "Hồ sơ cá nhân và kỹ năng đã được cập nhật thành công!"}')

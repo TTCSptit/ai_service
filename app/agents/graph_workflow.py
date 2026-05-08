@@ -94,7 +94,7 @@ async def node_evaluating(state:AgentState):
 
 async def node_revising(state:AgentState):
     logger.warning("[Node 4] Bị chê, đang viết lại nháp...")
-    revised_user_prompt = state["user_prompt_ref"] + f"\n[Tech Lead Feedback Cần Sửa]: {state['feedback']}"
+    revised_user_prompt = state["user_prompt_ref"] + f"\n[Bản nháp trước đó của bạn]:\n{state['draft_text']}\n\n[Tech Lead Feedback Cần Sửa]: {state['feedback']}"
     draft = await evaluator_agent.generate_draft(state["history"], state["system_prompt_ref"], revised_user_prompt)
     return {"draft_text": draft, "retry_count": state["retry_count"] + 1}
 def should_continue_loop(state: AgentState):
@@ -106,9 +106,9 @@ def should_continue_loop(state: AgentState):
     return "rejected"
 
 async def node_finalize(state: AgentState):
-    logger.info("[Node Cuối] Đóng gói gửi cho VIP AI phát sóng...")
-    final_prompt = get_final_revision_prompt(state["system_prompt_ref"], state["feedback"], state["draft_text"])
-    return {"final_prompt": final_prompt}
+    logger.info("[Node Cuối] Hoàn tất bản nháp, chuẩn bị xuất ra UI...")
+    # Không cần tạo final_prompt để sinh lại lần 2 nữa
+    return {"final_prompt": ""}
 
 async def node_rejection(state: AgentState):
     logger.info("[Node] Xử lý câu hỏi ngoài lề...")

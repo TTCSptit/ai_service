@@ -5,7 +5,7 @@ import asyncio
 from typing import List
 from pydantic import BaseModel, Field
 from langchain_core.messages import HumanMessage
-from app.core.llm import get_llm_cheap
+from app.core.llm import get_llm_cheap, get_llm_structured
 from app.core.logger import logger
 from langsmith import traceable
 BASE_DIR = os.getcwd()
@@ -67,7 +67,7 @@ async def generate_multi_queries(original_query: str) ->List[str]:
     Nhiệm vụ: Viết lại câu hỏi này thành 3 phiên bản khác nhau để tối ưu hóa việc tìm kiếm trong Vector Database. 
     Ví dụ: "Docker là gì?" -> ["Định nghĩa Containerization và Docker", "Ứng dụng của Docker trong CI/CD DevOps", "Kiến trúc hoạt động của Docker engine"]."""
     try:
-        llm = get_llm_cheap()
+        llm = get_llm_structured()
         structured_llm =  llm.with_structured_output(QueryVariations)
         result: QueryVariations = await structured_llm.ainvoke([HumanMessage(content=prompt)])
         return result.queries
@@ -110,42 +110,17 @@ async def search_knowledge_advanced(query: str, k: int = 2) -> str:
                 if content not in best_docs or dist < best_docs[content]:
                     best_docs[content] = dist
 
-    # Sắp xếp theo độ liên quan (distance thấp nhất trước)
-    sorted_docs = sorted(best_docs.items(), key=lambda x: x[1])
-    top_candidates = [doc for doc, _ in sorted_docs[:8]]  # Lấy top 8 để rerank
+    # Lấy top 2 tốt nhất (đã sort)
+    top_candidates = [doc for doc, _ in sorted_docs[:2]] 
 
     if not top_candidates:
         logger.warning(f"[RAG] Không tìm thấy tài liệu nào đủ liên quan (threshold={RELEVANCE_THRESHOLD}).")
         return ""
 
-    # Reranking with LLM
-    if len(top_candidates) > 3:
-        logger.info(f"[RAG] Đang dùng LLM để Re-rank {len(top_candidates)} tài liệu...")
-        numbered = "\n\n".join(f"[{i+1}] {c[:500]}..." for i, c in enumerate(top_candidates))
-        rerank_prompt = f"""Câu hỏi: "{query}"
-
-Các đoạn tài liệu sau, hãy chọn 3 đoạn LIÊN QUAN NHẤT đến câu hỏi trên.
-CHỈ trả về danh sách số thứ tự cách nhau bằng dấu phẩy, ví dụ: 2, 4, 7
-
-{numbered}
-
-Các đoạn liên quan nhất (chỉ số):"""
-        try:
-            llm = get_llm_cheap()
-            resp = await llm.ainvoke([HumanMessage(content=rerank_prompt)])
-            indices = [int(x.strip())-1 for x in resp.content.split(",") if x.strip().isdigit()]
-            best_contexts = [top_candidates[i] for i in indices if i < len(top_candidates)][:3]
-        except Exception as e:
-            logger.error(f"[RAG Rerank Lỗi]: {e}. Dùng mặc định top 3.")
-            best_contexts = top_candidates[:3]
-    else:
-        best_contexts = top_candidates
-
-    if not best_contexts:
-        best_contexts = top_candidates[:3]
+    best_contexts = top_candidates
 
     result_text = "\n---\n".join(best_contexts)
-    logger.info(f"[RAG] Đã gom thành công {len(best_contexts)} đoạn tài liệu cốt lõi sau khi re-rank.")
+    logger.info(f"[RAG] Đã gom thành công {len(best_contexts)} đoạn tài liệu cốt lõi sau khi lọc bằng khoảng cách.")
     
     return result_text
 

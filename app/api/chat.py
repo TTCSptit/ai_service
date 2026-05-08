@@ -1,13 +1,13 @@
 import uuid
 import asyncio
-from fastapi import APIRouter, Form, File, UploadFile, HTTPException, Depends, Path, WebSocket, WebSocketDisconnect
+from fastapi import APIRouter, Form, File, UploadFile, HTTPException, Depends, Path, WebSocket, WebSocketDisconnect, BackgroundTasks
 from fastapi.responses import StreamingResponse
-
+from fastapi.concurrency import run_in_threadpool
 from app.core.llm import get_llm_vip
 from langchain_core.messages import HumanMessage, SystemMessage, AIMessage
-from app.core.database import SessionLocal, ChatHistory, UserSkill
+from app.core.database import AsyncSessionLocal, ChatHistory, UserSkill, get_db
 from app.services.rag_engine import search_knowledge_advanced
-from app.services.cv_parser import extract_text_from_cv
+from sqlalchemy import select
 
 from app.prompts.system_prompts import get_hr_advisor_prompt, get_final_revision_prompt, sanitize_input
 from app.agents.router_agent import RouterAgent
@@ -33,12 +33,7 @@ vector_memory_agent  = VectorMemoryAgent()
 
 
 
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
+# get_db đã được định nghĩa là async generator trong database.py
 
 
 @router.post("/upload-cv")
@@ -72,6 +67,7 @@ async def chat_endpoint(
     user_id: str = Form(default="guest"),
     cv_id: str = Form(default=None),
     cv_file: UploadFile = File(None),
+    background_tasks: BackgroundTasks = None,
     db = Depends(get_db) 
 ):
     try:
@@ -90,8 +86,12 @@ async def chat_endpoint(
         if cv_text_for_cache:
             cv_hash_for_cache = hashlib.sha256(cv_text_for_cache.encode('utf-8')).hexdigest()
 
-        # BUG FIX: Truyền user_id VÀ cv_hash để check_cache chính xác
-        cache_result = semantic_cache.check_cache(message, user_id=user_id, cv_hash=cv_hash_for_cache)
+        # Tính toán context_hash dựa trên session_summary (hoặc message history nếu cần)
+        session_summary_for_cache = await memory_agent.get_session_summary(session_id, db) if session_id else ""
+        context_hash = hashlib.sha256(session_summary_for_cache.encode('utf-8')).hexdigest()
+
+        # BUG FIX: Truyền context_hash để check_cache chính xác
+        cache_result = await semantic_cache.check_cache(message, user_id=user_id, cv_hash=cv_hash_for_cache, context_hash=context_hash)
         if cache_result["is_hit"]:
             async def generate_cached_response():
                 cached_text = cache_result["cached_response"]
@@ -114,16 +114,17 @@ async def chat_endpoint(
         if not session_id:
             session_id = str(uuid.uuid4())
             
-        # FIX Bug 5: tăng từ 6 → 12 messages để giữ context tốt hơn
-        db_messages = db.query(ChatHistory).filter(ChatHistory.session_id == session_id).order_by(ChatHistory.created_at.asc()).limit(12).all()
+        # Dùng Async Database chuẩn 2.0
+        result = await db.execute(select(ChatHistory).where(ChatHistory.session_id == session_id).order_by(ChatHistory.created_at.asc()).limit(12))
+        db_messages = result.scalars().all()
         history = [HumanMessage(content=m.content) if m.role == 'user' else AIMessage(content=m.content) for m in db_messages]
 
         logger.info(f"[API] Bắt đầu lấy user_memory")
-        user_memory = memory_agent.get_memory(user_id,db)
+        user_memory = await memory_agent.get_memory(user_id, db)
         logger.info(f"[API] Bắt đầu lấy vector_memory")
         user_memory += vector_memory_agent.get_relevant_memory(user_id, message)
         logger.info(f"[API] Bắt đầu lấy session_summary")
-        session_summary = memory_agent.get_session_summary(session_id,db)
+        session_summary = await memory_agent.get_session_summary(session_id, db)
         logger.info(f"[API] Bắt đầu search_knowledge_advanced")
         knowledge = await search_knowledge_advanced(message)
         logger.info(f"[API] Bắt đầu extract_text_from_cv")
@@ -134,9 +135,9 @@ async def chat_endpoint(
             cv_text_bytes = await ws_manager.redis_client.get(f"cv:{cv_id}")
             cv_text = cv_text_bytes if cv_text_bytes else ""
         
-        # FIX Bug 6: sanitize CV text (giới hạn 10000 chars)
+        # FIX Bug 6: sanitize CV text (giới hạn 3000 chars)
         if cv_text:
-            cv_text = sanitize_input(cv_text, max_length=10000)
+            cv_text = sanitize_input(cv_text, max_length=3000)
         # FIX: Tính hash của CV để dùng cho semantic cache
         cv_hash = ""
         if cv_text:
@@ -174,32 +175,19 @@ async def chat_endpoint(
                     await asyncio.sleep(0.01)
 
                 ai_data_json_ref["data"] = final_state.get("ai_data_json", "{}")
-                system_prompt = final_state.get("system_prompt_ref", "")
-                revision_instruction = final_state.get("final_prompt", "")
-                user_prompt_base = final_state.get("user_prompt_ref", "")
-                if revision_instruction:
-                    user_prompt = f"{user_prompt_base}\n{revision_instruction}"
-                else:
-                    user_prompt = user_prompt_base
                 
-                final_messages = [SystemMessage(content=system_prompt)] + history + [HumanMessage(content=user_prompt)]
+                # Thay vì gọi LLM VIP để sinh lại từ đầu, ta giả lập stream trực tiếp draft_text
+                draft_text = final_state.get("draft_text", "Xin lỗi, hệ thống AI đang gặp sự cố khi tạo câu trả lời (hoặc câu hỏi không hợp lệ).")
+                chunk_size = 30
+                for i in range(0, len(draft_text), chunk_size):
+                    chunk = draft_text[i:i+chunk_size]
+                    full_ai_response_ref["content"] += chunk
+                    safe_chunk = chunk.replace("\n", "\\n")
+                    yield f"data: {safe_chunk}\n\n"
+                    await asyncio.sleep(0.02)
                 
-                # 3. Bắt đầu stream LLM VIP
-                chunk_count = 0
-                async for chunk in get_llm_vip().astream(final_messages):
-                    chunk_count += 1
-                    text_chunk = chunk.content
-                    full_ai_response_ref["content"] += text_chunk
-
-                    safe_text = text_chunk.replace("\n", "\\n")
-                    yield f"data: {safe_text}\n\n"
+                logger.info(f"Giả lập Stream xong, ContentLength={len(full_ai_response_ref['content'])}")
                 
-                logger.info(f"Stream LLM xong, tổng số chunk={chunk_count}, ContentLength={len(full_ai_response_ref['content'])}")
-                if chunk_count == 0 or len(full_ai_response_ref["content"]) == 0:
-                    fallback_msg = "Xin lỗi, hệ thống AI đang gặp sự cố khi tạo câu trả lời (hoặc câu hỏi không hợp lệ). Vui lòng thử lại!"
-                    full_ai_response_ref["content"] = fallback_msg
-                    yield f"data: {fallback_msg}\n\n"
-
                 yield "data: ---DATA---\n\n"
                 yield f"data: {ai_data_json_ref['data']}\n\n"
                 yield "data: [DONE]\n\n"
@@ -213,20 +201,21 @@ async def chat_endpoint(
                 yield "data: [DONE]\n\n"
             finally:
                 # Lưu lịch sử chat vào DB
-                with SessionLocal() as session_stream:
-                    try:
-                        session_stream.add(ChatHistory(user_id=user_id, session_id=session_id, role="user", content=user_prompt))
-                        session_stream.add(ChatHistory(
-                            user_id=user_id, 
-                            session_id=session_id, 
-                            role="ai", 
-                            content=full_ai_response_ref["content"],
-                            ai_data_json=ai_data_json_ref["data"]
-                        ))
-                        session_stream.commit()
-                    except Exception as db_err:
-                        logger.error(f"Lỗi lưu DB cuối luồng STREAM: {db_err}")
-
+                async def save_chat_history():
+                    async with AsyncSessionLocal() as session_stream:
+                        try:
+                            session_stream.add(ChatHistory(user_id=user_id, session_id=session_id, role="user", content=user_prompt))
+                            session_stream.add(ChatHistory(
+                                user_id=user_id, 
+                                session_id=session_id, 
+                                role="ai", 
+                                content=full_ai_response_ref["content"],
+                                ai_data_json=ai_data_json_ref["data"]
+                            ))
+                            await session_stream.commit()
+                        except Exception as db_err:
+                            logger.error(f"Lỗi lưu DB cuối luồng STREAM: {db_err}")
+                await save_chat_history()
                 # Chuyển dữ liệu lịch sử và logic cập nhật background sang hàng đợi RabbitMQ Cloud
                 latest_chat_str = f"User: {message}\nAI: {full_ai_response_ref['content']}"
                 payload = {
@@ -241,15 +230,26 @@ async def chat_endpoint(
                     "cv_hash": cv_hash
                 }
                 # Lưu vào semantic cache cho lần sau
-                semantic_cache.save_cache(message, full_ai_response_ref["content"], ai_data_json_ref["data"], user_id, cv_hash)
-                asyncio.create_task(rabbitmq.publish_message("update_background", payload))
-                if cv_text:
-                    hunt_payload = {
-                        "user_id": user_id, 
-                        "cv_text": cv_text,
-                        "ai_data_json": ai_data_json_ref["data"]
-                    }
-                    asyncio.create_task(rabbitmq.publish_message("hunt_jobs_for_cv", hunt_payload))
+                await semantic_cache.save_cache(message, full_ai_response_ref["content"], ai_data_json_ref["data"], user_id, cv_hash, context_hash)
+                
+                if background_tasks:
+                    background_tasks.add_task(rabbitmq.publish_message, "update_background", payload)
+                    if cv_text:
+                        hunt_payload = {
+                            "user_id": user_id, 
+                            "cv_text": cv_text,
+                            "ai_data_json": ai_data_json_ref["data"]
+                        }
+                        background_tasks.add_task(rabbitmq.publish_message, "hunt_jobs_for_cv", hunt_payload)
+                else:
+                    asyncio.create_task(rabbitmq.publish_message("update_background", payload))
+                    if cv_text:
+                        hunt_payload = {
+                            "user_id": user_id, 
+                            "cv_text": cv_text,
+                            "ai_data_json": ai_data_json_ref["data"]
+                        }
+                        asyncio.create_task(rabbitmq.publish_message("hunt_jobs_for_cv", hunt_payload))
 
         return StreamingResponse(generate_response(), media_type="text/event-stream")
 
@@ -298,13 +298,20 @@ async def get_user_skills(user_id: str = Path(...), db = Depends(get_db)):
 @router.websocket("/ws/chat/{user_id}")
 async def websocket_chat_endpoint(websocket: WebSocket, user_id: str):
     await ws_manager.connect(websocket, user_id)
+    is_processing = False # Khóa xử lý để chặn spam
     try:
         while True:
             data = await websocket.receive_text()
+            if is_processing:
+                await websocket.send_text(json.dumps({"type": "error", "message": "AI đang xử lý tin nhắn trước, vui lòng đợi."}))
+                continue
+            
+            is_processing = True
             try:
                 payload = json.loads(data)
             except json.JSONDecodeError:
                 await websocket.send_text(json.dumps({"error": "Invalid JSON format"}))
+                is_processing = False
                 continue
                 
             message = payload.get("message", "")
@@ -313,6 +320,7 @@ async def websocket_chat_endpoint(websocket: WebSocket, user_id: str):
             
             if not message or len(message) < 2:
                 await websocket.send_text(json.dumps({"error": "Tin nhắn quá ngắn"}))
+                is_processing = False
                 continue
                 
             message = sanitize_input(message, max_length=2000)
@@ -322,23 +330,29 @@ async def websocket_chat_endpoint(websocket: WebSocket, user_id: str):
                 cv_text = await ws_manager.redis_client.get(f"cv:{cv_id}")
                 if not cv_text:
                     cv_text = ""
+            if cv_text:
+                cv_text = sanitize_input(cv_text, max_length=3000)
             
             if not session_id:
                 session_id = str(uuid.uuid4())
                 
-            with SessionLocal() as db_session:
-                db_messages = db_session.query(ChatHistory).filter(ChatHistory.session_id == session_id).order_by(ChatHistory.created_at.asc()).limit(12).all()
-                history = [HumanMessage(content=m.content) if m.role == 'user' else AIMessage(content=m.content) for m in db_messages]
-
-                user_memory = memory_agent.get_memory(user_id, db_session)
-                session_summary = memory_agent.get_session_summary(session_id, db_session)
+            async def fetch_ws_db():
+                async with AsyncSessionLocal() as db_session:
+                    res = await db_session.execute(select(ChatHistory).where(ChatHistory.session_id == session_id).order_by(ChatHistory.created_at.asc()).limit(12))
+                    db_msgs = res.scalars().all()
+                    hist = [HumanMessage(content=m.content) if m.role == 'user' else AIMessage(content=m.content) for m in db_msgs]
+                    u_mem = await memory_agent.get_memory(user_id, db_session)
+                    s_sum = await memory_agent.get_session_summary(session_id, db_session)
+                    return hist, u_mem, s_sum
+            history, user_memory, session_summary = await fetch_ws_db()
             
             cv_hash = ""
             if cv_text:
                 cv_hash = hashlib.sha256(cv_text.encode('utf-8')).hexdigest()
 
             # INTEGRATE SEMANTIC CACHE FOR WS
-            cache_result = semantic_cache.check_cache(message, user_id=user_id, cv_hash=cv_hash)
+            context_hash = hashlib.sha256(session_summary.encode('utf-8')).hexdigest()
+            cache_result = await semantic_cache.check_cache(message, user_id=user_id, cv_hash=cv_hash, context_hash=context_hash)
             if cache_result["is_hit"]:
                 await websocket.send_text(json.dumps({"type": "status", "status": "Hit cache! Đang tải câu trả lời..."}))
                 cached_text = cache_result["cached_response"]
@@ -347,6 +361,7 @@ async def websocket_chat_endpoint(websocket: WebSocket, user_id: str):
                     await websocket.send_text(json.dumps({"type": "content", "content": cached_text[i:i+chunk_size]}))
                     await asyncio.sleep(0.01)
                 await websocket.send_text(json.dumps({"type": "end", "session_id": session_id, "data": cache_result["cached_ai_data_json"]}))
+                is_processing = False
                 continue
 
             knowledge = await search_knowledge_advanced(message)
@@ -377,31 +392,31 @@ async def websocket_chat_endpoint(websocket: WebSocket, user_id: str):
                 await asyncio.sleep(0.01)
 
             ai_data_json["data"] = final_state.get("ai_data_json", "{}")
+            draft_text = final_state.get("draft_text", "Xin lỗi, hệ thống AI đang gặp sự cố khi tạo câu trả lời.")
+            full_ai_response["content"] = draft_text
+            
+            chunk_size = 30
+            for i in range(0, len(draft_text), chunk_size):
+                await websocket.send_text(json.dumps({"type": "content", "content": draft_text[i:i+chunk_size]}))
+                await asyncio.sleep(0.02)
+            await websocket.send_text(json.dumps({"type": "end", "session_id": session_id, "data": ai_data_json["data"]}))
 
-            # Sau khi graph chạy xong, lấy kết quả cuối cùng từ state
-            # Lưu ý: Trong WS hiện tại logic hơi khác HTTP, ta cần chạy LLM để ra text cuối nếu graph chưa ra text
-            # Nhưng ở đây để đơn giản và đồng bộ, ta giả định graph đã ra draft_text (từ analyzer/agent)
-            
-            # Tuy nhiên, để đồng bộ nhất với HTTP, ta nên chạy LLM VIP ở đây.
-            # Nhưng do user chỉ hỏi về semantic cache, tôi sẽ tập trung vào phần đó.
-            # Lưu vào cache sau khi hoàn tất (giả định logic sinh text ở đây)
-            # semantic_cache.save_cache(message, full_ai_response["content"], ai_data_json["data"], user_id, cv_hash)
-            
-            # Lưu DB
-            with SessionLocal() as session_stream:
-                try:
-                    session_stream.add(ChatHistory(user_id=user_id, session_id=session_id, role="user", content=message))
-                    session_stream.add(ChatHistory(
-                        user_id=user_id, 
-                        session_id=session_id, 
-                        role="ai", 
-                        content=full_ai_response["content"],
-                        ai_data_json=ai_data_json["data"]
-                    ))
-                    session_stream.commit()
-                except Exception as db_err:
-                    logger.error(f"Lỗi lưu DB cuối luồng WS: {db_err}")
-            
+            async def save_ws_db():
+                async with AsyncSessionLocal() as session_stream:
+                    try:
+                        session_stream.add(ChatHistory(user_id=user_id, session_id=session_id, role="user", content=message))
+                        session_stream.add(ChatHistory(
+                            user_id=user_id, 
+                            session_id=session_id, 
+                            role="ai", 
+                            content=full_ai_response["content"],
+                            ai_data_json=ai_data_json["data"]
+                        ))
+                        await session_stream.commit()
+                    except Exception as db_err:
+                        logger.error(f"Lỗi lưu DB cuối luồng WS: {db_err}")
+            await save_ws_db()
+
             # Đẩy Background task
             latest_chat_str = f"User: {message}\nAI: {full_ai_response['content']}"
             payload_bg = {
@@ -421,7 +436,10 @@ async def websocket_chat_endpoint(websocket: WebSocket, user_id: str):
                     "ai_data_json": ai_data_json["data"]
                 }
                 asyncio.create_task(rabbitmq.publish_message("hunt_jobs_for_cv", hunt_payload))
-
+            
+            # Lưu vào cache cho WS
+            await semantic_cache.save_cache(message, full_ai_response["content"], ai_data_json["data"], user_id, cv_hash, context_hash)
+            is_processing = False
     except WebSocketDisconnect:
         ws_manager.disconnect(websocket, user_id)
     except Exception as e:

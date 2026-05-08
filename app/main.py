@@ -18,7 +18,7 @@ from app.core.logger import logger as system_logger
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    init_db()
+    await init_db()
     init_database()
     init_graph_db()
     await rabbitmq.connect()
