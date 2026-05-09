@@ -140,6 +140,7 @@ primp
 prompt_toolkit
 propcache
 protobuf
+asyncpg
 psycopg2-binary
 pure_eval
 pyasn1
