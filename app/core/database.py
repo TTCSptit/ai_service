@@ -5,15 +5,29 @@ from datetime import datetime
 from app.core.config import settings
 from sqlalchemy.sql import func
 
-# Chuyển đổi URL sang asyncpg
+# Chuyển đổi URL sang asyncpg và xử lý SSL
 DATABASE_URL = settings.DATABASE_URL
 if DATABASE_URL.startswith("postgresql://"):
     DATABASE_URL = DATABASE_URL.replace("postgresql://", "postgresql+asyncpg://", 1)
 
+# Xử lý vấn đề sslmode với asyncpg (thường gặp khi dùng Neon/Supabase)
+# asyncpg không nhận 'sslmode' trong URL mà dùng 'ssl' tham số
+if "sslmode=" in DATABASE_URL:
+    # Tách URL và query params
+    from urllib.parse import urlparse, urlunparse, parse_qs, urlencode
+    u = urlparse(DATABASE_URL)
+    query = parse_qs(u.query)
+    # Loại bỏ các tham số không tương thích với asyncpg
+    query.pop('sslmode', None)
+    query.pop('channel_binding', None)
+    # Tạo lại URL không có các tham số này
+    DATABASE_URL = urlunparse(u._replace(query=urlencode(query, doseq=True)))
+
 engine = create_async_engine(
     DATABASE_URL,
     pool_pre_ping=True,
-    pool_recycle=1800
+    pool_recycle=1800,
+    connect_args={"ssl": True} if "neon.tech" in DATABASE_URL or "supabase.co" in DATABASE_URL else {}
 )
 
 AsyncSessionLocal = async_sessionmaker(
