@@ -62,14 +62,17 @@ def get_analyzer_prompt(cv_text: str, knowledge: str) -> str:
     return f"""Đánh giá CV sau dựa trên tiêu chuẩn: {knowledge}
     CV: {cv_text}
     
-    Nhiệm vụ: Trích xuất thông tin, chấm điểm độ phù hợp (0-100), liệt kê kỹ năng đã có, kỹ năng còn thiếu.
+    Nhiệm vụ: Trích xuất thông tin, chấm điểm độ phù hợp (0-100), liệt kê kỹ năng đã có, kỹ năng còn thiếu. Đặc biệt, hãy đánh giá mức độ thuần thục (từ 0 đến 5) của ứng viên trong 5 nhóm: Frontend, Backend, Database, DevOps, Soft Skills.
         YÊU CẦU BẮT BUỘC: Bạn CHỈ ĐƯỢC PHÉP trả về kết quả dưới định dạng JSON nguyên bản, tuyệt đối không có markdown ```json, theo đúng cấu trúc sau:
     {{
         "candidate_info": {{"name": "Tên", "email": "Email"}},
         "matching_score": 80,
         "extracted_skills": ["Kỹ năng 1", "Kỹ năng 2"],
-        "missing_skills": ["Kỹ năng thiếu 1", "Kỹ năng thiếu 2"]
+        "skill_matrix": {{"Frontend": 4, "Backend": 3, "Database": 2, "DevOps": 1, "Soft Skills": 4}},
+        "missing_skills": ["Kỹ năng thiếu 1", "Kỹ năng thiếu 2"],
+        "suggested_questions": ["Câu hỏi 1", "Câu hỏi 2"]
     }}"""
+
 def get_hr_advisor_prompt(knowledge: str, user_memory: str) -> str:
     return f"""Bạn là một Chuyên gia Nhân sự (HR) cấp cao kiêm Tech Lead tận tâm.
 

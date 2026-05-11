@@ -14,13 +14,14 @@ class CVSchema(BaseModel):
     candidate_info: CandidateInfo = Field(description="Thông tin liên hệ của ứng viên")
     matching_score: int = Field(description="Điểm số phù hợp của CV từ 0 đến 100")
     extracted_skills: List[str] = Field(description="Danh sách các kỹ năng tìm thấy trong CV")
+    skill_matrix: dict = Field(default={"Frontend": 0, "Backend": 0, "Database": 0, "DevOps": 0, "Soft Skills": 0}, description="Điểm số các nhóm kỹ năng (0-5) cho biểu đồ Radar")
     missing_skills: List[str] = Field(description="Danh sách các kỹ năng còn thiếu")
     suggested_questions: List[str] = Field(description="Danh sách câu hỏi phỏng vấn đề xuất")
 
 class CVAnalyzerAgent:
     async def execute(self, cv_text: str, knowledge: str) -> str:
         if not cv_text:
-            return '{"candidate_info":{},"matching_score":0,"extracted_skills":[],"missing_skills":[],"suggested_questions":[]}'
+            return '{"candidate_info":{},"matching_score":0,"extracted_skills":[],"skill_matrix":{"Frontend":0,"Backend":0,"Database":0,"DevOps":0,"Soft Skills":0},"missing_skills":[],"suggested_questions":[]}'
         prompt = get_analyzer_prompt(cv_text, knowledge)
         try:
             llm = get_llm_cheap_v1()
@@ -33,4 +34,4 @@ class CVAnalyzerAgent:
             
         except Exception as e:
             logger.error(f"[Analyzer Agent Lỗi]: {e}", exc_info=True)
-            return '{"candidate_info":{},"matching_score":0,"extracted_skills":[],"missing_skills":[],"suggested_questions":[]}'
+            return '{"candidate_info":{},"matching_score":0,"extracted_skills":[],"skill_matrix":{"Frontend":0,"Backend":0,"Database":0,"DevOps":0,"Soft Skills":0},"missing_skills":[],"suggested_questions":[]}'
