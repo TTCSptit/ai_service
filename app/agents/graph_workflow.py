@@ -48,7 +48,7 @@ async def node_prepare_context(state: AgentState):
     graph_ctx = results[1] if router_decision.get("needs_graph") else ""
     market_ctx = results[2] if router_decision.get("needs_market_data") else ""
     
-    sys_prompt = get_hr_advisor_prompt(state["knowledge"],state["user_memory"])
+    sys_prompt = get_hr_advisor_prompt(state["knowledge"], state["user_memory"], state["cv_text"], ai_json)
     if state["session_summary"]:
         sys_prompt += f"\n\n[BIÊN BẢN SESSION]\n{state['session_summary']}"
         
