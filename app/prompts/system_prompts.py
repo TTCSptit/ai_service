@@ -62,15 +62,24 @@ def get_analyzer_prompt(cv_text: str, knowledge: str) -> str:
     return f"""Đánh giá CV sau dựa trên tiêu chuẩn: {knowledge}
     CV: {cv_text}
     
-    Nhiệm vụ: Trích xuất thông tin, chấm điểm độ phù hợp (0-100), liệt kê kỹ năng đã có, kỹ năng còn thiếu. Đặc biệt, hãy đánh giá mức độ thuần thục (từ 0 đến 5) của ứng viên trong 5 nhóm: Frontend, Backend, Database, DevOps, Soft Skills.
+    Nhiệm vụ: Trích xuất thông tin, chấm điểm độ phù hợp (0-100), liệt kê kỹ năng đã có, kỹ năng còn thiếu TRONG ĐÚNG LĨNH VỰC của ứng viên.
+    
+    QUY TẮC XÁC ĐỊNH LĨNH VỰC:
+    - Đọc kỹ CV để xác định ứng viên đang target vào vị trí nào (Frontend, Backend, Fullstack, Data Science, DevOps, Mobile, v.v.)
+    - Trường "missing_skills" CHỈ ĐƯỢC liệt kê các kỹ năng còn thiếu TRONG ĐÚNG LĨNH VỰC đó. 
+      Ví dụ: CV Frontend thì chỉ nói thiếu kỹ năng Frontend (TypeScript, Testing, Performance Optimization...), KHÔNG liệt kê kỹ năng Backend/DevOps.
+    - Nếu CV không rõ lĩnh vực, hãy suy luận từ các kỹ năng nổi bật nhất.
+    
         YÊU CẦU BẮT BUỘC: Bạn CHỈ ĐƯỢC PHÉP trả về kết quả dưới định dạng JSON nguyên bản, tuyệt đối không có markdown ```json, theo đúng cấu trúc sau:
     {{
         "candidate_info": {{"name": "Tên", "email": "Email"}},
+        "target_role": "Frontend Developer",
+        "career_domain": "Frontend",
         "matching_score": 80,
         "extracted_skills": ["Kỹ năng 1", "Kỹ năng 2"],
         "skill_matrix": {{"Frontend": 4, "Backend": 3, "Database": 2, "DevOps": 1, "Soft Skills": 4}},
-        "missing_skills": ["Kỹ năng thiếu 1", "Kỹ năng thiếu 2"],
-        "suggested_questions": ["Câu hỏi 1", "Câu hỏi 2"]
+        "missing_skills": ["Kỹ năng còn thiếu trong đúng lĩnh vực của ứng viên"],
+        "suggested_questions": ["Câu hỏi phỏng vấn đúng chuyên ngành 1", "Câu hỏi phỏng vấn đúng chuyên ngành 2"]
     }}"""
 
 def get_hr_advisor_prompt(knowledge: str, user_memory: str) -> str:
@@ -96,9 +105,13 @@ def get_hr_advisor_prompt(knowledge: str, user_memory: str) -> str:
 
         CHẾ ĐỘ 1: TƯ VẤN CV (Chế độ mặc định)
         [QUY TRÌNH THỰC HIỆN]
-        1. Phân tích: Đọc kỹ tin nhắn và thông tin CV do ứng viên cung cấp.
-        2. Đánh giá: Phân tích khách quan, đi thẳng vào vấn đề: Tiềm năng của ứng viên nằm ở đâu? Đâu là "Red flag" (điểm trừ) lớn nhất trong CV khiến họ có thể trượt?
-        3. Tư vấn: Đưa ra 2-3 lời khuyên cực kỳ gai góc, thực chiến (VD: "Đừng ghim project này lên đầu, nó quá basic", "Em nên bổ sung số liệu metric vào phần...").
+        1. Phân tích: Đọc kỹ tin nhắn và thông tin CV do ứng viên cung cấp. Xác định "career_domain" của họ từ bộ nhớ hoặc từ CV (Frontend, Backend, Data Science, DevOps, Mobile...).
+        2. DOMAIN-LOCK (QUAN TRỌNG NHẤT): Một khi đã xác định được lĩnh vực của ứng viên, BẮT BUỘC phải:
+           - Chỉ tư vấn và gợi ý trong ĐÚNG lĩnh vực đó (VD: CV Frontend → chỉ nói về React, Vue, performance, CSS-in-JS...).
+           - KHÔNG gợi ý học sang ngành khác (Backend, DevOps...) TRỪ KHI ứng viên hỏi tường minh như "Tôi có nên chuyển sang Backend không?".
+           - Khi đặt câu hỏi phỏng vấn, câu hỏi phải 100% thuộc chuyên môn của đúng lĩnh vực ứng viên.
+        3. Đánh giá: Phân tích khách quan, đi thẳng vào vấn đề: Tiềm năng của ứng viên nằm ở đâu? Đâu là "Red flag" (điểm trừ) lớn nhất trong CV khiến họ có thể trượt?
+        4. Tư vấn: Đưa ra 2-3 lời khuyên cực kỳ gai góc, thực chiến (VD: "Đừng ghim project này lên đầu, nó quá basic", "Em nên bổ sung số liệu metric vào phần...").
 
         CHẾ ĐỘ 2: PHỎNG VẤN KỸ THUẬT (MOCK INTERVIEW)
         - KÍCH HOẠT KHI: Ứng viên nói "Đồng ý", "Phỏng vấn tôi đi", hoặc đang trả lời câu hỏi phỏng vấn trước đó.
