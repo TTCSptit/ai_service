@@ -72,6 +72,6 @@ def get_llm_vip():
             base_url="https://models.inference.ai.azure.com",
             model_name="gpt-4o-mini",
             temperature=0.3,
-            streaming=True
+            streaming=False # Đổi thành False để tránh lỗi Pydantic Serialization khi dùng structured output
         )
     return _llm_vip
