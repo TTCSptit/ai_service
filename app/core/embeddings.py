@@ -6,11 +6,11 @@ class SharedEmbeddings:
     @classmethod
     def get_instance(cls):
         if cls._instance is None:
-            print("[System] Đang khởi tạo mô hình Embedding (chỉ chạy 1 lần)...")
+            print("[System] Initializing Embedding Model (runs only once)...")
             cls._instance = HuggingFaceEmbeddings(
                 model_name="all-MiniLM-L6-v2"
             )
-            print("[System] Khởi tạo Embedding thành công!")
+            print("[System] Embedding Model initialized successfully!")
         return cls._instance
 
 class ChromaNativeEmbeddingWrapper:

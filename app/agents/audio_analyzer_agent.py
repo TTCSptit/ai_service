@@ -10,9 +10,9 @@ class InterviewReport(BaseModel):
     communication_score: int = Field(description="Điểm giao tiếp (0-100)")
     technical_score: int = Field(description="Điểm kỹ thuật/chuyên môn (0-100)")
     confidence_score: int = Field(description="Điểm tự tin (0-100)")
-    feedback_strengths: list[str] = Field(description="Danh sách điểm mạnh của ứng viên")
-    feedback_weaknesses: list[str] = Field(description="Danh sách điểm yếu cần khắc phục")
-    transcript_summary: str = Field(description="Tóm tắt ngắn gọn nội dung cuộc phỏng vấn")
+    feedback_strengths: list[str] = Field(description="Danh sách điểm mạnh của ứng viên (BẮT BUỘC bằng tiếng Việt)")
+    feedback_weaknesses: list[str] = Field(description="Danh sách điểm yếu cần khắc phục (BẮT BUỘC bằng tiếng Việt)")
+    transcript_summary: str = Field(description="Tóm tắt ngắn gọn nội dung cuộc phỏng vấn (BẮT BUỘC bằng tiếng Việt)")
 
 class AudioAnalyzerAgent:
     def __init__(self):
@@ -48,7 +48,9 @@ class AudioAnalyzerAgent:
             2. Đánh giá kỹ năng giao tiếp (chào hỏi, logic trình bày).
             3. Đánh giá kỹ năng chuyên môn (kiểm tra xem ứng viên trả lời đúng hay sai).
             
-            Lưu ý: Văn bản bóc băng có thể không ghi rõ ai là người nói, bạn phải tự suy luận ai là ứng viên (thường là người trả lời) và ai là HR (người đặt câu hỏi).
+            Lưu ý cực kỳ quan trọng:
+            - Văn bản bóc băng có thể không ghi rõ ai là người nói, bạn phải tự suy luận ai là ứng viên (thường là người trả lời) và ai là HR (người đặt câu hỏi).
+            - BẮT BUỘC PHẢI TRẢ LỜI CÁC TRƯỜNG VĂN BẢN (feedback_strengths, feedback_weaknesses, transcript_summary) BẰNG TIẾNG VIỆT TỰ NHIÊN, DỄ HIỂU. TUYỆT ĐỐI KHÔNG DÙNG TIẾNG ANH.
             """
             
             structured_llm = get_llm_kaggle_v1().with_structured_output(InterviewReport)
@@ -75,7 +77,9 @@ class AudioAnalyzerAgent:
             2. Đánh giá kỹ năng giao tiếp (chào hỏi, logic trình bày).
             3. Đánh giá kỹ năng chuyên môn (kiểm tra xem ứng viên trả lời đúng hay sai).
             
-            Lưu ý: Văn bản bóc băng có thể không ghi rõ ai là người nói, bạn phải tự suy luận ai là ứng viên (thường là người trả lời) và ai là HR (người đặt câu hỏi).
+            Lưu ý cực kỳ quan trọng:
+            - Văn bản bóc băng có thể không ghi rõ ai là người nói, bạn phải tự suy luận ai là ứng viên (thường là người trả lời) và ai là HR (người đặt câu hỏi).
+            - BẮT BUỘC PHẢI TRẢ LỜI CÁC TRƯỜNG VĂN BẢN (feedback_strengths, feedback_weaknesses, transcript_summary) BẰNG TIẾNG VIỆT TỰ NHIÊN, DỄ HIỂU. TUYỆT ĐỐI KHÔNG DÙNG TIẾNG ANH.
             """
             
             structured_llm = get_llm_kaggle_v1().with_structured_output(InterviewReport)
