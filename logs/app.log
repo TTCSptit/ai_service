@@ -9249,3 +9249,901 @@ Hãy cho tôi biết cách bạn nghĩ về những vấn đề này!
 2026-04-26 09:47:34 - AI_System - INFO - [redis_conf.py:74] - [WebSocket] User guest đã ngắt kết nối.
 2026-04-26 09:47:35 - AI_System - INFO - [worker.py:129] - Worker đang dừng...
 2026-04-26 09:47:35 - AI_System - INFO - [redis_conf.py:59] - Đã đóng kết nối Redis.
+2026-05-15 22:27:12 - AI_System - INFO - [graph_workflow.py:18] - [Node 1] Đang chuẩn bị Context...
+2026-05-15 22:27:13 - AI_System - INFO - [graph_workflow.py:84] - [Node 2] Đang viết nháp (Lần {state['retry_count'] + 1})...
+2026-05-15 22:27:13 - AI_System - INFO - [evaluator_agent.py:27] - [Agent Groq] Đang kiểm tra xem có cần gọi Sandbox không...
+2026-05-15 22:27:15 - AI_System - INFO - [evaluator_agent.py:51] - [Agent LoRA] Đang sinh bản nháp với văn phong Tech Lead...
+2026-05-15 22:27:16 - AI_System - INFO - [graph_workflow.py:90] - [Node 3] Tech Lead đang chấm điểm...
+2026-05-15 22:27:23 - AI_System - INFO - [graph_workflow.py:92] - [Tech Lead]: Pass=False | Feedback: 1. Câu trả lời thiếu tính chuyên sâu và không liên quan đến kỹ thuật, không đề cập đến bất kỳ khía cạnh nào của món ăn, chỉ đưa ra lời khuyên chung mà không có giá trị thực tiễn.
+2. Câu hỏi phỏng vấn không có, cần phải chuyển sang hỏi về cách ứng viên giải quyết vấn đề trong nấu ăn, ví dụ: "Nếu bạn gặp khó khăn trong việc tìm nguyên liệu, bạn sẽ xử lý như thế nào?"
+3. Câu trả lời quá nhiều thông tin thừa thãi, cần phải mớm ý hơn và khuyến khích ứng viên tự tìm hiểu, ví dụ: "Bạn có biết các nguyên liệu chính của bún bò Huế là gì không?"
+4. Bản nháp không giải quyết câu hỏi gốc của ứng viên, mà lại lạc đề sang việc gửi CV, cần phải tập trung vào việc hướng dẫn nấu ăn ngay từ đầu.
+2026-05-15 22:27:23 - AI_System - WARNING - [graph_workflow.py:96] - [Node 4] Bị chê, đang viết lại nháp...
+2026-05-15 22:27:23 - AI_System - INFO - [evaluator_agent.py:27] - [Agent Groq] Đang kiểm tra xem có cần gọi Sandbox không...
+2026-05-15 22:27:25 - AI_System - INFO - [evaluator_agent.py:51] - [Agent LoRA] Đang sinh bản nháp với văn phong Tech Lead...
+2026-05-15 22:27:26 - AI_System - INFO - [graph_workflow.py:90] - [Node 3] Tech Lead đang chấm điểm...
+2026-05-15 22:27:29 - AI_System - INFO - [graph_workflow.py:18] - [Node 1] Đang chuẩn bị Context...
+2026-05-15 22:27:30 - AI_System - INFO - [graph_workflow.py:84] - [Node 2] Đang viết nháp (Lần {state['retry_count'] + 1})...
+2026-05-15 22:27:30 - AI_System - INFO - [evaluator_agent.py:27] - [Agent Groq] Đang kiểm tra xem có cần gọi Sandbox không...
+2026-05-15 22:27:30 - AI_System - INFO - [graph_workflow.py:92] - [Tech Lead]: Pass=False | Feedback: 1. Câu trả lời thiếu chiều sâu kỹ thuật, không đề cập đến các yếu tố như nguyên liệu, thời gian nấu, hay cách điều chỉnh hương vị, điều này không đáp ứng được yêu cầu của một câu hỏi về nấu ăn.
+2. Cách đặt câu hỏi quá nhàm chán và lý thuyết, không khuyến khích ứng viên chia sẻ kinh nghiệm thực tế hoặc cách xử lý tình huống khi nấu ăn.
+3. AI đang nhồi nhét quá nhiều thông tin, cần chuyển sang phương pháp gợi mở hơn để ứng viên tự tìm hiểu và phát triển ý tưởng của mình.
+4. Bản nháp không trực tiếp giải quyết câu hỏi gốc về cách nấu bún bò Huế, cần phải tập trung vào việc cung cấp thông tin cụ thể hơn ngay từ đầu.
+2026-05-15 22:27:30 - AI_System - WARNING - [graph_workflow.py:104] - Đã hết số lần sửa tối đa. Buộc xuất xưởng.
+2026-05-15 22:27:30 - AI_System - INFO - [graph_workflow.py:109] - [Node Cuối] Hoàn tất bản nháp, chuẩn bị xuất ra UI...
+2026-05-15 22:27:30 - AI_System - INFO - [graph_workflow.py:18] - [Node 1] Đang chuẩn bị Context...
+2026-05-15 22:27:33 - AI_System - INFO - [analyzer_agent.py:32] -  [Analyzer Agent] Bóc tách CV bằng Structured Output thành công!
+2026-05-15 22:27:33 - AI_System - INFO - [graph_workflow.py:84] - [Node 2] Đang viết nháp (Lần {state['retry_count'] + 1})...
+2026-05-15 22:27:33 - AI_System - INFO - [evaluator_agent.py:27] - [Agent Groq] Đang kiểm tra xem có cần gọi Sandbox không...
+2026-05-15 22:27:48 - AI_System - INFO - [evaluator_agent.py:51] - [Agent LoRA] Đang sinh bản nháp với văn phong Tech Lead...
+2026-05-15 22:28:03 - AI_System - INFO - [graph_workflow.py:90] - [Node 3] Tech Lead đang chấm điểm...
+2026-05-15 22:28:04 - AI_System - WARNING - [evaluator_agent.py:48] - [Tool check lỗi, bỏ qua]: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kjjc70njeqnbgahy5nxqtqvk` service tier `on_demand` on tokens per minute (TPM): Limit 12000, Used 11791, Requested 3715. Please try again in 17.53s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
+2026-05-15 22:28:04 - AI_System - INFO - [evaluator_agent.py:51] - [Agent LoRA] Đang sinh bản nháp với văn phong Tech Lead...
+2026-05-15 22:28:09 - AI_System - INFO - [graph_workflow.py:92] - [Tech Lead]: Pass=False | Feedback: 1. Câu trả lời thiếu chiều sâu kỹ thuật; không có phân tích trade-offs hay tối ưu hóa quy trình nấu ăn, chỉ đưa ra công thức mà không giải thích lý do tại sao các bước lại quan trọng.
+2. Cách đặt câu hỏi không khuyến khích tư duy phản biện; cần chuyển sang các câu hỏi thực tiễn hơn như "Nếu bạn không có đủ nguyên liệu, bạn sẽ điều chỉnh công thức như thế nào?".
+3. AI đang "nhồi nhét" quá nhiều thông tin; cần sử dụng phương pháp Socratic để khuyến khích ứng viên tự tìm hiểu và phát triển ý tưởng của mình hơn là chỉ đưa ra công thức.
+4. Bản nháp không trực tiếp giải quyết câu hỏi gốc; cần tập trung vào việc hướng dẫn cách nấu bún bò Huế mà không lan man vào các thông tin không cần thiết.
+2026-05-15 22:28:09 - AI_System - WARNING - [graph_workflow.py:96] - [Node 4] Bị chê, đang viết lại nháp...
+2026-05-15 22:28:09 - AI_System - INFO - [evaluator_agent.py:27] - [Agent Groq] Đang kiểm tra xem có cần gọi Sandbox không...
+2026-05-15 22:28:22 - AI_System - INFO - [graph_workflow.py:90] - [Node 3] Tech Lead đang chấm điểm...
+2026-05-15 22:28:27 - AI_System - INFO - [graph_workflow.py:92] - [Tech Lead]: Pass=False | Feedback: 1. **Thiếu độ sâu kỹ thuật:** Bản nháp không đề cập đến các trade-offs, tối ưu bộ nhớ, hay kiến trúc hệ thống. Cần bổ sung những khía cạnh này để thể hiện sự hiểu biết sâu sắc về phát triển backend.
+2. **Câu hỏi phỏng vấn quá lý thuyết:** Cần chuyển từ các câu hỏi lý thuyết sang các tình huống thực tế, yêu cầu ứng viên giải quyết các vấn đề cụ thể thay vì chỉ trả lời lý thuyết.
+3. **Nhồi nhét đáp án:** Bản nháp đang cung cấp quá nhiều thông tin và hướng dẫn cụ thể. Cần áp dụng phương pháp Socratic, chỉ gợi mở ý tưởng để ứng viên tự tìm ra giải pháp.
+4. **Không tập trung vào câu hỏi gốc:** Bản nháp không trả lời trực tiếp câu hỏi về tính phù hợp của CV. Cần bắt đầu bằng việc đánh giá rõ ràng CV trước khi đưa ra các khuyến nghị.
+2026-05-15 22:28:27 - AI_System - WARNING - [graph_workflow.py:96] - [Node 4] Bị chê, đang viết lại nháp...
+2026-05-15 22:28:27 - AI_System - INFO - [evaluator_agent.py:27] - [Agent Groq] Đang kiểm tra xem có cần gọi Sandbox không...
+2026-05-15 22:28:45 - AI_System - INFO - [evaluator_agent.py:51] - [Agent LoRA] Đang sinh bản nháp với văn phong Tech Lead...
+2026-05-15 22:29:04 - AI_System - INFO - [graph_workflow.py:90] - [Node 3] Tech Lead đang chấm điểm...
+2026-05-15 22:29:09 - AI_System - WARNING - [evaluator_agent.py:48] - [Tool check lỗi, bỏ qua]: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kjjc70njeqnbgahy5nxqtqvk` service tier `on_demand` on tokens per minute (TPM): Limit 12000, Used 10493, Requested 4921. Please try again in 17.07s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
+2026-05-15 22:29:09 - AI_System - INFO - [evaluator_agent.py:51] - [Agent LoRA] Đang sinh bản nháp với văn phong Tech Lead...
+2026-05-15 22:29:10 - AI_System - INFO - [graph_workflow.py:92] - [Tech Lead]: Pass=False | Feedback: 1. Độ sâu kỹ thuật không đủ: Bản nháp chỉ tập trung vào các bước nấu ăn mà không đề cập đến các trade-offs, như việc lựa chọn nguyên liệu ảnh hưởng đến hương vị và cách điều chỉnh công thức khi thiếu nguyên liệu.
+2. Cách đặt câu hỏi quá nhàm chán: Câu hỏi về kinh nghiệm nấu ăn không kích thích tư duy thực tế. Nên hỏi ứng viên cách họ sẽ giải quyết vấn đề nếu món ăn không đạt yêu cầu về hương vị.
+3. Phương pháp người đưa đường không hiệu quả: Bản nháp đang nhồi nhét quá nhiều thông tin. Cần chuyển sang phương pháp Socratic, chỉ gợi ý và để ứng viên tự khám phá các bước nấu ăn.
+4. Không đúng trọng tâm: Bản nháp không trả lời trực tiếp câu hỏi về cách nấu bún bò Huế mà lại đi sâu vào hỏi về kinh nghiệm. Cần tập trung vào việc cung cấp công thức hoặc hướng dẫn cụ thể ngay từ đầu.
+2026-05-15 22:29:10 - AI_System - WARNING - [graph_workflow.py:104] - Đã hết số lần sửa tối đa. Buộc xuất xưởng.
+2026-05-15 22:29:10 - AI_System - INFO - [graph_workflow.py:109] - [Node Cuối] Hoàn tất bản nháp, chuẩn bị xuất ra UI...
+2026-05-15 22:29:10 - AI_System - INFO - [graph_workflow.py:18] - [Node 1] Đang chuẩn bị Context...
+2026-05-15 22:29:12 - AI_System - INFO - [analyzer_agent.py:32] -  [Analyzer Agent] Bóc tách CV bằng Structured Output thành công!
+2026-05-15 22:29:12 - AI_System - INFO - [graph_workflow.py:84] - [Node 2] Đang viết nháp (Lần {state['retry_count'] + 1})...
+2026-05-15 22:29:12 - AI_System - INFO - [evaluator_agent.py:27] - [Agent Groq] Đang kiểm tra xem có cần gọi Sandbox không...
+2026-05-15 22:29:24 - AI_System - ERROR - [evaluator_agent.py:60] - Lỗi khi model  sinh bản nháp: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kjjc70njeqnbgahy5nxqtqvk` service tier `on_demand` on tokens per minute (TPM): Limit 12000, Used 8401, Requested 4019. Please try again in 2.1s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
+Traceback (most recent call last):
+  File "D:\ttcs\ai_service\app\agents\evaluator_agent.py", line 57, in generate_draft
+    final_draft = await get_llm_cheap_v1().ainvoke(messages)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_core\language_models\chat_models.py", line 425, in ainvoke
+    llm_result = await self.agenerate_prompt(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_core\language_models\chat_models.py", line 1134, in agenerate_prompt
+    return await self.agenerate(
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_core\language_models\chat_models.py", line 1092, in agenerate
+    raise exceptions[0]
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_core\language_models\chat_models.py", line 1318, in _agenerate_with_cache
+    async for chunk in self._astream(messages, stop=stop, **kwargs):
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_groq\chat_models.py", line 709, in _astream
+    async for chunk in await self.async_client.create(
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\groq\resources\chat\completions.py", line 941, in create
+    return await self._post(
+           ^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\groq\_base_client.py", line 1762, in post
+    return await self.request(cast_to, opts, stream=stream, stream_cls=stream_cls)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\groq\_base_client.py", line 1576, in request
+    raise self._make_status_error_from_response(err.response) from None
+groq.RateLimitError: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kjjc70njeqnbgahy5nxqtqvk` service tier `on_demand` on tokens per minute (TPM): Limit 12000, Used 8401, Requested 4019. Please try again in 2.1s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
+2026-05-15 22:29:24 - AI_System - INFO - [graph_workflow.py:90] - [Node 3] Tech Lead đang chấm điểm...
+2026-05-15 22:29:29 - AI_System - INFO - [evaluator_agent.py:51] - [Agent LoRA] Đang sinh bản nháp với văn phong Tech Lead...
+2026-05-15 22:29:29 - AI_System - INFO - [graph_workflow.py:92] - [Tech Lead]: Pass=False | Feedback: 1. Câu trả lời quá ngắn gọn và thiếu chiều sâu kỹ thuật; cần đề cập đến các trade-offs trong việc chuyển đổi từ Frontend sang Backend, cũng như các edge cases có thể gặp phải trong quá trình phát triển.
+2. Câu hỏi phỏng vấn hiện tại quá lý thuyết và không thực tế; cần chuyển sang các tình huống cụ thể mà ứng viên có thể gặp phải trong vai trò Backend Developer, ví dụ như xử lý lỗi trong API hoặc tối ưu hóa hiệu suất.
+3. Đừng nhồi nhét đáp án; hãy mớm ý để ứng viên tự suy nghĩ, ví dụ như hỏi "Bạn sẽ xử lý như thế nào nếu gặp phải tình huống X trong dự án?".
+4. Bản nháp không giải quyết trực tiếp câu hỏi của ứng viên; cần trả lời rõ ràng về việc CV có phù hợp hay không, sau đó mới đi vào chi tiết về kỹ năng và kinh nghiệm cần thiết cho vị trí Backend.
+2026-05-15 22:29:29 - AI_System - WARNING - [graph_workflow.py:104] - Đã hết số lần sửa tối đa. Buộc xuất xưởng.
+2026-05-15 22:29:29 - AI_System - INFO - [graph_workflow.py:109] - [Node Cuối] Hoàn tất bản nháp, chuẩn bị xuất ra UI...
+2026-05-15 22:29:29 - AI_System - INFO - [graph_workflow.py:18] - [Node 1] Đang chuẩn bị Context...
+2026-05-15 22:29:30 - AI_System - INFO - [graph_workflow.py:84] - [Node 2] Đang viết nháp (Lần {state['retry_count'] + 1})...
+2026-05-15 22:29:30 - AI_System - INFO - [evaluator_agent.py:27] - [Agent Groq] Đang kiểm tra xem có cần gọi Sandbox không...
+2026-05-15 22:29:43 - AI_System - INFO - [graph_workflow.py:90] - [Node 3] Tech Lead đang chấm điểm...
+2026-05-15 22:29:46 - AI_System - WARNING - [evaluator_agent.py:48] - [Tool check lỗi, bỏ qua]: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kjjc70njeqnbgahy5nxqtqvk` service tier `on_demand` on tokens per minute (TPM): Limit 12000, Used 10641, Requested 4003. Please try again in 13.219999999s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
+2026-05-15 22:29:46 - AI_System - INFO - [evaluator_agent.py:51] - [Agent LoRA] Đang sinh bản nháp với văn phong Tech Lead...
+2026-05-15 22:29:48 - AI_System - INFO - [graph_workflow.py:92] - [Tech Lead]: Pass=False | Feedback: 1. Độ sâu kỹ thuật chưa đủ, cần đề cập đến trade-offs trong kiến trúc backend, tối ưu bộ nhớ và xử lý edge cases để ứng viên hiểu rõ hơn về các thách thức thực tế.
+2. Câu hỏi phỏng vấn quá nhàm chán, cần chuyển sang các tình huống thực tế như xử lý lỗi trong hệ thống hoặc tối ưu hóa hiệu suất thay vì hỏi lý thuyết.
+3. Không nên nhồi nhét quá nhiều đáp án, hãy gợi mở cho ứng viên tự suy nghĩ và tìm ra giải pháp, áp dụng phương pháp Socratic để kích thích tư duy.
+4. Bản nháp chưa trực tiếp giải quyết câu hỏi gốc của ứng viên, cần tập trung vào việc đánh giá khả năng chuyển đổi sang Backend Developer ngay từ đầu.
+2026-05-15 22:29:48 - AI_System - WARNING - [graph_workflow.py:96] - [Node 4] Bị chê, đang viết lại nháp...
+2026-05-15 22:29:48 - AI_System - INFO - [evaluator_agent.py:27] - [Agent Groq] Đang kiểm tra xem có cần gọi Sandbox không...
+2026-05-15 22:29:54 - AI_System - ERROR - [evaluator_agent.py:60] - Lỗi khi model  sinh bản nháp: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kjjc70njeqnbgahy5nxqtqvk` service tier `on_demand` on tokens per minute (TPM): Limit 12000, Used 9074, Requested 3101. Please try again in 875ms. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
+Traceback (most recent call last):
+  File "D:\ttcs\ai_service\app\agents\evaluator_agent.py", line 57, in generate_draft
+    final_draft = await get_llm_cheap_v1().ainvoke(messages)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_core\language_models\chat_models.py", line 425, in ainvoke
+    llm_result = await self.agenerate_prompt(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_core\language_models\chat_models.py", line 1134, in agenerate_prompt
+    return await self.agenerate(
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_core\language_models\chat_models.py", line 1092, in agenerate
+    raise exceptions[0]
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_core\language_models\chat_models.py", line 1318, in _agenerate_with_cache
+    async for chunk in self._astream(messages, stop=stop, **kwargs):
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_groq\chat_models.py", line 709, in _astream
+    async for chunk in await self.async_client.create(
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\groq\resources\chat\completions.py", line 941, in create
+    return await self._post(
+           ^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\groq\_base_client.py", line 1762, in post
+    return await self.request(cast_to, opts, stream=stream, stream_cls=stream_cls)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\groq\_base_client.py", line 1576, in request
+    raise self._make_status_error_from_response(err.response) from None
+groq.RateLimitError: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kjjc70njeqnbgahy5nxqtqvk` service tier `on_demand` on tokens per minute (TPM): Limit 12000, Used 9074, Requested 3101. Please try again in 875ms. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
+2026-05-15 22:29:54 - AI_System - INFO - [graph_workflow.py:90] - [Node 3] Tech Lead đang chấm điểm...
+2026-05-15 22:30:00 - AI_System - INFO - [graph_workflow.py:92] - [Tech Lead]: Pass=False | Feedback: 1. Câu trả lời hoàn toàn không có nội dung kỹ thuật, không đề cập đến bất kỳ khía cạnh nào của SQL Injection, trade-offs hay edge cases. Cần phải cung cấp thông tin chi tiết và cụ thể hơn về vấn đề này.
+2. Câu hỏi phỏng vấn không có tính thực tiễn, cần chuyển sang những tình huống thực tế mà ứng viên có thể gặp phải trong công việc, thay vì yêu cầu lý thuyết suông.
+3. Đáp án hiện tại quá mờ nhạt và không kích thích tư duy của ứng viên. Cần sửa lại theo phương pháp Socratic, đưa ra câu hỏi gợi mở để ứng viên tự tìm ra giải pháp.
+4. Bản nháp không trực tiếp giải quyết yêu cầu của ứng viên, cần phải tập trung vào việc hướng dẫn ứng viên cách tiếp cận vấn đề mà không vi phạm đạo đức nghề nghiệp.
+2026-05-15 22:30:00 - AI_System - WARNING - [graph_workflow.py:96] - [Node 4] Bị chê, đang viết lại nháp...
+2026-05-15 22:30:00 - AI_System - INFO - [evaluator_agent.py:27] - [Agent Groq] Đang kiểm tra xem có cần gọi Sandbox không...
+2026-05-15 22:30:03 - AI_System - INFO - [evaluator_agent.py:35] - [Agent Groq] Dùng Tool: analyze_candidate_code
+2026-05-15 22:30:03 - AI_System - INFO - [interview_tools.py:18] - [Sub-Agent] Khởi động môi trường Sandbox chấm thi...
+2026-05-15 22:30:03 - AI_System - INFO - [evaluator_agent.py:45] - [Agent Groq] Đã có báo cáo từ hệ thống Tool.
+2026-05-15 22:30:03 - AI_System - INFO - [evaluator_agent.py:51] - [Agent LoRA] Đang sinh bản nháp với văn phong Tech Lead...
+2026-05-15 22:30:17 - AI_System - INFO - [graph_workflow.py:90] - [Node 3] Tech Lead đang chấm điểm...
+2026-05-15 22:30:19 - AI_System - WARNING - [evaluator_agent.py:48] - [Tool check lỗi, bỏ qua]: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kjjc70njeqnbgahy5nxqtqvk` service tier `on_demand` on tokens per minute (TPM): Limit 12000, Used 10840, Requested 4572. Please try again in 17.059999999s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
+2026-05-15 22:30:19 - AI_System - INFO - [evaluator_agent.py:51] - [Agent LoRA] Đang sinh bản nháp với văn phong Tech Lead...
+2026-05-15 22:30:21 - AI_System - INFO - [graph_workflow.py:92] - [Tech Lead]: Pass=False | Feedback: 1. Câu trả lời thiếu chiều sâu kỹ thuật, không đề cập đến các khía cạnh như trade-offs trong bảo mật, tối ưu hóa mã, hay các edge cases liên quan đến SQL Injection.
+2. Câu hỏi phỏng vấn quá an toàn và nhàm chán, cần chuyển sang các tình huống thực tế hơn để đánh giá khả năng tư duy và xử lý sự cố của ứng viên.
+3. Phương pháp trả lời hiện tại quá "nhồi nhét" thông tin, cần điều chỉnh để chỉ gợi mở ý tưởng cho ứng viên, khuyến khích họ tự tìm ra giải pháp.
+4. Bản nháp không trực tiếp giải quyết yêu cầu của ứng viên, cần phải tập trung vào việc từ chối yêu cầu một cách rõ ràng và ngắn gọn, tránh lan man.
+2026-05-15 22:30:21 - AI_System - WARNING - [graph_workflow.py:104] - Đã hết số lần sửa tối đa. Buộc xuất xưởng.
+2026-05-15 22:30:21 - AI_System - INFO - [graph_workflow.py:109] - [Node Cuối] Hoàn tất bản nháp, chuẩn bị xuất ra UI...
+2026-05-15 22:30:34 - AI_System - INFO - [graph_workflow.py:90] - [Node 3] Tech Lead đang chấm điểm...
+2026-05-15 22:30:38 - AI_System - INFO - [graph_workflow.py:92] - [Tech Lead]: Pass=False | Feedback: 1. Độ sâu kỹ thuật chưa đủ, cần yêu cầu ứng viên phân tích trade-offs trong việc tối ưu hóa hiệu suất và xử lý edge cases cụ thể hơn.
+2. Câu hỏi phỏng vấn quá lý thuyết, cần chuyển sang tình huống thực tế hơn, ví dụ như mô tả một sự cố cụ thể và yêu cầu ứng viên đưa ra giải pháp.
+3. Không nên nhồi nhét đáp án, hãy mớm ý để ứng viên tự tư duy, ví dụ như hỏi "Bạn nghĩ có những cách nào để cải thiện hiệu suất mà không cần chỉ ra cụ thể?"
+4. Bản nháp không trực tiếp giải quyết câu hỏi gốc của ứng viên, cần tập trung vào việc đánh giá khả năng chuyển đổi sang Backend Developer mà không lan man.
+2026-05-15 22:30:38 - AI_System - WARNING - [graph_workflow.py:104] - Đã hết số lần sửa tối đa. Buộc xuất xưởng.
+2026-05-15 22:30:38 - AI_System - INFO - [graph_workflow.py:109] - [Node Cuối] Hoàn tất bản nháp, chuẩn bị xuất ra UI...
+2026-05-15 22:30:38 - AI_System - INFO - [graph_workflow.py:18] - [Node 1] Đang chuẩn bị Context...
+2026-05-15 22:30:40 - AI_System - INFO - [graph_workflow.py:84] - [Node 2] Đang viết nháp (Lần {state['retry_count'] + 1})...
+2026-05-15 22:30:40 - AI_System - INFO - [evaluator_agent.py:27] - [Agent Groq] Đang kiểm tra xem có cần gọi Sandbox không...
+2026-05-15 22:30:52 - AI_System - INFO - [evaluator_agent.py:51] - [Agent LoRA] Đang sinh bản nháp với văn phong Tech Lead...
+2026-05-15 22:31:05 - AI_System - INFO - [graph_workflow.py:90] - [Node 3] Tech Lead đang chấm điểm...
+2026-05-15 22:31:11 - AI_System - INFO - [graph_workflow.py:92] - [Tech Lead]: Pass=False | Feedback: 1. Câu trả lời thiếu chiều sâu kỹ thuật; cần đề cập đến các phương pháp bảo mật, cách phòng ngừa SQL Injection và các trade-offs trong thiết kế hệ thống để ứng viên hiểu rõ hơn về vấn đề này.
+2. Câu hỏi của ứng viên không nên được đáp ứng bằng một câu trả lời quá an toàn; hãy chuyển sang hỏi về cách ứng viên xử lý các tình huống tấn công thực tế, thay vì chỉ từ chối cung cấp mã.
+3. Đừng nhồi nhét quá nhiều thông tin; hãy khuyến khích ứng viên tự suy nghĩ bằng cách đặt câu hỏi mở, ví dụ: "Bạn sẽ làm gì để phát hiện và ngăn chặn SQL Injection trong ứng dụng của mình?"
+4. Câu trả lời không trực tiếp giải quyết yêu cầu của ứng viên; cần phải nhấn mạnh rằng việc cung cấp mã tấn công là không phù hợp, nhưng cũng cần chuyển hướng sang việc thảo luận về các biện pháp bảo mật và cách ứng viên sẽ xử lý tình huống này.
+2026-05-15 22:31:11 - AI_System - WARNING - [graph_workflow.py:96] - [Node 4] Bị chê, đang viết lại nháp...
+2026-05-15 22:31:11 - AI_System - INFO - [evaluator_agent.py:27] - [Agent Groq] Đang kiểm tra xem có cần gọi Sandbox không...
+2026-05-15 22:31:25 - AI_System - INFO - [evaluator_agent.py:51] - [Agent LoRA] Đang sinh bản nháp với văn phong Tech Lead...
+2026-05-15 22:31:42 - AI_System - INFO - [graph_workflow.py:90] - [Node 3] Tech Lead đang chấm điểm...
+2026-05-15 22:31:46 - AI_System - ERROR - [evaluator_agent.py:70] - [Evaluator Lỗi]: Error code: 400 - {'error': {'message': "The response was filtered due to the prompt triggering Azure OpenAI's content management policy. Please modify your prompt and retry. To learn more about our content filtering policies please read our documentation: https://go.microsoft.com/fwlink/?linkid=2198766", 'type': None, 'param': 'prompt', 'code': 'content_filter', 'status': 400, 'innererror': {'code': 'ResponsibleAIPolicyViolation', 'content_filter_result': {'hate': {'filtered': False, 'severity': 'safe'}, 'jailbreak': {'detected': True, 'filtered': True}, 'self_harm': {'filtered': False, 'severity': 'safe'}, 'sexual': {'filtered': False, 'severity': 'safe'}, 'violence': {'filtered': False, 'severity': 'safe'}}}}}
+Traceback (most recent call last):
+  File "D:\ttcs\ai_service\app\agents\evaluator_agent.py", line 67, in evaluate
+    result: EvaluationResult = await structured_llm.ainvoke([HumanMessage(content=prompt)])
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_core\runnables\base.py", line 3197, in ainvoke
+    input_ = await coro_with_context(part(), context, create_task=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_core\runnables\base.py", line 5708, in ainvoke
+    return await self.bound.ainvoke(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_core\language_models\chat_models.py", line 425, in ainvoke
+    llm_result = await self.agenerate_prompt(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_core\language_models\chat_models.py", line 1134, in agenerate_prompt
+    return await self.agenerate(
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_core\language_models\chat_models.py", line 1092, in agenerate
+    raise exceptions[0]
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_core\language_models\chat_models.py", line 1361, in _agenerate_with_cache
+    result = await self._agenerate(
+             ^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_openai\chat_models\base.py", line 1731, in _agenerate
+    _handle_openai_bad_request(e)
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_openai\chat_models\base.py", line 1698, in _agenerate
+    raw_response = await self.root_async_client.chat.completions.with_raw_response.parse(  # noqa: E501
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\openai\_legacy_response.py", line 384, in wrapped
+    return cast(LegacyAPIResponse[R], await func(*args, **kwargs))
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\openai\resources\chat\completions\completions.py", line 1680, in parse
+    return await self._post(
+           ^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\openai\_base_client.py", line 1884, in post
+    return await self.request(cast_to, opts, stream=stream, stream_cls=stream_cls)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\openai\_base_client.py", line 1669, in request
+    raise self._make_status_error_from_response(err.response) from None
+openai.BadRequestError: Error code: 400 - {'error': {'message': "The response was filtered due to the prompt triggering Azure OpenAI's content management policy. Please modify your prompt and retry. To learn more about our content filtering policies please read our documentation: https://go.microsoft.com/fwlink/?linkid=2198766", 'type': None, 'param': 'prompt', 'code': 'content_filter', 'status': 400, 'innererror': {'code': 'ResponsibleAIPolicyViolation', 'content_filter_result': {'hate': {'filtered': False, 'severity': 'safe'}, 'jailbreak': {'detected': True, 'filtered': True}, 'self_harm': {'filtered': False, 'severity': 'safe'}, 'sexual': {'filtered': False, 'severity': 'safe'}, 'violence': {'filtered': False, 'severity': 'safe'}}}}}
+2026-05-15 22:31:46 - AI_System - INFO - [graph_workflow.py:92] - [Tech Lead]: Pass=True | Feedback: Lỗi chấm điểm, tự động duyệt.
+2026-05-15 22:31:46 - AI_System - INFO - [graph_workflow.py:109] - [Node Cuối] Hoàn tất bản nháp, chuẩn bị xuất ra UI...
+2026-05-15 22:43:31 - AI_System - INFO - [graph_workflow.py:18] - [Node 1] Đang chuẩn bị Context...
+2026-05-15 22:43:32 - AI_System - WARNING - [graph_workflow.py:23] - [Router Guardrail] Câu hỏi ngoài lề. Chặn luồng xử lý RAG/LLM.
+2026-05-15 22:43:32 - AI_System - WARNING - [graph_workflow.py:129] - Bỏ qua đánh giá, rẽ nhánh thẳng đến điểm kết thúc.
+2026-05-15 22:43:32 - AI_System - INFO - [graph_workflow.py:114] - [Node] Xử lý câu hỏi ngoài lề...
+2026-05-15 22:43:33 - AI_System - INFO - [evaluator_agent.py:27] - [Agent Groq] Đang kiểm tra xem có cần gọi Sandbox không...
+2026-05-15 22:43:33 - AI_System - INFO - [evaluator_agent.py:51] - [Agent LoRA] Đang sinh bản nháp với văn phong Tech Lead...
+2026-05-15 22:43:34 - AI_System - INFO - [graph_workflow.py:109] - [Node Cuối] Hoàn tất bản nháp, chuẩn bị xuất ra UI...
+2026-05-15 22:43:34 - AI_System - INFO - [graph_workflow.py:18] - [Node 1] Đang chuẩn bị Context...
+2026-05-15 22:43:36 - AI_System - INFO - [analyzer_agent.py:32] -  [Analyzer Agent] Bóc tách CV bằng Structured Output thành công!
+2026-05-15 22:43:36 - AI_System - INFO - [graph_workflow.py:84] - [Node 2] Đang viết nháp (Lần {state['retry_count'] + 1})...
+2026-05-15 22:43:36 - AI_System - INFO - [evaluator_agent.py:27] - [Agent Groq] Đang kiểm tra xem có cần gọi Sandbox không...
+2026-05-15 22:43:38 - AI_System - INFO - [evaluator_agent.py:51] - [Agent LoRA] Đang sinh bản nháp với văn phong Tech Lead...
+2026-05-15 22:43:41 - AI_System - INFO - [graph_workflow.py:90] - [Node 3] Tech Lead đang chấm điểm...
+2026-05-15 22:43:46 - AI_System - INFO - [graph_workflow.py:92] - [Tech Lead]: Pass=False | Feedback: 1. Độ sâu kỹ thuật chưa đủ: Cần thảo luận về trade-offs trong việc chọn công nghệ, tối ưu bộ nhớ, và kiến trúc ứng dụng, cũng như các edge cases có thể xảy ra.
+2. Câu hỏi phỏng vấn quá lý thuyết: Cần chuyển sang câu hỏi thực chiến, yêu cầu ứng viên phân tích tình huống cụ thể thay vì chỉ chọn đáp án.
+3. Phương pháp Socratic chưa được áp dụng: Hạn chế việc nhồi nhét đáp án, thay vào đó hãy gợi ý để ứng viên tự suy nghĩ và đưa ra giải pháp của riêng mình.
+4. Không đúng trọng tâm: Phản hồi chưa trực tiếp giải quyết câu hỏi chuyển đổi nghề nghiệp của ứng viên, cần tập trung vào việc đánh giá khả năng và lộ trình phát triển cụ thể cho vị trí Backend Developer.
+2026-05-15 22:43:46 - AI_System - WARNING - [graph_workflow.py:96] - [Node 4] Bị chê, đang viết lại nháp...
+2026-05-15 22:43:46 - AI_System - INFO - [evaluator_agent.py:27] - [Agent Groq] Đang kiểm tra xem có cần gọi Sandbox không...
+2026-05-15 22:43:48 - AI_System - INFO - [evaluator_agent.py:51] - [Agent LoRA] Đang sinh bản nháp với văn phong Tech Lead...
+2026-05-15 22:44:03 - AI_System - INFO - [graph_workflow.py:90] - [Node 3] Tech Lead đang chấm điểm...
+2026-05-15 22:44:07 - AI_System - INFO - [graph_workflow.py:92] - [Tech Lead]: Pass=False | Feedback: 1. Độ sâu kỹ thuật chưa đủ: Câu trả lời cần đi sâu hơn vào các trade-offs giữa các công nghệ, tối ưu bộ nhớ và kiến trúc ứng dụng, cũng như các edge cases có thể xảy ra trong quá trình phát triển.
+2. Câu hỏi phỏng vấn quá lý thuyết: Cần chuyển câu hỏi thành tình huống thực tế hơn, yêu cầu ứng viên đưa ra giải pháp cho một vấn đề cụ thể thay vì chỉ lý thuyết.
+3. Quá nhiều gợi ý: Cần giảm bớt thông tin và chỉ đưa ra một vài gợi ý để khuyến khích ứng viên tự suy nghĩ và phát triển ý tưởng của riêng mình.
+4. Không tập trung vào câu hỏi gốc: Cần trả lời trực tiếp câu hỏi của ứng viên về việc CV có phù hợp hay không, trước khi đi vào các khía cạnh phát triển kỹ năng.
+2026-05-15 22:44:07 - AI_System - WARNING - [graph_workflow.py:104] - Đã hết số lần sửa tối đa. Buộc xuất xưởng.
+2026-05-15 22:44:07 - AI_System - INFO - [graph_workflow.py:109] - [Node Cuối] Hoàn tất bản nháp, chuẩn bị xuất ra UI...
+2026-05-15 22:44:07 - AI_System - INFO - [graph_workflow.py:18] - [Node 1] Đang chuẩn bị Context...
+2026-05-15 22:44:08 - AI_System - INFO - [graph_workflow.py:84] - [Node 2] Đang viết nháp (Lần {state['retry_count'] + 1})...
+2026-05-15 22:44:08 - AI_System - INFO - [evaluator_agent.py:27] - [Agent Groq] Đang kiểm tra xem có cần gọi Sandbox không...
+2026-05-15 22:44:22 - AI_System - INFO - [evaluator_agent.py:51] - [Agent LoRA] Đang sinh bản nháp với văn phong Tech Lead...
+2026-05-15 22:44:39 - AI_System - INFO - [graph_workflow.py:90] - [Node 3] Tech Lead đang chấm điểm...
+2026-05-15 22:44:44 - AI_System - INFO - [graph_workflow.py:92] - [Tech Lead]: Pass=False | Feedback: 1. Câu trả lời quá ngắn gọn và thiếu chiều sâu kỹ thuật; cần giải thích rõ lý do không thể cung cấp mã tấn công và nhấn mạnh tầm quan trọng của bảo mật trong lập trình.
+2. Câu hỏi của ứng viên có thể phản ánh sự thiếu hiểu biết về bảo mật; nên chuyển sang hỏi về cách phòng chống SQL Injection thay vì chỉ từ chối yêu cầu.
+3. Cần phải mớm ý một cách tinh tế hơn, khuyến khích ứng viên tự suy nghĩ về các phương pháp bảo vệ ứng dụng khỏi SQL Injection thay vì chỉ nói không.
+4. Bản nháp không giải quyết đúng trọng tâm của câu hỏi; cần phải làm rõ lý do không thể cung cấp mã tấn công và chuyển hướng sang thảo luận về các biện pháp bảo mật.
+2026-05-15 22:44:44 - AI_System - WARNING - [graph_workflow.py:96] - [Node 4] Bị chê, đang viết lại nháp...
+2026-05-15 22:44:44 - AI_System - INFO - [evaluator_agent.py:27] - [Agent Groq] Đang kiểm tra xem có cần gọi Sandbox không...
+2026-05-15 22:44:56 - AI_System - INFO - [evaluator_agent.py:51] - [Agent LoRA] Đang sinh bản nháp với văn phong Tech Lead...
+2026-05-15 22:45:12 - AI_System - INFO - [graph_workflow.py:90] - [Node 3] Tech Lead đang chấm điểm...
+2026-05-15 22:45:17 - AI_System - ERROR - [evaluator_agent.py:70] - [Evaluator Lỗi]: Error code: 400 - {'error': {'message': "The response was filtered due to the prompt triggering Azure OpenAI's content management policy. Please modify your prompt and retry. To learn more about our content filtering policies please read our documentation: https://go.microsoft.com/fwlink/?linkid=2198766", 'type': None, 'param': 'prompt', 'code': 'content_filter', 'status': 400, 'innererror': {'code': 'ResponsibleAIPolicyViolation', 'content_filter_result': {'hate': {'filtered': False, 'severity': 'safe'}, 'jailbreak': {'detected': True, 'filtered': True}, 'self_harm': {'filtered': False, 'severity': 'safe'}, 'sexual': {'filtered': False, 'severity': 'safe'}, 'violence': {'filtered': False, 'severity': 'safe'}}}}}
+Traceback (most recent call last):
+  File "D:\ttcs\ai_service\app\agents\evaluator_agent.py", line 67, in evaluate
+    result: EvaluationResult = await structured_llm.ainvoke([HumanMessage(content=prompt)])
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_core\runnables\base.py", line 3197, in ainvoke
+    input_ = await coro_with_context(part(), context, create_task=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_core\runnables\base.py", line 5708, in ainvoke
+    return await self.bound.ainvoke(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_core\language_models\chat_models.py", line 425, in ainvoke
+    llm_result = await self.agenerate_prompt(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_core\language_models\chat_models.py", line 1134, in agenerate_prompt
+    return await self.agenerate(
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_core\language_models\chat_models.py", line 1092, in agenerate
+    raise exceptions[0]
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_core\language_models\chat_models.py", line 1361, in _agenerate_with_cache
+    result = await self._agenerate(
+             ^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_openai\chat_models\base.py", line 1731, in _agenerate
+    _handle_openai_bad_request(e)
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_openai\chat_models\base.py", line 1698, in _agenerate
+    raw_response = await self.root_async_client.chat.completions.with_raw_response.parse(  # noqa: E501
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\openai\_legacy_response.py", line 384, in wrapped
+    return cast(LegacyAPIResponse[R], await func(*args, **kwargs))
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\openai\resources\chat\completions\completions.py", line 1680, in parse
+    return await self._post(
+           ^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\openai\_base_client.py", line 1884, in post
+    return await self.request(cast_to, opts, stream=stream, stream_cls=stream_cls)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\openai\_base_client.py", line 1669, in request
+    raise self._make_status_error_from_response(err.response) from None
+openai.BadRequestError: Error code: 400 - {'error': {'message': "The response was filtered due to the prompt triggering Azure OpenAI's content management policy. Please modify your prompt and retry. To learn more about our content filtering policies please read our documentation: https://go.microsoft.com/fwlink/?linkid=2198766", 'type': None, 'param': 'prompt', 'code': 'content_filter', 'status': 400, 'innererror': {'code': 'ResponsibleAIPolicyViolation', 'content_filter_result': {'hate': {'filtered': False, 'severity': 'safe'}, 'jailbreak': {'detected': True, 'filtered': True}, 'self_harm': {'filtered': False, 'severity': 'safe'}, 'sexual': {'filtered': False, 'severity': 'safe'}, 'violence': {'filtered': False, 'severity': 'safe'}}}}}
+2026-05-15 22:45:17 - AI_System - INFO - [graph_workflow.py:92] - [Tech Lead]: Pass=True | Feedback: Lỗi chấm điểm, tự động duyệt.
+2026-05-15 22:45:17 - AI_System - INFO - [graph_workflow.py:109] - [Node Cuối] Hoàn tất bản nháp, chuẩn bị xuất ra UI...
+2026-05-15 22:50:44 - AI_System - INFO - [graph_workflow.py:18] - [Node 1] Đang chuẩn bị Context...
+2026-05-15 22:50:45 - AI_System - WARNING - [graph_workflow.py:23] - [Router Guardrail] Câu hỏi ngoài lề. Chặn luồng xử lý RAG/LLM.
+2026-05-15 22:50:45 - AI_System - WARNING - [graph_workflow.py:129] - Bỏ qua đánh giá, rẽ nhánh thẳng đến điểm kết thúc.
+2026-05-15 22:50:45 - AI_System - INFO - [graph_workflow.py:114] - [Node] Xử lý câu hỏi ngoài lề...
+2026-05-15 22:50:46 - AI_System - INFO - [evaluator_agent.py:27] - [Agent Groq] Đang kiểm tra xem có cần gọi Sandbox không...
+2026-05-15 22:50:47 - AI_System - INFO - [evaluator_agent.py:51] - [Agent LoRA] Đang sinh bản nháp với văn phong Tech Lead...
+2026-05-15 22:50:48 - AI_System - INFO - [graph_workflow.py:109] - [Node Cuối] Hoàn tất bản nháp, chuẩn bị xuất ra UI...
+2026-05-15 22:50:48 - AI_System - INFO - [graph_workflow.py:18] - [Node 1] Đang chuẩn bị Context...
+2026-05-15 22:50:49 - AI_System - INFO - [graph_rag.py:73] - [GraphRAG] Đang truy vấn đồ thị cho câu hỏi: Chào bạn, tôi muốn chuyển sang làm Backend Developer, bạn xem CV của tôi có phù hợp không?
+2026-05-15 22:50:49 - AI_System - INFO - [graph_rag.py:18] - [GraphRAG] Bắt đầu kết nối Neo4j và khởi tạo Chain (Pre-load)...
+2026-05-15 22:50:50 - AI_System - INFO - [analyzer_agent.py:32] -  [Analyzer Agent] Bóc tách CV bằng Structured Output thành công!
+2026-05-15 22:50:51 - AI_System - INFO - [graph_rag.py:35] - [GraphRAG] Khởi tạo thành công Neo4j QA Chain.
+2026-05-15 22:50:52 - AI_System - INFO - [graph_rag.py:66] - [GraphRAG] Kết quả rút ra từ Đồ thị: [{'p': [{'id': 'c75e57e1f67ab5daab52961ef6ee2608', 'text': 'Tuyển Middle Backend NestJS: Yêu cầu 2-3 năm kinh nghiệm. Thành thạo TypeScript, NestJS, Prisma và PostgreSQL. Có khả năng tối ưu query và viết Unit Test. Lương: 20 - 30 triệu VNĐ + Thưởng dự án.', 'source': 'data\\jd_middle_nestjs.txt'}, 'MENTIONS', {'id': 'Middle Backend Developer'}]}]
+2026-05-15 22:50:52 - AI_System - INFO - [graph_workflow.py:84] - [Node 2] Đang viết nháp (Lần {state['retry_count'] + 1})...
+2026-05-15 22:50:52 - AI_System - INFO - [evaluator_agent.py:27] - [Agent Groq] Đang kiểm tra xem có cần gọi Sandbox không...
+2026-05-15 22:50:52 - AI_System - WARNING - [evaluator_agent.py:48] - [Tool check lỗi, bỏ qua]: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kjjc70njeqnbgahy5nxqtqvk` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 97372, Requested 3825. Please try again in 17m14.208s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
+2026-05-15 22:50:52 - AI_System - INFO - [evaluator_agent.py:51] - [Agent LoRA] Đang sinh bản nháp với văn phong Tech Lead...
+2026-05-15 22:50:52 - AI_System - ERROR - [evaluator_agent.py:60] - Lỗi khi model  sinh bản nháp: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kjjc70njeqnbgahy5nxqtqvk` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 97372, Requested 2923. Please try again in 4m14.88s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
+Traceback (most recent call last):
+  File "D:\ttcs\ai_service\app\agents\evaluator_agent.py", line 57, in generate_draft
+    final_draft = await get_llm_cheap_v1().ainvoke(messages)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_core\language_models\chat_models.py", line 425, in ainvoke
+    llm_result = await self.agenerate_prompt(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_core\language_models\chat_models.py", line 1134, in agenerate_prompt
+    return await self.agenerate(
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_core\language_models\chat_models.py", line 1092, in agenerate
+    raise exceptions[0]
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_core\language_models\chat_models.py", line 1318, in _agenerate_with_cache
+    async for chunk in self._astream(messages, stop=stop, **kwargs):
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_groq\chat_models.py", line 709, in _astream
+    async for chunk in await self.async_client.create(
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\groq\resources\chat\completions.py", line 941, in create
+    return await self._post(
+           ^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\groq\_base_client.py", line 1762, in post
+    return await self.request(cast_to, opts, stream=stream, stream_cls=stream_cls)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\groq\_base_client.py", line 1576, in request
+    raise self._make_status_error_from_response(err.response) from None
+groq.RateLimitError: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kjjc70njeqnbgahy5nxqtqvk` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 97372, Requested 2923. Please try again in 4m14.88s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
+2026-05-15 22:50:52 - AI_System - INFO - [graph_workflow.py:90] - [Node 3] Tech Lead đang chấm điểm...
+2026-05-15 22:50:57 - AI_System - INFO - [graph_workflow.py:92] - [Tech Lead]: Pass=False | Feedback: 1. Câu trả lời hoàn toàn thiếu chiều sâu kỹ thuật, không đề cập đến các trade-offs, tối ưu bộ nhớ hay kiến trúc hệ thống. Cần bổ sung những yếu tố này để thể hiện sự am hiểu về Backend Development.
+2. Câu hỏi phỏng vấn hiện tại quá nhàm chán và lý thuyết. Cần chuyển sang các tình huống thực tế, ví dụ như "Bạn sẽ xử lý thế nào nếu API của bạn gặp sự cố trong giờ cao điểm?".
+3. Đừng nhồi nhét đáp án, hãy áp dụng phương pháp Socratic để khuyến khích ứng viên tự suy nghĩ. Ví dụ, thay vì đưa ra giải pháp ngay, hãy hỏi "Bạn nghĩ vấn đề này có thể giải quyết như thế nào?".
+4. Bản nháp không trực tiếp giải quyết câu hỏi của ứng viên. Cần trả lời rõ ràng về việc CV có phù hợp hay không trước khi đi vào chi tiết kỹ thuật.
+2026-05-15 22:50:57 - AI_System - WARNING - [graph_workflow.py:96] - [Node 4] Bị chê, đang viết lại nháp...
+2026-05-15 22:50:57 - AI_System - INFO - [evaluator_agent.py:27] - [Agent Groq] Đang kiểm tra xem có cần gọi Sandbox không...
+2026-05-15 22:50:57 - AI_System - WARNING - [evaluator_agent.py:48] - [Tool check lỗi, bỏ qua]: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kjjc70njeqnbgahy5nxqtqvk` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 97366, Requested 4054. Please try again in 20m26.88s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
+2026-05-15 22:50:57 - AI_System - INFO - [evaluator_agent.py:51] - [Agent LoRA] Đang sinh bản nháp với văn phong Tech Lead...
+2026-05-15 22:50:57 - AI_System - ERROR - [evaluator_agent.py:60] - Lỗi khi model  sinh bản nháp: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kjjc70njeqnbgahy5nxqtqvk` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 97366, Requested 3171. Please try again in 7m43.967999999s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
+Traceback (most recent call last):
+  File "D:\ttcs\ai_service\app\agents\evaluator_agent.py", line 57, in generate_draft
+    final_draft = await get_llm_cheap_v1().ainvoke(messages)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_core\language_models\chat_models.py", line 425, in ainvoke
+    llm_result = await self.agenerate_prompt(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_core\language_models\chat_models.py", line 1134, in agenerate_prompt
+    return await self.agenerate(
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_core\language_models\chat_models.py", line 1092, in agenerate
+    raise exceptions[0]
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_core\language_models\chat_models.py", line 1318, in _agenerate_with_cache
+    async for chunk in self._astream(messages, stop=stop, **kwargs):
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_groq\chat_models.py", line 709, in _astream
+    async for chunk in await self.async_client.create(
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\groq\resources\chat\completions.py", line 941, in create
+    return await self._post(
+           ^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\groq\_base_client.py", line 1762, in post
+    return await self.request(cast_to, opts, stream=stream, stream_cls=stream_cls)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\groq\_base_client.py", line 1576, in request
+    raise self._make_status_error_from_response(err.response) from None
+groq.RateLimitError: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kjjc70njeqnbgahy5nxqtqvk` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 97366, Requested 3171. Please try again in 7m43.967999999s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
+2026-05-15 22:50:57 - AI_System - INFO - [graph_workflow.py:90] - [Node 3] Tech Lead đang chấm điểm...
+2026-05-15 22:51:01 - AI_System - INFO - [graph_workflow.py:92] - [Tech Lead]: Pass=False | Feedback: 1. Câu trả lời quá ngắn gọn và thiếu chiều sâu kỹ thuật. Cần thảo luận về các trade-offs trong việc chuyển đổi từ Frontend sang Backend, cũng như các thách thức về tối ưu bộ nhớ và kiến trúc ứng dụng.
+2. Câu hỏi phỏng vấn hiện tại quá lý thuyết và không thực tế. Cần chuyển sang các tình huống cụ thể mà ứng viên có thể gặp phải trong công việc thực tế, ví dụ như xử lý lỗi trong API hoặc tối ưu hóa truy vấn cơ sở dữ liệu.
+3. Đừng nhồi nhét đáp án vào câu trả lời. Hãy sử dụng phương pháp Socratic để gợi ý cho ứng viên tự tìm ra giải pháp, ví dụ như hỏi "Bạn sẽ xử lý như thế nào nếu gặp phải tình huống X?".
+4. Câu trả lời không trực tiếp giải quyết câu hỏi của ứng viên. Cần bắt đầu bằng việc xác nhận sự quan tâm của ứng viên và sau đó đi vào phân tích CV để xem xét sự phù hợp với vị trí Backend Developer.
+2026-05-15 22:51:01 - AI_System - WARNING - [graph_workflow.py:104] - Đã hết số lần sửa tối đa. Buộc xuất xưởng.
+2026-05-15 22:51:01 - AI_System - INFO - [graph_workflow.py:109] - [Node Cuối] Hoàn tất bản nháp, chuẩn bị xuất ra UI...
+2026-05-15 22:51:01 - AI_System - INFO - [graph_workflow.py:18] - [Node 1] Đang chuẩn bị Context...
+2026-05-15 22:51:02 - AI_System - INFO - [graph_workflow.py:84] - [Node 2] Đang viết nháp (Lần {state['retry_count'] + 1})...
+2026-05-15 22:51:02 - AI_System - INFO - [evaluator_agent.py:27] - [Agent Groq] Đang kiểm tra xem có cần gọi Sandbox không...
+2026-05-15 22:51:03 - AI_System - WARNING - [evaluator_agent.py:48] - [Tool check lỗi, bỏ qua]: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kjjc70njeqnbgahy5nxqtqvk` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 97359, Requested 3641. Please try again in 14m24s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
+2026-05-15 22:51:03 - AI_System - INFO - [evaluator_agent.py:51] - [Agent LoRA] Đang sinh bản nháp với văn phong Tech Lead...
+2026-05-15 22:51:04 - AI_System - INFO - [graph_workflow.py:90] - [Node 3] Tech Lead đang chấm điểm...
+2026-05-15 22:51:09 - AI_System - INFO - [graph_workflow.py:92] - [Tech Lead]: Pass=False | Feedback: 1. Câu trả lời thiếu chiều sâu kỹ thuật; cần nêu rõ các phương pháp bảo mật, trade-offs trong việc bảo vệ cơ sở dữ liệu và các edge cases có thể xảy ra khi triển khai các biện pháp này.
+2. Câu hỏi phỏng vấn quá an toàn và không thực tế; hãy chuyển sang các tình huống thực tế mà ứng viên có thể gặp phải trong công việc, ví dụ như cách ứng phó với một cuộc tấn công thực sự.
+3. Phương pháp đưa đường chưa đủ tinh tế; cần mớm ý hơn để ứng viên tự tìm ra giải pháp thay vì cung cấp thông tin ngay lập tức.
+4. Bản nháp không trực tiếp trả lời câu hỏi của ứng viên; cần tập trung vào việc giải thích lý do tại sao không thể cung cấp mã tấn công mà vẫn giữ được tính chất chuyên nghiệp và hướng dẫn.
+2026-05-15 22:51:09 - AI_System - WARNING - [graph_workflow.py:96] - [Node 4] Bị chê, đang viết lại nháp...
+2026-05-15 22:51:09 - AI_System - INFO - [evaluator_agent.py:27] - [Agent Groq] Đang kiểm tra xem có cần gọi Sandbox không...
+2026-05-15 22:51:09 - AI_System - WARNING - [evaluator_agent.py:48] - [Tool check lỗi, bỏ qua]: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kjjc70njeqnbgahy5nxqtqvk` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99994, Requested 3915. Please try again in 56m17.376s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
+2026-05-15 22:51:09 - AI_System - INFO - [evaluator_agent.py:51] - [Agent LoRA] Đang sinh bản nháp với văn phong Tech Lead...
+2026-05-15 22:51:10 - AI_System - ERROR - [evaluator_agent.py:60] - Lỗi khi model  sinh bản nháp: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kjjc70njeqnbgahy5nxqtqvk` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99994, Requested 2928. Please try again in 42m4.608s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
+Traceback (most recent call last):
+  File "D:\ttcs\ai_service\app\agents\evaluator_agent.py", line 57, in generate_draft
+    final_draft = await get_llm_cheap_v1().ainvoke(messages)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_core\language_models\chat_models.py", line 425, in ainvoke
+    llm_result = await self.agenerate_prompt(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_core\language_models\chat_models.py", line 1134, in agenerate_prompt
+    return await self.agenerate(
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_core\language_models\chat_models.py", line 1092, in agenerate
+    raise exceptions[0]
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_core\language_models\chat_models.py", line 1318, in _agenerate_with_cache
+    async for chunk in self._astream(messages, stop=stop, **kwargs):
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_groq\chat_models.py", line 709, in _astream
+    async for chunk in await self.async_client.create(
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\groq\resources\chat\completions.py", line 941, in create
+    return await self._post(
+           ^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\groq\_base_client.py", line 1762, in post
+    return await self.request(cast_to, opts, stream=stream, stream_cls=stream_cls)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\groq\_base_client.py", line 1576, in request
+    raise self._make_status_error_from_response(err.response) from None
+groq.RateLimitError: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kjjc70njeqnbgahy5nxqtqvk` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99994, Requested 2928. Please try again in 42m4.608s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
+2026-05-15 22:51:10 - AI_System - INFO - [graph_workflow.py:90] - [Node 3] Tech Lead đang chấm điểm...
+2026-05-15 22:51:13 - AI_System - INFO - [graph_workflow.py:92] - [Tech Lead]: Pass=False | Feedback: 1. Bản nháp không có nội dung kỹ thuật nào, hoàn toàn thiếu sự phân tích về SQL Injection, trade-offs hay edge cases. Cần phải cung cấp một cái nhìn sâu sắc hơn về vấn đề này.
+2. Câu hỏi phỏng vấn quá đơn giản và không thực tế. Thay vì yêu cầu viết mã tấn công, hãy chuyển sang tình huống thực tế mà ứng viên phải xử lý một lỗ hổng bảo mật đã xảy ra.
+3. Đáp án hiện tại không có thông tin gì hữu ích, cần phải mớm ý một cách thông minh hơn, khuyến khích ứng viên tự suy nghĩ và đưa ra giải pháp thay vì chỉ đưa ra một câu trả lời đơn giản.
+4. Bản nháp hoàn toàn không giải quyết câu hỏi của ứng viên, cần phải tập trung vào việc hướng dẫn ứng viên cách xử lý tình huống mà không lạc đề.
+2026-05-15 22:51:13 - AI_System - WARNING - [graph_workflow.py:104] - Đã hết số lần sửa tối đa. Buộc xuất xưởng.
+2026-05-15 22:51:13 - AI_System - INFO - [graph_workflow.py:109] - [Node Cuối] Hoàn tất bản nháp, chuẩn bị xuất ra UI...
+2026-05-15 22:51:13 - AI_System - INFO - [graph_workflow.py:18] - [Node 1] Đang chuẩn bị Context...
+2026-05-15 22:51:14 - AI_System - INFO - [router_agent.py:35] - [Router Agent] Đang cào mạng cho từ khóa: phỏng vấn Frontend Developer ReactJS
+2026-05-15 22:51:15 - AI_System - INFO - [market_agent.py:12] - [Market Agent] Bắt đầu phân tích thị trường dựa trên yêu cầu...
+2026-05-15 22:51:16 - AI_System - INFO - [market_agent.py:21] - [Market Agent] Search Query: Tuyển dụng Frontend Developer ReactJS tại Việt Nam hiện nay
+2026-05-15 22:51:16 - AI_System - ERROR - [analyzer_agent.py:36] - [Analyzer Agent Lỗi]: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kjjc70njeqnbgahy5nxqtqvk` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99986, Requested 1091. Please try again in 15m30.528s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
+Traceback (most recent call last):
+  File "D:\ttcs\ai_service\app\agents\analyzer_agent.py", line 30, in execute
+    result: CVSchema = await structured_llm.ainvoke([HumanMessage(content=prompt)])
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_core\runnables\base.py", line 3197, in ainvoke
+    input_ = await coro_with_context(part(), context, create_task=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_core\runnables\base.py", line 5708, in ainvoke
+    return await self.bound.ainvoke(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_core\language_models\chat_models.py", line 425, in ainvoke
+    llm_result = await self.agenerate_prompt(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_core\language_models\chat_models.py", line 1134, in agenerate_prompt
+    return await self.agenerate(
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_core\language_models\chat_models.py", line 1092, in agenerate
+    raise exceptions[0]
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_core\language_models\chat_models.py", line 1318, in _agenerate_with_cache
+    async for chunk in self._astream(messages, stop=stop, **kwargs):
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_groq\chat_models.py", line 709, in _astream
+    async for chunk in await self.async_client.create(
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\groq\resources\chat\completions.py", line 941, in create
+    return await self._post(
+           ^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\groq\_base_client.py", line 1762, in post
+    return await self.request(cast_to, opts, stream=stream, stream_cls=stream_cls)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\groq\_base_client.py", line 1576, in request
+    raise self._make_status_error_from_response(err.response) from None
+groq.RateLimitError: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kjjc70njeqnbgahy5nxqtqvk` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99986, Requested 1091. Please try again in 15m30.528s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
+2026-05-15 22:51:17 - AI_System - INFO - [market_agent.py:33] - [Market Agent] Kết quả phân tích: Dưới đây là tóm tắt các yêu cầu nổi bật mà các nhà tuyển dụng đang tìm kiếm:
+
+- Kỹ năng ReactJS
+- Kỹ năng Frontend
+- Kỹ năng lập trình JavaScript
+2026-05-15 22:51:17 - AI_System - INFO - [graph_workflow.py:84] - [Node 2] Đang viết nháp (Lần {state['retry_count'] + 1})...
+2026-05-15 22:51:17 - AI_System - INFO - [evaluator_agent.py:27] - [Agent Groq] Đang kiểm tra xem có cần gọi Sandbox không...
+2026-05-15 22:51:17 - AI_System - WARNING - [evaluator_agent.py:48] - [Tool check lỗi, bỏ qua]: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kjjc70njeqnbgahy5nxqtqvk` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99985, Requested 3825. Please try again in 54m51.84s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
+2026-05-15 22:51:17 - AI_System - INFO - [evaluator_agent.py:51] - [Agent LoRA] Đang sinh bản nháp với văn phong Tech Lead...
+2026-05-15 22:51:18 - AI_System - ERROR - [evaluator_agent.py:60] - Lỗi khi model  sinh bản nháp: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kjjc70njeqnbgahy5nxqtqvk` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99985, Requested 2923. Please try again in 41m52.512s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
+Traceback (most recent call last):
+  File "D:\ttcs\ai_service\app\agents\evaluator_agent.py", line 57, in generate_draft
+    final_draft = await get_llm_cheap_v1().ainvoke(messages)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_core\language_models\chat_models.py", line 425, in ainvoke
+    llm_result = await self.agenerate_prompt(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_core\language_models\chat_models.py", line 1134, in agenerate_prompt
+    return await self.agenerate(
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_core\language_models\chat_models.py", line 1092, in agenerate
+    raise exceptions[0]
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_core\language_models\chat_models.py", line 1318, in _agenerate_with_cache
+    async for chunk in self._astream(messages, stop=stop, **kwargs):
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_groq\chat_models.py", line 709, in _astream
+    async for chunk in await self.async_client.create(
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\groq\resources\chat\completions.py", line 941, in create
+    return await self._post(
+           ^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\groq\_base_client.py", line 1762, in post
+    return await self.request(cast_to, opts, stream=stream, stream_cls=stream_cls)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\groq\_base_client.py", line 1576, in request
+    raise self._make_status_error_from_response(err.response) from None
+groq.RateLimitError: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kjjc70njeqnbgahy5nxqtqvk` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99985, Requested 2923. Please try again in 41m52.512s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
+2026-05-15 22:51:18 - AI_System - INFO - [graph_workflow.py:90] - [Node 3] Tech Lead đang chấm điểm...
+2026-05-15 22:51:22 - AI_System - INFO - [graph_workflow.py:92] - [Tech Lead]: Pass=False | Feedback: 1. Bản nháp không có độ sâu kỹ thuật, thiếu các yếu tố như trade-offs, tối ưu bộ nhớ, kiến trúc và edge cases cần được đưa vào để đánh giá khả năng thực sự của ứng viên.
+2. Câu hỏi phỏng vấn hiện tại quá nhàm chán và lý thuyết, cần chuyển sang các tình huống thực tế để kiểm tra khả năng giải quyết vấn đề của ứng viên.
+3. AI đang nhồi nhét quá nhiều thông tin, cần áp dụng phương pháp Socratic để khuyến khích ứng viên tự suy nghĩ và đưa ra giải pháp.
+4. Bản nháp không trực tiếp giải quyết câu hỏi gốc của ứng viên, cần phải tập trung vào yêu cầu phỏng vấn và tránh lan man.
+2026-05-15 22:51:22 - AI_System - WARNING - [graph_workflow.py:96] - [Node 4] Bị chê, đang viết lại nháp...
+2026-05-15 22:51:22 - AI_System - INFO - [evaluator_agent.py:27] - [Agent Groq] Đang kiểm tra xem có cần gọi Sandbox không...
+2026-05-15 22:51:22 - AI_System - WARNING - [evaluator_agent.py:48] - [Tool check lỗi, bỏ qua]: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kjjc70njeqnbgahy5nxqtqvk` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99979, Requested 4079. Please try again in 58m26.111999999s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
+2026-05-15 22:51:22 - AI_System - INFO - [evaluator_agent.py:51] - [Agent LoRA] Đang sinh bản nháp với văn phong Tech Lead...
+2026-05-15 22:51:22 - AI_System - ERROR - [evaluator_agent.py:60] - Lỗi khi model  sinh bản nháp: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kjjc70njeqnbgahy5nxqtqvk` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99979, Requested 3177. Please try again in 45m26.783999999s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
+Traceback (most recent call last):
+  File "D:\ttcs\ai_service\app\agents\evaluator_agent.py", line 57, in generate_draft
+    final_draft = await get_llm_cheap_v1().ainvoke(messages)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_core\language_models\chat_models.py", line 425, in ainvoke
+    llm_result = await self.agenerate_prompt(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_core\language_models\chat_models.py", line 1134, in agenerate_prompt
+    return await self.agenerate(
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_core\language_models\chat_models.py", line 1092, in agenerate
+    raise exceptions[0]
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_core\language_models\chat_models.py", line 1318, in _agenerate_with_cache
+    async for chunk in self._astream(messages, stop=stop, **kwargs):
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_groq\chat_models.py", line 709, in _astream
+    async for chunk in await self.async_client.create(
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\groq\resources\chat\completions.py", line 941, in create
+    return await self._post(
+           ^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\groq\_base_client.py", line 1762, in post
+    return await self.request(cast_to, opts, stream=stream, stream_cls=stream_cls)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\groq\_base_client.py", line 1576, in request
+    raise self._make_status_error_from_response(err.response) from None
+groq.RateLimitError: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kjjc70njeqnbgahy5nxqtqvk` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99979, Requested 3177. Please try again in 45m26.783999999s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
+2026-05-15 22:51:22 - AI_System - INFO - [graph_workflow.py:90] - [Node 3] Tech Lead đang chấm điểm...
+2026-05-15 22:51:25 - AI_System - INFO - [graph_workflow.py:92] - [Tech Lead]: Pass=False | Feedback: 1. Bản nháp hoàn toàn thiếu chiều sâu kỹ thuật, không đề cập đến trade-offs, tối ưu bộ nhớ hay kiến trúc, cần bổ sung các câu hỏi về edge cases và cách xử lý chúng.
+2. Câu hỏi phỏng vấn hiện tại quá nhàm chán và lý thuyết, cần chuyển sang các tình huống thực tế mà ứng viên có thể gặp phải trong công việc hàng ngày.
+3. AI đang nhồi nhét quá nhiều thông tin, cần áp dụng phương pháp Socratic để khuyến khích ứng viên tự suy nghĩ và đưa ra giải pháp của riêng mình.
+4. Bản nháp không trực tiếp giải quyết yêu cầu phỏng vấn của ứng viên, cần tập trung vào câu hỏi gốc và loại bỏ những phần lan man không liên quan.
+2026-05-15 22:51:25 - AI_System - WARNING - [graph_workflow.py:104] - Đã hết số lần sửa tối đa. Buộc xuất xưởng.
+2026-05-15 22:51:25 - AI_System - INFO - [graph_workflow.py:109] - [Node Cuối] Hoàn tất bản nháp, chuẩn bị xuất ra UI...
+2026-05-15 22:51:25 - AI_System - INFO - [graph_workflow.py:18] - [Node 1] Đang chuẩn bị Context...
+2026-05-15 22:51:26 - AI_System - INFO - [graph_rag.py:73] - [GraphRAG] Đang truy vấn đồ thị cho câu hỏi: Tôi là sinh viên năm 2, chưa biết gì. Xin lộ trình trở thành Data Engineer.
+2026-05-15 22:51:26 - AI_System - INFO - [market_agent.py:12] - [Market Agent] Bắt đầu phân tích thị trường dựa trên yêu cầu...
+2026-05-15 22:51:26 - AI_System - INFO - [market_agent.py:21] - [Market Agent] Search Query: Tuyển dụng Data Engineer Việt Nam 2024
+2026-05-15 22:51:29 - AI_System - INFO - [market_agent.py:33] - [Market Agent] Kết quả phân tích: Dưới đây là 3 gạch đầu dòng tóm tắt công nghệ, kỹ năng và yêu cầu nổi bật mà các nhà tuyển dụng đang tìm kiếm:
+
+- Kỹ năng điện toán đám mây
+- Kỹ năng quản lý cơ sở dữ liệu và AI/học máy
+- Kỹ năng quản lý dữ liệu, an ninh mạng và triển khai công nghệ tiên tiến
+2026-05-15 22:51:29 - AI_System - INFO - [graph_workflow.py:84] - [Node 2] Đang viết nháp (Lần {state['retry_count'] + 1})...
+2026-05-15 22:51:29 - AI_System - INFO - [evaluator_agent.py:27] - [Agent Groq] Đang kiểm tra xem có cần gọi Sandbox không...
+2026-05-15 22:51:30 - AI_System - WARNING - [evaluator_agent.py:48] - [Tool check lỗi, bỏ qua]: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kjjc70njeqnbgahy5nxqtqvk` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99970, Requested 3712. Please try again in 53m1.248s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
+2026-05-15 22:51:30 - AI_System - INFO - [evaluator_agent.py:51] - [Agent LoRA] Đang sinh bản nháp với văn phong Tech Lead...
+2026-05-15 22:51:30 - AI_System - ERROR - [evaluator_agent.py:60] - Lỗi khi model  sinh bản nháp: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kjjc70njeqnbgahy5nxqtqvk` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99970, Requested 2810. Please try again in 40m1.92s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
+Traceback (most recent call last):
+  File "D:\ttcs\ai_service\app\agents\evaluator_agent.py", line 57, in generate_draft
+    final_draft = await get_llm_cheap_v1().ainvoke(messages)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_core\language_models\chat_models.py", line 425, in ainvoke
+    llm_result = await self.agenerate_prompt(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_core\language_models\chat_models.py", line 1134, in agenerate_prompt
+    return await self.agenerate(
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_core\language_models\chat_models.py", line 1092, in agenerate
+    raise exceptions[0]
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_core\language_models\chat_models.py", line 1318, in _agenerate_with_cache
+    async for chunk in self._astream(messages, stop=stop, **kwargs):
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_groq\chat_models.py", line 709, in _astream
+    async for chunk in await self.async_client.create(
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\groq\resources\chat\completions.py", line 941, in create
+    return await self._post(
+           ^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\groq\_base_client.py", line 1762, in post
+    return await self.request(cast_to, opts, stream=stream, stream_cls=stream_cls)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\groq\_base_client.py", line 1576, in request
+    raise self._make_status_error_from_response(err.response) from None
+groq.RateLimitError: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kjjc70njeqnbgahy5nxqtqvk` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99970, Requested 2810. Please try again in 40m1.92s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
+2026-05-15 22:51:30 - AI_System - INFO - [graph_workflow.py:90] - [Node 3] Tech Lead đang chấm điểm...
+2026-05-15 22:51:36 - AI_System - INFO - [graph_workflow.py:92] - [Tech Lead]: Pass=False | Feedback: 1. Câu trả lời thiếu chiều sâu kỹ thuật, không đề cập đến các trade-offs, tối ưu bộ nhớ hay kiến trúc hệ thống cho Data Engineer.
+2. Câu hỏi phỏng vấn quá lý thuyết, cần chuyển sang các tình huống thực tế để ứng viên có thể xử lý vấn đề cụ thể.
+3. AI đang nhồi nhét quá nhiều thông tin, cần áp dụng phương pháp Socratic để gợi mở ý tưởng cho ứng viên thay vì cung cấp đáp án ngay lập tức.
+4. Bản nháp không giải quyết trực tiếp câu hỏi của ứng viên, cần tập trung vào lộ trình cụ thể để trở thành Data Engineer ngay từ câu đầu tiên.
+2026-05-15 22:51:36 - AI_System - WARNING - [graph_workflow.py:96] - [Node 4] Bị chê, đang viết lại nháp...
+2026-05-15 22:51:36 - AI_System - INFO - [evaluator_agent.py:27] - [Agent Groq] Đang kiểm tra xem có cần gọi Sandbox không...
+2026-05-15 22:51:36 - AI_System - WARNING - [evaluator_agent.py:48] - [Tool check lỗi, bỏ qua]: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kjjc70njeqnbgahy5nxqtqvk` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99963, Requested 3801. Please try again in 54m12.096s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
+2026-05-15 22:51:36 - AI_System - INFO - [evaluator_agent.py:51] - [Agent LoRA] Đang sinh bản nháp với văn phong Tech Lead...
+2026-05-15 22:51:36 - AI_System - ERROR - [evaluator_agent.py:60] - Lỗi khi model  sinh bản nháp: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kjjc70njeqnbgahy5nxqtqvk` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99963, Requested 2984. Please try again in 42m26.208s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
+Traceback (most recent call last):
+  File "D:\ttcs\ai_service\app\agents\evaluator_agent.py", line 57, in generate_draft
+    final_draft = await get_llm_cheap_v1().ainvoke(messages)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_core\language_models\chat_models.py", line 425, in ainvoke
+    llm_result = await self.agenerate_prompt(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_core\language_models\chat_models.py", line 1134, in agenerate_prompt
+    return await self.agenerate(
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_core\language_models\chat_models.py", line 1092, in agenerate
+    raise exceptions[0]
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_core\language_models\chat_models.py", line 1318, in _agenerate_with_cache
+    async for chunk in self._astream(messages, stop=stop, **kwargs):
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_groq\chat_models.py", line 709, in _astream
+    async for chunk in await self.async_client.create(
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\groq\resources\chat\completions.py", line 941, in create
+    return await self._post(
+           ^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\groq\_base_client.py", line 1762, in post
+    return await self.request(cast_to, opts, stream=stream, stream_cls=stream_cls)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\groq\_base_client.py", line 1576, in request
+    raise self._make_status_error_from_response(err.response) from None
+groq.RateLimitError: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kjjc70njeqnbgahy5nxqtqvk` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99963, Requested 2984. Please try again in 42m26.208s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
+2026-05-15 22:51:36 - AI_System - INFO - [graph_workflow.py:90] - [Node 3] Tech Lead đang chấm điểm...
+2026-05-15 22:51:40 - AI_System - INFO - [graph_workflow.py:92] - [Tech Lead]: Pass=False | Feedback: 1. Bản nháp không cung cấp thông tin cụ thể về lộ trình trở thành Data Engineer, thiếu các bước rõ ràng và chi tiết về kỹ năng cần thiết, kiến thức nền tảng và công cụ sử dụng.
+2. Câu hỏi phỏng vấn không có, cần thay thế bằng các tình huống thực tế mà ứng viên có thể gặp phải trong công việc để đánh giá khả năng tư duy và giải quyết vấn đề của họ.
+3. Đừng nhồi nhét quá nhiều thông tin vào bản nháp, hãy sử dụng phương pháp Socratic để khuyến khích ứng viên tự tìm ra giải pháp và phát triển tư duy phản biện.
+4. Cần tập trung vào câu hỏi gốc ngay từ đầu, tránh lan man sang các chủ đề không liên quan, hãy cung cấp một lộ trình ngắn gọn và rõ ràng để ứng viên dễ dàng theo dõi.
+2026-05-15 22:51:40 - AI_System - WARNING - [graph_workflow.py:104] - Đã hết số lần sửa tối đa. Buộc xuất xưởng.
+2026-05-15 22:51:40 - AI_System - INFO - [graph_workflow.py:109] - [Node Cuối] Hoàn tất bản nháp, chuẩn bị xuất ra UI...
+2026-05-15 22:51:40 - AI_System - INFO - [graph_workflow.py:18] - [Node 1] Đang chuẩn bị Context...
+2026-05-15 22:51:41 - AI_System - INFO - [graph_rag.py:73] - [GraphRAG] Đang truy vấn đồ thị cho câu hỏi: Cho tôi một bài test thuật toán nhỏ bằng Python để kiểm tra tư duy.
+2026-05-15 22:51:52 - AI_System - INFO - [graph_rag.py:66] - [GraphRAG] Kết quả rút ra từ Đồ thị: [{'p': [{'id': '95930cb4db8645dcc4ef018fb0369b4c', 'text': 'Định hướng nghề nghiệp: Sự khác biệt giữa Data Engineer và DBA:\nNhiều bạn trẻ thường nhầm lẫn giữa Data Engineer (DE) và Database Administrator (DBA), dẫn đến chọn sai lộ trình phát triển. Dưới góc độ Tech HR, tôi sẽ phân tích rõ bản chất của hai vai trò này.\nData Engineer là kỹ sư của "Dòng chảy" (Flow) và "Sự biến đổi" (Transformation). Kỹ năng cốt lõi của họ thiên hẳn về Software Engineering. Họ quan tâm đến việc làm sao để xây dựng một đường ống dẫn nước (Data Pipeline) từ sông (hệ thống nguồn) về hồ chứa (Data Lake), qua nhà máy lọc (Spark/Flink) một cách tự động, có thể lập trình được (Python, Java), và chịu được lưu lượng lớn. Họ tư duy theo hướng mở rộng ngang (Distributed Computing).', 'source': 'data\\hr_career_path_de_vs_dba.txt'}, 'MENTIONS', {'id': 'Data Engineer'}]}, {'p': [{'id': '95930cb4db8645dcc4ef018fb0369b4c', 'text': 'Định hướng nghề nghiệp: Sự khác biệt giữa Data Engineer và DBA:\nNhiều bạn trẻ thường nhầm lẫn giữa Data Engineer (DE) và Database Administrator (DBA), dẫn đến chọn sai lộ trình phát triển. Dưới góc độ Tech HR, tôi sẽ phân tích rõ bản chất của hai vai trò này.\nData Engineer là kỹ sư của "Dòng chảy" (Flow) và "Sự biến đổi" (Transformation). Kỹ năng cốt lõi của họ thiên hẳn về Software Engineering. Họ quan tâm đến việc làm sao để xây dựng một đường ống dẫn nước (Data Pipeline) từ sông (hệ thống nguồn) về hồ chứa (Data Lake), qua nhà máy lọc (Spark/Flink) một cách tự động, có thể lập trình được (Python, Java), và chịu được lưu lượng lớn. Họ tư duy theo hướng mở rộng ngang (Distributed Computing).', 'source': 'data\\hr_career_path_de_vs_dba.txt'}, 'MENTIONS', {'id': 'Database Administrator'}]}, {'p': [{'id': '372fb09b9e8da35126e752d170e3e518', 'text': 'Định hướng Nghề nghiệp: Từ SysAdmin truyền thống sang Cloud Architect:\nRất nhiều chuyên gia Quản trị mạng/Hệ thống (SysAdmin) có 5-7 năm kinh nghiệm đang cảm thấy bế tắc và sợ hãi trước làn sóng Cloud. Lời khuyên của tôi: Nền tảng của bạn (hiểu sâu về Linux, TCP/IP, bash script, storage) chính là lợi thế cạnh tranh tuyệt đối so với các bạn chỉ biết gõ lệnh Cloud trên giao diện web. Đừng bỏ đi, hãy nâng cấp nó!\nQuá trình chuyển đổi (Transition) cần 3 bước. Bước 1: Từ bỏ tư duy "nuôi thú cưng" (Pet vs Cattle). Ngày xưa bạn cưng nựng, sửa từng lỗi nhỏ trên một server (Pet). Nay trên Cloud, server là gia súc (Cattle) - nếu một server lỗi, hãy giết nó (Terminate) và để Auto-Scaling tự động đẻ ra server mới. \nBước 2: Nâng cấp ngôn ngữ lập trình. Bash script là chưa đủ. Bạn bắt buộc phải học Python hoặc Go để tương tác qua API (boto3, Google Cloud SDK).', 'source': 'data\\hr_career_path_sysadmin_to_cloud.txt'}, 'MENTIONS', {'id': 'Sysadmin'}]}, {'p': [{'id': '372fb09b9e8da35126e752d170e3e518', 'text': 'Định hướng Nghề nghiệp: Từ SysAdmin truyền thống sang Cloud Architect:\nRất nhiều chuyên gia Quản trị mạng/Hệ thống (SysAdmin) có 5-7 năm kinh nghiệm đang cảm thấy bế tắc và sợ hãi trước làn sóng Cloud. Lời khuyên của tôi: Nền tảng của bạn (hiểu sâu về Linux, TCP/IP, bash script, storage) chính là lợi thế cạnh tranh tuyệt đối so với các bạn chỉ biết gõ lệnh Cloud trên giao diện web. Đừng bỏ đi, hãy nâng cấp nó!\nQuá trình chuyển đổi (Transition) cần 3 bước. Bước 1: Từ bỏ tư duy "nuôi thú cưng" (Pet vs Cattle). Ngày xưa bạn cưng nựng, sửa từng lỗi nhỏ trên một server (Pet). Nay trên Cloud, server là gia súc (Cattle) - nếu một server lỗi, hãy giết nó (Terminate) và để Auto-Scaling tự động đẻ ra server mới. \nBước 2: Nâng cấp ngôn ngữ lập trình. Bash script là chưa đủ. Bạn bắt buộc phải học Python hoặc Go để tương tác qua API (boto3, Google Cloud SDK).', 'source': 'data\\hr_career_path_sysadmin_to_cloud.txt'}, 'MENTIONS', {'id': 'Cloud Architect'}]}, {'p': [{'id': 'c8c6af80a736f35054700af9ebb3cb1a', 'text': 'Bước ngoặt sự nghiệp: Vì sao Kỹ sư Mạng (Network Engineer) PHẢI học Lập trình:\nNếu bạn là một kỹ sư mạng truyền thống, chỉ quen thuộc với giao diện dòng lệnh (CLI) của Cisco IOS hay Juniper Junos, sự nghiệp của bạn đang bị đe dọa nghiêm trọng. Mạng lõi (Core Network) đang dần bị trừu tượng hóa (Abstracted) bởi Cloud và SDN (Software-Defined Networking). Kỹ năng gõ lệnh nhanh không còn là lợi thế cạnh tranh nữa.\nTương lai thuộc về NetDevOps (Network + DevOps). Bạn bắt buộc phải học lập trình, và ngôn ngữ tốt nhất để bắt đầu là Python. Khi đi phỏng vấn các vị trí Senior Network, câu hỏi không còn là "Cấu hình OSPF thế nào?", mà sẽ là "Làm sao để cấu hình OSPF cho 500 routers trong vòng 10 phút mà không có sai sót?". Bạn phải trả lời được cách sử dụng Ansible (với các module netconf) hoặc viết script Python (dùng thư viện Nornir, Netmiko) để tự động push cấu hình.', 'source': 'data\\hr_network_engineer_python_automation.txt'}, 'MENTIONS', {'id': 'Kỹ Sư Mạng'}]}, {'p': [{'id': 'f5372a74f71ebc64eb651374139e4c49', 'text': 'Thứ hai, ngừng sử dụng các script bash dài hàng nghìn dòng không có cấu trúc. Hãy chuyển sang học Python (với các thư viện gọi API) hoặc Ansible (dễ học hơn cho người có gốc SysAdmin vì nó dùng YAML và SSH). Cuối cùng, hãy học cách làm việc chung với Developer. DevOps là cầu nối. Đừng đóng vai "Cảnh sát chặn cửa" không cho Dev đưa code lên mạng. Hãy đóng vai "Người thiết kế đường cao tốc", xây dựng rào chắn an toàn (CI/CD, automated tests) để Dev có thể tự lái xe lên Production một cách nhanh chóng nhất.', 'source': 'data\\hr_sysadmin_to_devops_transition.txt'}, 'MENTIONS', {'id': 'Sysadmin'}]}, {'p': [{'id': 'f5372a74f71ebc64eb651374139e4c49', 'text': 'Thứ hai, ngừng sử dụng các script bash dài hàng nghìn dòng không có cấu trúc. Hãy chuyển sang học Python (với các thư viện gọi API) hoặc Ansible (dễ học hơn cho người có gốc SysAdmin vì nó dùng YAML và SSH). Cuối cùng, hãy học cách làm việc chung với Developer. DevOps là cầu nối. Đừng đóng vai "Cảnh sát chặn cửa" không cho Dev đưa code lên mạng. Hãy đóng vai "Người thiết kế đường cao tốc", xây dựng rào chắn an toàn (CI/CD, automated tests) để Dev có thể tự lái xe lên Production một cách nhanh chóng nhất.', 'source': 'data\\hr_sysadmin_to_devops_transition.txt'}, 'MENTIONS', {'id': 'Devops'}]}]
+2026-05-15 22:51:52 - AI_System - INFO - [graph_workflow.py:84] - [Node 2] Đang viết nháp (Lần {state['retry_count'] + 1})...
+2026-05-15 22:51:52 - AI_System - INFO - [evaluator_agent.py:27] - [Agent Groq] Đang kiểm tra xem có cần gọi Sandbox không...
+2026-05-15 22:51:52 - AI_System - WARNING - [evaluator_agent.py:48] - [Tool check lỗi, bỏ qua]: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kjjc70njeqnbgahy5nxqtqvk` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99944, Requested 5359. Please try again in 1h16m21.792s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
+2026-05-15 22:51:53 - AI_System - INFO - [evaluator_agent.py:51] - [Agent LoRA] Đang sinh bản nháp với văn phong Tech Lead...
+2026-05-15 22:51:53 - AI_System - ERROR - [evaluator_agent.py:60] - Lỗi khi model  sinh bản nháp: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kjjc70njeqnbgahy5nxqtqvk` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99944, Requested 4542. Please try again in 1h4m35.903999999s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
+Traceback (most recent call last):
+  File "D:\ttcs\ai_service\app\agents\evaluator_agent.py", line 57, in generate_draft
+    final_draft = await get_llm_cheap_v1().ainvoke(messages)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_core\language_models\chat_models.py", line 425, in ainvoke
+    llm_result = await self.agenerate_prompt(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_core\language_models\chat_models.py", line 1134, in agenerate_prompt
+    return await self.agenerate(
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_core\language_models\chat_models.py", line 1092, in agenerate
+    raise exceptions[0]
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_core\language_models\chat_models.py", line 1318, in _agenerate_with_cache
+    async for chunk in self._astream(messages, stop=stop, **kwargs):
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_groq\chat_models.py", line 709, in _astream
+    async for chunk in await self.async_client.create(
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\groq\resources\chat\completions.py", line 941, in create
+    return await self._post(
+           ^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\groq\_base_client.py", line 1762, in post
+    return await self.request(cast_to, opts, stream=stream, stream_cls=stream_cls)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\groq\_base_client.py", line 1576, in request
+    raise self._make_status_error_from_response(err.response) from None
+groq.RateLimitError: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kjjc70njeqnbgahy5nxqtqvk` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99944, Requested 4542. Please try again in 1h4m35.903999999s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
+2026-05-15 22:51:53 - AI_System - INFO - [graph_workflow.py:90] - [Node 3] Tech Lead đang chấm điểm...
+2026-05-15 22:51:57 - AI_System - INFO - [graph_workflow.py:92] - [Tech Lead]: Pass=False | Feedback: 1. Bản nháp thiếu chiều sâu kỹ thuật; không đề cập đến trade-offs, tối ưu bộ nhớ hay edge cases. Cần bổ sung các yếu tố này để đánh giá tư duy thuật toán của ứng viên.
+2. Câu hỏi phỏng vấn hiện tại quá lý thuyết và nhàm chán; cần chuyển sang các tình huống thực tế để ứng viên có thể thể hiện khả năng giải quyết vấn đề.
+3. AI đang cung cấp quá nhiều thông tin; cần áp dụng phương pháp Socratic để khuyến khích ứng viên tự tìm ra giải pháp thay vì chỉ nhận câu trả lời.
+4. Bản nháp không trực tiếp giải quyết yêu cầu của ứng viên; cần tập trung vào việc đưa ra bài test cụ thể ngay từ đầu để không bị lạc đề.
+2026-05-15 22:51:57 - AI_System - WARNING - [graph_workflow.py:96] - [Node 4] Bị chê, đang viết lại nháp...
+2026-05-15 22:51:57 - AI_System - INFO - [evaluator_agent.py:27] - [Agent Groq] Đang kiểm tra xem có cần gọi Sandbox không...
+2026-05-15 22:51:58 - AI_System - WARNING - [evaluator_agent.py:48] - [Tool check lỗi, bỏ qua]: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kjjc70njeqnbgahy5nxqtqvk` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99938, Requested 5618. Please try again in 1h20m0.384s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
+2026-05-15 22:51:58 - AI_System - INFO - [evaluator_agent.py:51] - [Agent LoRA] Đang sinh bản nháp với văn phong Tech Lead...
+2026-05-15 22:51:58 - AI_System - ERROR - [evaluator_agent.py:60] - Lỗi khi model  sinh bản nháp: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kjjc70njeqnbgahy5nxqtqvk` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99938, Requested 4716. Please try again in 1h7m1.056s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
+Traceback (most recent call last):
+  File "D:\ttcs\ai_service\app\agents\evaluator_agent.py", line 57, in generate_draft
+    final_draft = await get_llm_cheap_v1().ainvoke(messages)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_core\language_models\chat_models.py", line 425, in ainvoke
+    llm_result = await self.agenerate_prompt(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_core\language_models\chat_models.py", line 1134, in agenerate_prompt
+    return await self.agenerate(
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_core\language_models\chat_models.py", line 1092, in agenerate
+    raise exceptions[0]
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_core\language_models\chat_models.py", line 1318, in _agenerate_with_cache
+    async for chunk in self._astream(messages, stop=stop, **kwargs):
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_groq\chat_models.py", line 709, in _astream
+    async for chunk in await self.async_client.create(
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\groq\resources\chat\completions.py", line 941, in create
+    return await self._post(
+           ^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\groq\_base_client.py", line 1762, in post
+    return await self.request(cast_to, opts, stream=stream, stream_cls=stream_cls)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\groq\_base_client.py", line 1576, in request
+    raise self._make_status_error_from_response(err.response) from None
+groq.RateLimitError: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kjjc70njeqnbgahy5nxqtqvk` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99938, Requested 4716. Please try again in 1h7m1.056s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
+2026-05-15 22:51:58 - AI_System - INFO - [graph_workflow.py:90] - [Node 3] Tech Lead đang chấm điểm...
+2026-05-15 22:52:01 - AI_System - INFO - [graph_workflow.py:92] - [Tech Lead]: Pass=False | Feedback: 1. Bản nháp hoàn toàn thiếu chiều sâu kỹ thuật, không đề cập đến trade-offs, tối ưu bộ nhớ hay edge cases. Cần bổ sung các yếu tố này để thể hiện sự nghiêm túc trong việc kiểm tra tư duy thuật toán.
+2. Câu hỏi phỏng vấn hiện tại quá nhàm chán và lý thuyết, cần chuyển sang các tình huống thực tế để ứng viên có thể thể hiện khả năng giải quyết vấn đề thực tiễn.
+3. Đừng nhồi nhét đáp án, hãy áp dụng phương pháp Socratic để gợi mở cho ứng viên tự tìm ra giải pháp, điều này sẽ giúp đánh giá khả năng tư duy của họ tốt hơn.
+4. Bản nháp không trực tiếp trả lời câu hỏi của ứng viên, cần phải tập trung vào việc đưa ra bài test thuật toán cụ thể ngay từ đầu, tránh lan man và lạc đề.
+2026-05-15 22:52:01 - AI_System - WARNING - [graph_workflow.py:104] - Đã hết số lần sửa tối đa. Buộc xuất xưởng.
+2026-05-15 22:52:01 - AI_System - INFO - [graph_workflow.py:109] - [Node Cuối] Hoàn tất bản nháp, chuẩn bị xuất ra UI...
+2026-05-15 22:52:01 - AI_System - INFO - [graph_workflow.py:18] - [Node 1] Đang chuẩn bị Context...
+2026-05-15 22:52:02 - AI_System - INFO - [router_agent.py:35] - [Router Agent] Đang cào mạng cho từ khóa: lương Node.js Hà Nội
+2026-05-15 22:52:03 - AI_System - INFO - [market_agent.py:12] - [Market Agent] Bắt đầu phân tích thị trường dựa trên yêu cầu...
+2026-05-15 22:52:04 - AI_System - INFO - [market_agent.py:21] - [Market Agent] Search Query: Các yêu cầu tuyển dụng Node.js tại Hà Nội hiện tại
+2026-05-15 22:52:04 - AI_System - ERROR - [analyzer_agent.py:36] - [Analyzer Agent Lỗi]: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kjjc70njeqnbgahy5nxqtqvk` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99931, Requested 1013. Please try again in 13m35.616s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
+Traceback (most recent call last):
+  File "D:\ttcs\ai_service\app\agents\analyzer_agent.py", line 30, in execute
+    result: CVSchema = await structured_llm.ainvoke([HumanMessage(content=prompt)])
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_core\runnables\base.py", line 3197, in ainvoke
+    input_ = await coro_with_context(part(), context, create_task=True)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_core\runnables\base.py", line 5708, in ainvoke
+    return await self.bound.ainvoke(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_core\language_models\chat_models.py", line 425, in ainvoke
+    llm_result = await self.agenerate_prompt(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_core\language_models\chat_models.py", line 1134, in agenerate_prompt
+    return await self.agenerate(
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_core\language_models\chat_models.py", line 1092, in agenerate
+    raise exceptions[0]
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_core\language_models\chat_models.py", line 1318, in _agenerate_with_cache
+    async for chunk in self._astream(messages, stop=stop, **kwargs):
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_groq\chat_models.py", line 709, in _astream
+    async for chunk in await self.async_client.create(
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\groq\resources\chat\completions.py", line 941, in create
+    return await self._post(
+           ^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\groq\_base_client.py", line 1762, in post
+    return await self.request(cast_to, opts, stream=stream, stream_cls=stream_cls)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\groq\_base_client.py", line 1576, in request
+    raise self._make_status_error_from_response(err.response) from None
+groq.RateLimitError: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kjjc70njeqnbgahy5nxqtqvk` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99931, Requested 1013. Please try again in 13m35.616s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
+2026-05-15 22:52:06 - AI_System - INFO - [market_agent.py:33] - [Market Agent] Kết quả phân tích: Dưới đây là 3 yêu cầu nổi bật mà các nhà tuyển dụng đang tìm kiếm:
+
+- **Node.js**: Yêu cầu ứng viên phải có kiến thức và kinh nghiệm về Node.js.
+- **JavaScript**: Yêu cầu ứng viên phải có kiến thức và kinh nghiệm về JavaScript.
+- **Cơ sở dữ liệu**: Yêu cầu ứng viên phải có kiến thức và kinh nghiệm về cơ sở dữ liệu (ví dụ: MongoDB, MySQL).
+2026-05-15 22:52:06 - AI_System - INFO - [graph_workflow.py:84] - [Node 2] Đang viết nháp (Lần {state['retry_count'] + 1})...
+2026-05-15 22:52:06 - AI_System - INFO - [evaluator_agent.py:27] - [Agent Groq] Đang kiểm tra xem có cần gọi Sandbox không...
+2026-05-15 22:52:06 - AI_System - WARNING - [evaluator_agent.py:48] - [Tool check lỗi, bỏ qua]: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kjjc70njeqnbgahy5nxqtqvk` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99929, Requested 3934. Please try again in 55m37.631999999s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
+2026-05-15 22:52:06 - AI_System - INFO - [evaluator_agent.py:51] - [Agent LoRA] Đang sinh bản nháp với văn phong Tech Lead...
+2026-05-15 22:52:06 - AI_System - ERROR - [evaluator_agent.py:60] - Lỗi khi model  sinh bản nháp: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kjjc70njeqnbgahy5nxqtqvk` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99929, Requested 2947. Please try again in 41m24.864s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
+Traceback (most recent call last):
+  File "D:\ttcs\ai_service\app\agents\evaluator_agent.py", line 57, in generate_draft
+    final_draft = await get_llm_cheap_v1().ainvoke(messages)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_core\language_models\chat_models.py", line 425, in ainvoke
+    llm_result = await self.agenerate_prompt(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_core\language_models\chat_models.py", line 1134, in agenerate_prompt
+    return await self.agenerate(
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_core\language_models\chat_models.py", line 1092, in agenerate
+    raise exceptions[0]
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_core\language_models\chat_models.py", line 1318, in _agenerate_with_cache
+    async for chunk in self._astream(messages, stop=stop, **kwargs):
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_groq\chat_models.py", line 709, in _astream
+    async for chunk in await self.async_client.create(
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\groq\resources\chat\completions.py", line 941, in create
+    return await self._post(
+           ^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\groq\_base_client.py", line 1762, in post
+    return await self.request(cast_to, opts, stream=stream, stream_cls=stream_cls)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\groq\_base_client.py", line 1576, in request
+    raise self._make_status_error_from_response(err.response) from None
+groq.RateLimitError: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kjjc70njeqnbgahy5nxqtqvk` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99929, Requested 2947. Please try again in 41m24.864s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
+2026-05-15 22:52:06 - AI_System - INFO - [graph_workflow.py:90] - [Node 3] Tech Lead đang chấm điểm...
+2026-05-15 22:52:11 - AI_System - INFO - [graph_workflow.py:92] - [Tech Lead]: Pass=False | Feedback: 1. Bản nháp không cung cấp thông tin cụ thể về mức lương phù hợp cho vị trí Node.js ở Hà Nội, cần phải có dữ liệu thị trường và phân tích rõ ràng hơn.
+2. Câu hỏi phỏng vấn không nên chỉ dừng lại ở việc hỏi về lương, mà cần đưa ra các tình huống thực tế để đánh giá khả năng ứng viên trong việc thương lượng và định giá bản thân.
+3. Đáp án hiện tại quá chung chung và thiếu chiều sâu, cần gợi ý cho ứng viên cách tự nghiên cứu và tìm hiểu về mức lương thay vì chỉ đưa ra con số.
+4. Câu trả lời không trực tiếp giải quyết câu hỏi về mức lương mà lại lạc đề, cần tập trung vào việc đưa ra thông tin cụ thể và hữu ích cho ứng viên.
+2026-05-15 22:52:11 - AI_System - WARNING - [graph_workflow.py:96] - [Node 4] Bị chê, đang viết lại nháp...
+2026-05-15 22:52:11 - AI_System - INFO - [evaluator_agent.py:27] - [Agent Groq] Đang kiểm tra xem có cần gọi Sandbox không...
+2026-05-15 22:52:11 - AI_System - WARNING - [evaluator_agent.py:48] - [Tool check lỗi, bỏ qua]: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kjjc70njeqnbgahy5nxqtqvk` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99923, Requested 4133. Please try again in 58m24.384s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
+2026-05-15 22:52:11 - AI_System - INFO - [evaluator_agent.py:51] - [Agent LoRA] Đang sinh bản nháp với văn phong Tech Lead...
+2026-05-15 22:52:11 - AI_System - ERROR - [evaluator_agent.py:60] - Lỗi khi model  sinh bản nháp: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kjjc70njeqnbgahy5nxqtqvk` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99923, Requested 3146. Please try again in 44m11.616s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
+Traceback (most recent call last):
+  File "D:\ttcs\ai_service\app\agents\evaluator_agent.py", line 57, in generate_draft
+    final_draft = await get_llm_cheap_v1().ainvoke(messages)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_core\language_models\chat_models.py", line 425, in ainvoke
+    llm_result = await self.agenerate_prompt(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_core\language_models\chat_models.py", line 1134, in agenerate_prompt
+    return await self.agenerate(
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_core\language_models\chat_models.py", line 1092, in agenerate
+    raise exceptions[0]
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_core\language_models\chat_models.py", line 1318, in _agenerate_with_cache
+    async for chunk in self._astream(messages, stop=stop, **kwargs):
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_groq\chat_models.py", line 709, in _astream
+    async for chunk in await self.async_client.create(
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\groq\resources\chat\completions.py", line 941, in create
+    return await self._post(
+           ^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\groq\_base_client.py", line 1762, in post
+    return await self.request(cast_to, opts, stream=stream, stream_cls=stream_cls)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\groq\_base_client.py", line 1576, in request
+    raise self._make_status_error_from_response(err.response) from None
+groq.RateLimitError: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kjjc70njeqnbgahy5nxqtqvk` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99923, Requested 3146. Please try again in 44m11.616s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
+2026-05-15 22:52:11 - AI_System - INFO - [graph_workflow.py:90] - [Node 3] Tech Lead đang chấm điểm...
+2026-05-15 22:52:14 - AI_System - INFO - [graph_workflow.py:92] - [Tech Lead]: Pass=False | Feedback: 1. Câu trả lời hoàn toàn thiếu chiều sâu kỹ thuật; không đề cập đến các yếu tố như trade-offs, tối ưu bộ nhớ hay kiến trúc hệ thống.
+2. Câu hỏi phỏng vấn quá nhàm chán và lý thuyết; cần chuyển sang các tình huống thực tế để đánh giá khả năng giải quyết vấn đề của ứng viên.
+3. AI đang nhồi nhét quá nhiều thông tin; cần chuyển sang phương pháp Socratic để ứng viên tự tìm ra câu trả lời.
+4. Bản nháp không trực tiếp giải quyết câu hỏi về lương; cần tập trung vào vấn đề chính ngay từ đầu.
+2026-05-15 22:52:14 - AI_System - WARNING - [graph_workflow.py:104] - Đã hết số lần sửa tối đa. Buộc xuất xưởng.
+2026-05-15 22:52:14 - AI_System - INFO - [graph_workflow.py:109] - [Node Cuối] Hoàn tất bản nháp, chuẩn bị xuất ra UI...
+2026-05-15 22:52:14 - AI_System - INFO - [graph_workflow.py:18] - [Node 1] Đang chuẩn bị Context...
+2026-05-15 22:52:15 - AI_System - ERROR - [router_agent.py:39] - [Router Agent Lỗi]: Failed to call a function. Please adjust your prompt. See 'failed_generation' for more details.
+2026-05-15 22:52:15 - AI_System - INFO - [graph_rag.py:73] - [GraphRAG] Đang truy vấn đồ thị cho câu hỏi: Cái hệ thống AI này ngu như bò, trả lời chả ra cái gì cả.
+2026-05-15 22:52:35 - AI_System - INFO - [graph_rag.py:66] - [GraphRAG] Kết quả rút ra từ Đồ thị: [{'d': {'id': '95930cb4db8645dcc4ef018fb0369b4c', 'text': 'Định hướng nghề nghiệp: Sự khác biệt giữa Data Engineer và DBA:\nNhiều bạn trẻ thường nhầm lẫn giữa Data Engineer (DE) và Database Administrator (DBA), dẫn đến chọn sai lộ trình phát triển. Dưới góc độ Tech HR, tôi sẽ phân tích rõ bản chất của hai vai trò này.\nData Engineer là kỹ sư của "Dòng chảy" (Flow) và "Sự biến đổi" (Transformation). Kỹ năng cốt lõi của họ thiên hẳn về Software Engineering. Họ quan tâm đến việc làm sao để xây dựng một đường ống dẫn nước (Data Pipeline) từ sông (hệ thống nguồn) về hồ chứa (Data Lake), qua nhà máy lọc (Spark/Flink) một cách tự động, có thể lập trình được (Python, Java), và chịu được lưu lượng lớn. Họ tư duy theo hướng mở rộng ngang (Distributed Computing).', 'source': 'data\\hr_career_path_de_vs_dba.txt'}, 'r': {'id': 'Data Engineer'}}, {'d': {'id': '95930cb4db8645dcc4ef018fb0369b4c', 'text': 'Định hướng nghề nghiệp: Sự khác biệt giữa Data Engineer và DBA:\nNhiều bạn trẻ thường nhầm lẫn giữa Data Engineer (DE) và Database Administrator (DBA), dẫn đến chọn sai lộ trình phát triển. Dưới góc độ Tech HR, tôi sẽ phân tích rõ bản chất của hai vai trò này.\nData Engineer là kỹ sư của "Dòng chảy" (Flow) và "Sự biến đổi" (Transformation). Kỹ năng cốt lõi của họ thiên hẳn về Software Engineering. Họ quan tâm đến việc làm sao để xây dựng một đường ống dẫn nước (Data Pipeline) từ sông (hệ thống nguồn) về hồ chứa (Data Lake), qua nhà máy lọc (Spark/Flink) một cách tự động, có thể lập trình được (Python, Java), và chịu được lưu lượng lớn. Họ tư duy theo hướng mở rộng ngang (Distributed Computing).', 'source': 'data\\hr_career_path_de_vs_dba.txt'}, 'r': {'id': 'Database Administrator'}}, {'d': {'id': '68ebefe4be31b63b6ba3db467c339a6b', 'text': 'Ngược lại, DBA là người canh gác "Trạng thái" (State) và "Sự bền bỉ" (Persistence). Họ thiên về System Operations. DBA quan tâm đến việc làm sao để cái hồ chứa (Database) không bị vỡ đập, nước không bị rò rỉ (Security, Backup/Recovery), và máy bơm hoạt động hiệu quả nhất (Tuning Indexes, CPU, RAM của Server). Áp lực của DBA thường lớn hơn về mặt trực chiến (On-call), vì database sập là công ty ngừng hoạt động.\nNếu bạn thích lập trình, thích xây dựng hệ thống xử lý logic phức tạp, hãy làm DE. Nếu bạn thích đi sâu vào phần cứng, kiến trúc bộ nhớ máy chủ, thích tối ưu hóa từng mili-giây và có tinh thần thép bảo vệ dữ liệu, DBA là con đường vinh quang dành cho bạn.', 'source': 'data\\hr_career_path_de_vs_dba.txt'}, 'r': {'id': 'Dba'}}, {'d': {'id': '68ebefe4be31b63b6ba3db467c339a6b', 'text': 'Ngược lại, DBA là người canh gác "Trạng thái" (State) và "Sự bền bỉ" (Persistence). Họ thiên về System Operations. DBA quan tâm đến việc làm sao để cái hồ chứa (Database) không bị vỡ đập, nước không bị rò rỉ (Security, Backup/Recovery), và máy bơm hoạt động hiệu quả nhất (Tuning Indexes, CPU, RAM của Server). Áp lực của DBA thường lớn hơn về mặt trực chiến (On-call), vì database sập là công ty ngừng hoạt động.\nNếu bạn thích lập trình, thích xây dựng hệ thống xử lý logic phức tạp, hãy làm DE. Nếu bạn thích đi sâu vào phần cứng, kiến trúc bộ nhớ máy chủ, thích tối ưu hóa từng mili-giây và có tinh thần thép bảo vệ dữ liệu, DBA là con đường vinh quang dành cho bạn.', 'source': 'data\\hr_career_path_de_vs_dba.txt'}, 'r': {'id': 'De'}}, {'d': {'id': '0b3292b4f893e6d5f721013e3d71b795', 'text': 'Định hướng sự nghiệp: Vượt qua định kiến và cạm bẫy ngành Game (Game Dev Career & Burnout):\nNgành công nghiệp Game được xây dựng dựa trên "Đam mê", và chính vì thế, nó là môi trường dễ bóc lột sức lao động nhất. Rất nhiều kỹ sư trẻ sẵn sàng nhận mức lương thấp hơn thị trường Web/App, chấp nhận làm việc quá sức (Crunch culture) 70-80 tiếng/tuần chỉ để được thấy tên mình trong phần Credit của một tựa game. Dưới góc độ Tech HR, tôi khuyên bạn phải có chiến lược bảo vệ sự nghiệp và sức khỏe của mình.\nThứ nhất, đừng mắc kẹt mãi ở vị trí Gameplay Scripter (Người ghép nối logic game cơ bản). Nếu bạn chỉ biết gọi các API có sẵn của Unity, bạn rất dễ bị đào thải. Hãy đào sâu vào Core Engineering: Học C++ để viết lại engine, tìm hiểu về Shader Programming để trở thành Technical Artist (vị trí lai giữa Dev và Art, lương cực cao và cực hiếm), hoặc tập trung vào Network/Multiplayer architecture.', 'source': 'data\\hr_career_path_game_dev_burnout.txt'}, 'r': {'id': 'Kỹ Sư Trẻ'}}, {'d': {'id': '0b3292b4f893e6d5f721013e3d71b795', 'text': 'Định hướng sự nghiệp: Vượt qua định kiến và cạm bẫy ngành Game (Game Dev Career & Burnout):\nNgành công nghiệp Game được xây dựng dựa trên "Đam mê", và chính vì thế, nó là môi trường dễ bóc lột sức lao động nhất. Rất nhiều kỹ sư trẻ sẵn sàng nhận mức lương thấp hơn thị trường Web/App, chấp nhận làm việc quá sức (Crunch culture) 70-80 tiếng/tuần chỉ để được thấy tên mình trong phần Credit của một tựa game. Dưới góc độ Tech HR, tôi khuyên bạn phải có chiến lược bảo vệ sự nghiệp và sức khỏe của mình.\nThứ nhất, đừng mắc kẹt mãi ở vị trí Gameplay Scripter (Người ghép nối logic game cơ bản). Nếu bạn chỉ biết gọi các API có sẵn của Unity, bạn rất dễ bị đào thải. Hãy đào sâu vào Core Engineering: Học C++ để viết lại engine, tìm hiểu về Shader Programming để trở thành Technical Artist (vị trí lai giữa Dev và Art, lương cực cao và cực hiếm), hoặc tập trung vào Network/Multiplayer architecture.', 'source': 'data\\hr_career_path_game_dev_burnout.txt'}, 'r': {'id': 'Gameplay Scripter'}}, {'d': {'id': '0b3292b4f893e6d5f721013e3d71b795', 'text': 'Định hướng sự nghiệp: Vượt qua định kiến và cạm bẫy ngành Game (Game Dev Career & Burnout):\nNgành công nghiệp Game được xây dựng dựa trên "Đam mê", và chính vì thế, nó là môi trường dễ bóc lột sức lao động nhất. Rất nhiều kỹ sư trẻ sẵn sàng nhận mức lương thấp hơn thị trường Web/App, chấp nhận làm việc quá sức (Crunch culture) 70-80 tiếng/tuần chỉ để được thấy tên mình trong phần Credit của một tựa game. Dưới góc độ Tech HR, tôi khuyên bạn phải có chiến lược bảo vệ sự nghiệp và sức khỏe của mình.\nThứ nhất, đừng mắc kẹt mãi ở vị trí Gameplay Scripter (Người ghép nối logic game cơ bản). Nếu bạn chỉ biết gọi các API có sẵn của Unity, bạn rất dễ bị đào thải. Hãy đào sâu vào Core Engineering: Học C++ để viết lại engine, tìm hiểu về Shader Programming để trở thành Technical Artist (vị trí lai giữa Dev và Art, lương cực cao và cực hiếm), hoặc tập trung vào Network/Multiplayer architecture.', 'source': 'data\\hr_career_path_game_dev_burnout.txt'}, 'r': {'id': 'Technical Artist'}}]
+2026-05-15 22:52:35 - AI_System - INFO - [graph_workflow.py:84] - [Node 2] Đang viết nháp (Lần {state['retry_count'] + 1})...
+2026-05-15 22:52:35 - AI_System - INFO - [evaluator_agent.py:27] - [Agent Groq] Đang kiểm tra xem có cần gọi Sandbox không...
+2026-05-15 22:52:35 - AI_System - WARNING - [evaluator_agent.py:48] - [Tool check lỗi, bỏ qua]: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kjjc70njeqnbgahy5nxqtqvk` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99895, Requested 5519. Please try again in 1h17m57.696s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
+2026-05-15 22:52:35 - AI_System - INFO - [evaluator_agent.py:51] - [Agent LoRA] Đang sinh bản nháp với văn phong Tech Lead...
+2026-05-15 22:52:36 - AI_System - ERROR - [evaluator_agent.py:60] - Lỗi khi model  sinh bản nháp: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kjjc70njeqnbgahy5nxqtqvk` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99894, Requested 4551. Please try again in 1h4m0.48s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
+Traceback (most recent call last):
+  File "D:\ttcs\ai_service\app\agents\evaluator_agent.py", line 57, in generate_draft
+    final_draft = await get_llm_cheap_v1().ainvoke(messages)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_core\language_models\chat_models.py", line 425, in ainvoke
+    llm_result = await self.agenerate_prompt(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_core\language_models\chat_models.py", line 1134, in agenerate_prompt
+    return await self.agenerate(
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_core\language_models\chat_models.py", line 1092, in agenerate
+    raise exceptions[0]
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_core\language_models\chat_models.py", line 1318, in _agenerate_with_cache
+    async for chunk in self._astream(messages, stop=stop, **kwargs):
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_groq\chat_models.py", line 709, in _astream
+    async for chunk in await self.async_client.create(
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\groq\resources\chat\completions.py", line 941, in create
+    return await self._post(
+           ^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\groq\_base_client.py", line 1762, in post
+    return await self.request(cast_to, opts, stream=stream, stream_cls=stream_cls)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\groq\_base_client.py", line 1576, in request
+    raise self._make_status_error_from_response(err.response) from None
+groq.RateLimitError: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kjjc70njeqnbgahy5nxqtqvk` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99894, Requested 4551. Please try again in 1h4m0.48s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
+2026-05-15 22:52:36 - AI_System - INFO - [graph_workflow.py:90] - [Node 3] Tech Lead đang chấm điểm...
+2026-05-15 22:52:41 - AI_System - INFO - [graph_workflow.py:92] - [Tech Lead]: Pass=False | Feedback: 1. Câu trả lời quá đơn giản và không đi vào chi tiết kỹ thuật. Cần giải thích rõ nguyên nhân sự cố, các trade-offs có thể xảy ra và cách khắc phục. 
+2. Câu hỏi phỏng vấn cần chuyển từ lý thuyết sang thực tiễn, yêu cầu ứng viên phân tích tình huống cụ thể và đề xuất giải pháp. 
+3. Đừng chỉ đưa ra câu trả lời, hãy khuyến khích ứng viên tự tìm ra vấn đề và giải pháp thông qua các câu hỏi gợi mở. 
+4. Bản nháp không trực tiếp giải quyết vấn đề của ứng viên. Cần trả lời rõ ràng về lý do hệ thống gặp sự cố và các bước khắc phục cụ thể.
+2026-05-15 22:52:41 - AI_System - WARNING - [graph_workflow.py:96] - [Node 4] Bị chê, đang viết lại nháp...
+2026-05-15 22:52:41 - AI_System - INFO - [evaluator_agent.py:27] - [Agent Groq] Đang kiểm tra xem có cần gọi Sandbox không...
+2026-05-15 22:52:41 - AI_System - WARNING - [evaluator_agent.py:48] - [Tool check lỗi, bỏ qua]: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kjjc70njeqnbgahy5nxqtqvk` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99888, Requested 5721. Please try again in 1h20m46.176s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
+2026-05-15 22:52:41 - AI_System - INFO - [evaluator_agent.py:51] - [Agent LoRA] Đang sinh bản nháp với văn phong Tech Lead...
+2026-05-15 22:52:42 - AI_System - ERROR - [evaluator_agent.py:60] - Lỗi khi model  sinh bản nháp: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kjjc70njeqnbgahy5nxqtqvk` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99887, Requested 4800. Please try again in 1h7m29.568s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
+Traceback (most recent call last):
+  File "D:\ttcs\ai_service\app\agents\evaluator_agent.py", line 57, in generate_draft
+    final_draft = await get_llm_cheap_v1().ainvoke(messages)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_core\language_models\chat_models.py", line 425, in ainvoke
+    llm_result = await self.agenerate_prompt(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_core\language_models\chat_models.py", line 1134, in agenerate_prompt
+    return await self.agenerate(
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_core\language_models\chat_models.py", line 1092, in agenerate
+    raise exceptions[0]
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_core\language_models\chat_models.py", line 1318, in _agenerate_with_cache
+    async for chunk in self._astream(messages, stop=stop, **kwargs):
+  File "D:\ttcs\ai_env\Lib\site-packages\langchain_groq\chat_models.py", line 709, in _astream
+    async for chunk in await self.async_client.create(
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\groq\resources\chat\completions.py", line 941, in create
+    return await self._post(
+           ^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\groq\_base_client.py", line 1762, in post
+    return await self.request(cast_to, opts, stream=stream, stream_cls=stream_cls)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\ttcs\ai_env\Lib\site-packages\groq\_base_client.py", line 1576, in request
+    raise self._make_status_error_from_response(err.response) from None
+groq.RateLimitError: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kjjc70njeqnbgahy5nxqtqvk` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99887, Requested 4800. Please try again in 1h7m29.568s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
+2026-05-15 22:52:42 - AI_System - INFO - [graph_workflow.py:90] - [Node 3] Tech Lead đang chấm điểm...
+2026-05-15 22:52:45 - AI_System - INFO - [graph_workflow.py:92] - [Tech Lead]: Pass=False | Feedback: 1. Câu trả lời quá đơn giản và không đi sâu vào các vấn đề kỹ thuật như trade-offs, tối ưu bộ nhớ hay kiến trúc của hệ thống AI. Cần phân tích nguyên nhân cụ thể khiến hệ thống không hoạt động hiệu quả.
+2. Không có câu hỏi phỏng vấn nào trong bản nháp. Cần chuyển từ lý thuyết sang thực tiễn, hỏi ứng viên về cách họ sẽ xử lý sự cố cụ thể trong hệ thống AI này.
+3. Bản nháp chỉ đưa ra một câu xin lỗi mà không cung cấp bất kỳ gợi ý nào để ứng viên tự suy nghĩ. Cần áp dụng phương pháp Socratic, khuyến khích ứng viên tự tìm ra giải pháp.
+4. Không giải quyết đúng trọng tâm câu hỏi của ứng viên. Cần tập trung vào vấn đề mà ứng viên nêu ra, thay vì chỉ thông báo về sự cố của hệ thống.
+2026-05-15 22:52:45 - AI_System - WARNING - [graph_workflow.py:104] - Đã hết số lần sửa tối đa. Buộc xuất xưởng.
+2026-05-15 22:52:45 - AI_System - INFO - [graph_workflow.py:109] - [Node Cuối] Hoàn tất bản nháp, chuẩn bị xuất ra UI...

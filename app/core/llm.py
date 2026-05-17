@@ -6,6 +6,9 @@ _llm_cheap = None
 _llm_cheap_v1 = None
 _llm_cheap_v2 = None
 _llm_vip = None
+_llm_kaggle_v1 = None
+_llm_kaggle_v2 = None
+
 
 
 def get_llm_cheap():
@@ -17,7 +20,7 @@ def get_llm_cheap():
             model_name="llama-3.1-8b-instant",
             temperature=0.3,
             streaming=True
-        )
+        ).with_fallbacks([get_llm_kaggle_v1(), get_llm_kaggle_v2()])
     return _llm_cheap
 
 
@@ -33,7 +36,7 @@ def get_llm_structured():
             model_name="llama-3.3-70b-versatile",
             temperature=0.1,
             streaming=False  # PHẢI là False khi dùng with_structured_output
-        )
+        ).with_fallbacks([get_llm_kaggle_v1(), get_llm_kaggle_v2()])
     return _llm_structured
 
 
@@ -46,7 +49,7 @@ def get_llm_cheap_v1():
             model_name="llama-3.3-70b-versatile",
             temperature=0.3,
             streaming=True
-        )
+        ).with_fallbacks([get_llm_kaggle_v1(), get_llm_kaggle_v2()])
     return _llm_cheap_v1
 
 
@@ -59,7 +62,7 @@ def get_llm_cheap_v2():
             model_name="llama-3.3-70b-versatile",
             temperature=0.3,
             streaming=True
-        )
+        ).with_fallbacks([get_llm_kaggle_v1(), get_llm_kaggle_v2()])
     return _llm_cheap_v2
 
 
@@ -73,5 +76,34 @@ def get_llm_vip():
             model_name="gpt-4o-mini",
             temperature=0.3,
             streaming=False # Đổi thành False để tránh lỗi Pydantic Serialization khi dùng structured output
-        )
+        ).with_fallbacks([get_llm_kaggle_v1(), get_llm_kaggle_v2()])
     return _llm_vip
+
+
+def get_llm_kaggle_v1():
+    """Kaggle Llama 3 via Ngrok (Backup 1)."""
+    global _llm_kaggle_v1
+    if _llm_kaggle_v1 is None:
+        _llm_kaggle_v1 = ChatOpenAI(
+            base_url=settings.KAGGLE_BACKUP_URL_1,
+            api_key=settings.KAGGLE_BACKUP_KEY_1,
+            model_name="my-llama3",
+            temperature=0.7,
+            streaming=True
+        )
+    return _llm_kaggle_v1
+
+
+def get_llm_kaggle_v2():
+    """Kaggle Llama 3 via Pinggy (Backup 2)."""
+    global _llm_kaggle_v2
+    if _llm_kaggle_v2 is None:
+        _llm_kaggle_v2 = ChatOpenAI(
+            base_url=settings.KAGGLE_BACKUP_URL_2,
+            api_key=settings.KAGGLE_BACKUP_KEY_2,
+            model_name="my-llama3",
+            temperature=0.1,
+            streaming=True
+        )
+    return _llm_kaggle_v2
+

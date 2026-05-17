@@ -55,8 +55,12 @@ async def validation_exception_handler(request, exc):
     )
 
 app.include_router(chat.router, prefix="/api")
+
 from app.api import upload
 app.include_router(upload.router, prefix="/api")
+
+from app.api import interview
+app.include_router(interview.router, prefix="/api")
 
 from app.api.chat import websocket_chat_endpoint
 @app.websocket("/ws/chat/{user_id}")

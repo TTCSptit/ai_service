@@ -22,6 +22,14 @@ class Settings:
     GROQ_API_KEY_V2: str = os.getenv("GROQ_API_KEY_v2","")
     RABBITMQ_URL: str = os.getenv("RABBITMQ_URL","")
     REDIS_URL: str = os.getenv("REDIS_URL", "").strip().replace('"', '').replace("'", "")
+    
+    # Kaggle Backups
+    KAGGLE_BACKUP_URL_1: str = "https://tenesha-utterable-karlyn.ngrok-free.dev/v1"
+    KAGGLE_BACKUP_KEY_1: str = "sk-no-key-required"
+    
+    KAGGLE_BACKUP_URL_2: str = "https://npqas-34-125-18-72.run.pinggy-free.link/v1"
+    KAGGLE_BACKUP_KEY_2: str = "boc_phet"
+
 settings = Settings()
 
 
