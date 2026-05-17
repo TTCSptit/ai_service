@@ -60,3 +60,31 @@ class AudioAnalyzerAgent:
         except Exception as e:
             logger.error(f"[AudioAnalyzer Lỗi]: {str(e)}")
             raise e
+
+    async def analyze_interview_transcript(self, transcript_text: str) -> dict:
+        try:
+            logger.info(f"[AudioAnalyzer] Đang dùng LLM chấm điểm phỏng vấn từ transcript giả lập...")
+            prompt = f"""Dưới đây là kịch bản bóc băng (transcript) của một cuộc phỏng vấn xin việc (Video Call).
+            Hãy phân tích và chấm điểm ứng viên dựa trên cuộc đối thoại này:
+            
+            [TRANSCRIPT BÓC BĂNG BỞI AI]
+            {transcript_text}
+            
+            Nhiệm vụ của bạn (HR & Tech Lead):
+            1. Đánh giá sự tự tin (dựa vào ngôn từ, cách nói dứt khoát hay ngập ngừng, lặp từ).
+            2. Đánh giá kỹ năng giao tiếp (chào hỏi, logic trình bày).
+            3. Đánh giá kỹ năng chuyên môn (kiểm tra xem ứng viên trả lời đúng hay sai).
+            
+            Lưu ý: Văn bản bóc băng có thể không ghi rõ ai là người nói, bạn phải tự suy luận ai là ứng viên (thường là người trả lời) và ai là HR (người đặt câu hỏi).
+            """
+            
+            structured_llm = get_llm_kaggle_v1().with_structured_output(InterviewReport)
+            report: InterviewReport = await structured_llm.ainvoke([HumanMessage(content=prompt)])
+            
+            logger.info(f"[AudioAnalyzer] Hoàn tất chấm điểm giả lập. Điểm giao tiếp: {report.communication_score}")
+            return report.model_dump()
+            
+        except Exception as e:
+            logger.error(f"[AudioAnalyzer Lỗi]: {str(e)}")
+            raise e
+
