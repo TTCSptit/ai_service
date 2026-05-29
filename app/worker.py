@@ -98,6 +98,72 @@ async def process_message(message: aio_pika.IncomingMessage):
                 
                 logger.info(f"[RabbitMQ Worker] Đã hoàn tất luồng săn việc cho: {final_email}")
                 await ws_manager.publish_user_notification(user_id, '{"action": "job_hunt", "status": "completed", "message": "Đã tìm thấy công việc phù hợp, vui lòng kiểm tra Email!"}')
+            elif task_type == "evaluate_applicant":
+                import httpx
+                import tempfile
+                import os
+                from app.services.employer_service import match_cv_to_jd
+                from app.services.cv_parser import extract_text_from_cv
+
+                application_id = payload.get("application_id")
+                job_id = payload.get("job_id")
+                cv_url = payload.get("cv_url")
+                logger.info(f"[RabbitMQ Worker] Bắt đầu đánh giá AI cho Application: {application_id}, Job: {job_id}")
+
+                # 1. Fetch Job Description
+                jd_text = ""
+                async with httpx.AsyncClient() as client:
+                    try:
+                        job_resp = await client.get(f"http://localhost:5272/api/Jobs/{job_id}")
+                        if job_resp.status_code == 200:
+                            job_data = job_resp.json().get("data", {})
+                            jd_text = f"Title: {job_data.get('title', '')}\nDescription: {job_data.get('description', '')}"
+                    except Exception as e:
+                        logger.error(f"[RabbitMQ Worker] Lỗi lấy JD: {e}")
+                
+                # 2. Download CV File
+                cv_text = ""
+                async with httpx.AsyncClient() as client:
+                    try:
+                        # Assuming the .NET backend serves files from /api/Applications/{id}/cv or it's a static file
+                        cv_resp = await client.get(f"http://localhost:5272/api/Applications/{application_id}/cv")
+                        if cv_resp.status_code == 200:
+                            with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmp_file:
+                                tmp_file.write(cv_resp.content)
+                                tmp_file_path = tmp_file.name
+                            cv_text = extract_text_from_cv(tmp_file_path)
+                            os.remove(tmp_file_path)
+                    except Exception as e:
+                        logger.error(f"[RabbitMQ Worker] Lỗi tải/đọc CV: {e}")
+
+                # 3. Chạy AI Match CV vs JD
+                if jd_text and cv_text:
+                    logger.info(f"[RabbitMQ Worker] Đang gọi LLM chấm điểm cho Application {application_id}...")
+                    match_result = await asyncio.to_thread(match_cv_to_jd, cv_text, jd_text)
+
+                    # 4. Push Kết quả về .NET Backend
+                    update_payload = {
+                        "applicationId": application_id,
+                        "aiScore": match_result.score,
+                        "aiStrengths": json.dumps(match_result.strengths, ensure_ascii=False),
+                        "aiWeaknesses": json.dumps(match_result.weaknesses, ensure_ascii=False),
+                        "aiReasoning": match_result.reasoning
+                    }
+                    async with httpx.AsyncClient() as client:
+                        try:
+                            put_resp = await client.put(
+                                "http://localhost:5272/api/Applications/update-ai-score",
+                                json=update_payload
+                            )
+                            if put_resp.status_code == 200:
+                                logger.info(f"[RabbitMQ Worker] Đã cập nhật AI Score thành công cho Application {application_id}")
+                            else:
+                                logger.error(f"[RabbitMQ Worker] Cập nhật AI Score thất bại: {put_resp.text}")
+                        except Exception as e:
+                            logger.error(f"[RabbitMQ Worker] Lỗi gọi Webhook update-ai-score: {e}")
+                else:
+                    logger.warning(f"[RabbitMQ Worker] Không đủ dữ liệu (Thiếu CV hoặc JD) để chấm điểm Application {application_id}.")
+
             else:
                 logger.warning(f"[RabbitMQ Worker] Loại task không xác định: {task_type}")
 
