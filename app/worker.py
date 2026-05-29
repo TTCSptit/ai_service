@@ -102,9 +102,21 @@ async def process_message(message: aio_pika.IncomingMessage):
                 import httpx
                 import tempfile
                 import os
+                import jwt
+                import datetime
                 from app.services.employer_service import match_cv_to_jd
                 from app.services.cv_parser import extract_text_from_cv
                 from app.core.config import settings
+
+                def generate_worker_token():
+                    payload = {
+                        "sub": "ai_worker",
+                        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "Recruiter",
+                        "exp": datetime.datetime.utcnow() + datetime.timedelta(hours=1),
+                        "iss": "PtitJobsBackend",
+                        "aud": "PtitJobsFrontend"
+                    }
+                    return jwt.encode(payload, "Đây_Là_Một_Key_Rất_Dài_Và_Bảo_Mật_Cho_JWT_PTIT_JOBS_2026", algorithm="HS256")
 
                 application_id = payload.get("application_id")
                 job_id = payload.get("job_id")
@@ -115,33 +127,33 @@ async def process_message(message: aio_pika.IncomingMessage):
                 jd_text = ""
                 async with httpx.AsyncClient() as client:
                     try:
-                        job_resp = await client.get(f"{settings.DOTNET_BACKEND_URL}/api/Jobs/{job_id}")
+                        headers = {"Authorization": f"Bearer {generate_worker_token()}"}
+                        job_resp = await client.get(f"{settings.DOTNET_BACKEND_URL}/api/Jobs/{job_id}", headers=headers)
                         if job_resp.status_code == 200:
                             job_data = job_resp.json().get("data", {})
                             jd_text = f"Title: {job_data.get('title', '')}\nDescription: {job_data.get('description', '')}"
+                        else:
+                            logger.error(f"[RabbitMQ Worker] Lỗi tải JD. Mã HTTP: {job_resp.status_code}")
                     except Exception as e:
                         logger.error(f"[RabbitMQ Worker] Lỗi lấy JD: {e}")
                 
                 # 2. Download CV File
                 cv_text = ""
-                if cv_url:
-                    async with httpx.AsyncClient() as client:
-                        try:
-                            # Fetch directly from the Cloudinary URL (publicly accessible)
-                            logger.info(f"[RabbitMQ Worker] Đang tải CV từ: {cv_url}")
-                            cv_resp = await client.get(cv_url)
-                            if cv_resp.status_code == 200:
-                                with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmp_file:
-                                    tmp_file.write(cv_resp.content)
-                                    tmp_file_path = tmp_file.name
-                                cv_text = extract_text_from_cv(tmp_file_path)
-                                os.remove(tmp_file_path)
-                            else:
-                                logger.error(f"[RabbitMQ Worker] Lỗi tải CV từ {cv_url}. Mã HTTP: {cv_resp.status_code}")
-                        except Exception as e:
-                            logger.error(f"[RabbitMQ Worker] Lỗi tải/đọc CV: {e}")
-                else:
-                    logger.warning(f"[RabbitMQ Worker] Application {application_id} không có cv_url.")
+                async with httpx.AsyncClient() as client:
+                    try:
+                        logger.info(f"[RabbitMQ Worker] Đang gọi API .NET để tải CV cho Application {application_id}")
+                        headers = {"Authorization": f"Bearer {generate_worker_token()}"}
+                        cv_resp = await client.get(f"{settings.DOTNET_BACKEND_URL}/api/Applications/{application_id}/cv", headers=headers)
+                        if cv_resp.status_code == 200:
+                            with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmp_file:
+                                tmp_file.write(cv_resp.content)
+                                tmp_file_path = tmp_file.name
+                            cv_text = extract_text_from_cv(tmp_file_path)
+                            os.remove(tmp_file_path)
+                        else:
+                            logger.error(f"[RabbitMQ Worker] Lỗi tải CV qua API. Mã HTTP: {cv_resp.status_code}")
+                    except Exception as e:
+                        logger.error(f"[RabbitMQ Worker] Lỗi tải/đọc CV qua API: {e}")
 
                 # 3. Chạy AI Match CV vs JD
                 if jd_text and cv_text:
