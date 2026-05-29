@@ -104,6 +104,7 @@ async def process_message(message: aio_pika.IncomingMessage):
                 import os
                 from app.services.employer_service import match_cv_to_jd
                 from app.services.cv_parser import extract_text_from_cv
+                from app.core.config import settings
 
                 application_id = payload.get("application_id")
                 job_id = payload.get("job_id")
@@ -114,7 +115,7 @@ async def process_message(message: aio_pika.IncomingMessage):
                 jd_text = ""
                 async with httpx.AsyncClient() as client:
                     try:
-                        job_resp = await client.get(f"http://localhost:5272/api/Jobs/{job_id}")
+                        job_resp = await client.get(f"{settings.DOTNET_BACKEND_URL}/api/Jobs/{job_id}")
                         if job_resp.status_code == 200:
                             job_data = job_resp.json().get("data", {})
                             jd_text = f"Title: {job_data.get('title', '')}\nDescription: {job_data.get('description', '')}"
@@ -125,8 +126,8 @@ async def process_message(message: aio_pika.IncomingMessage):
                 cv_text = ""
                 async with httpx.AsyncClient() as client:
                     try:
-                        # Assuming the .NET backend serves files from /api/Applications/{id}/cv or it's a static file
-                        cv_resp = await client.get(f"http://localhost:5272/api/Applications/{application_id}/cv")
+                        # Fetch from .NET backend URL configured in settings
+                        cv_resp = await client.get(f"{settings.DOTNET_BACKEND_URL}/api/Applications/{application_id}/cv")
                         if cv_resp.status_code == 200:
                             with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmp_file:
                                 tmp_file.write(cv_resp.content)
@@ -152,7 +153,7 @@ async def process_message(message: aio_pika.IncomingMessage):
                     async with httpx.AsyncClient() as client:
                         try:
                             put_resp = await client.put(
-                                "http://localhost:5272/api/Applications/update-ai-score",
+                                f"{settings.DOTNET_BACKEND_URL}/api/Applications/update-ai-score",
                                 json=update_payload
                             )
                             if put_resp.status_code == 200:

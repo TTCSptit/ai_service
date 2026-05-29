@@ -22,6 +22,7 @@ class Settings:
     GROQ_API_KEY_V2: str = os.getenv("GROQ_API_KEY_v2","")
     RABBITMQ_URL: str = os.getenv("RABBITMQ_URL","")
     REDIS_URL: str = os.getenv("REDIS_URL", "").strip().replace('"', '').replace("'", "")
+    DOTNET_BACKEND_URL: str = os.getenv("DOTNET_BACKEND_URL", "https://jobptit-api-fbevbkfre0c4h4g4.southeastasia-01.azurewebsites.net")
     
     # Kaggle Backups
     KAGGLE_BACKUP_URL_1: str = "https://tenesha-utterable-karlyn.ngrok-free.dev/v1"
