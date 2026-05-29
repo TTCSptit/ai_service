@@ -124,18 +124,24 @@ async def process_message(message: aio_pika.IncomingMessage):
                 
                 # 2. Download CV File
                 cv_text = ""
-                async with httpx.AsyncClient() as client:
-                    try:
-                        # Fetch from .NET backend URL configured in settings
-                        cv_resp = await client.get(f"{settings.DOTNET_BACKEND_URL}/api/Applications/{application_id}/cv")
-                        if cv_resp.status_code == 200:
-                            with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmp_file:
-                                tmp_file.write(cv_resp.content)
-                                tmp_file_path = tmp_file.name
-                            cv_text = extract_text_from_cv(tmp_file_path)
-                            os.remove(tmp_file_path)
-                    except Exception as e:
-                        logger.error(f"[RabbitMQ Worker] Lỗi tải/đọc CV: {e}")
+                if cv_url:
+                    async with httpx.AsyncClient() as client:
+                        try:
+                            # Fetch directly from the Cloudinary URL (publicly accessible)
+                            logger.info(f"[RabbitMQ Worker] Đang tải CV từ: {cv_url}")
+                            cv_resp = await client.get(cv_url)
+                            if cv_resp.status_code == 200:
+                                with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmp_file:
+                                    tmp_file.write(cv_resp.content)
+                                    tmp_file_path = tmp_file.name
+                                cv_text = extract_text_from_cv(tmp_file_path)
+                                os.remove(tmp_file_path)
+                            else:
+                                logger.error(f"[RabbitMQ Worker] Lỗi tải CV từ {cv_url}. Mã HTTP: {cv_resp.status_code}")
+                        except Exception as e:
+                            logger.error(f"[RabbitMQ Worker] Lỗi tải/đọc CV: {e}")
+                else:
+                    logger.warning(f"[RabbitMQ Worker] Application {application_id} không có cv_url.")
 
                 # 3. Chạy AI Match CV vs JD
                 if jd_text and cv_text:
