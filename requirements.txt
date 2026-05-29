@@ -215,3 +215,4 @@ yarl
 zipp
 zstandard
 mailtrap
+PyJWT
