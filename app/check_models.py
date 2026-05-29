@@ -1,42 +1,22 @@
-from app.core.llm import get_llm_kaggle_v1, get_llm_kaggle_v2
-from langchain_core.messages import SystemMessage, HumanMessage
+from openai import OpenAI
 
-def test_kaggle_backups():
-    print("🚀 Đang kiểm tra các model backup từ Kaggle...\n")
-    
-    # 1. Kiểm tra Backup 1 (Ngrok)
-    print("🔹 Đang gọi Llama 3 (Ngrok - Backup 1)...")
-    try:
-        llm1 = get_llm_kaggle_v1()
-        messages1 = [
-            SystemMessage(content="Bạn là một trợ lý AI thông minh. Hãy trả lời ngắn gọn, súc tích bằng tiếng Việt."),
-            HumanMessage(content="WebRTC là gì?")
-        ]
-        response1 = llm1.invoke(messages1)
-        print("🤖 Llama 3 (Ngrok) trả lời:")
-        print("-" * 50)
-        print(response1.content)
-        print("-" * 50)
-    except Exception as e:
-        print(f"❌ Lỗi khi gọi Backup 1: {e}")
+# Khởi tạo client kết nối tới Colab của bạn
+client = OpenAI(
+    base_url="https://tenesha-utterable-karlyn.ngrok-free.dev/v1",
+    api_key="ollama-boc-phet", # API key điền bừa gì cũng được vì Ollama không check
+    default_headers={"ngrok-skip-browser-warning": "true"} # Vượt tường lửa Ngrok
+)
 
-    print("\n" + "="*60 + "\n")
+print("Đang gửi tin nhắn cho Llama 3...")
+response = client.chat.completions.create(
+    model="my-llama3", # Đúng tên model bạn đã tạo ở Colab
+    messages=[
+        {"role": "system", "content": "Bạn là một trợ lý AI nói tiếng Việt xuất sắc."},
+        {"role": "user", "content": "Xin chào, 1 cộng 1 bằng mấy? Trả lời ngắn gọn."}
+    ],
+    temperature=0.7
+)
 
-    # 2. Kiểm tra Backup 2 (Pinggy)
-    print("🔹 Đang gọi Llama 3 (Pinggy - Backup 2)...")
-    try:
-        llm2 = get_llm_kaggle_v2()
-        messages2 = [
-            SystemMessage(content="Bạn là chuyên gia về đồ án tốt nghiệp IT."),
-            HumanMessage(content="Chào bạn, hãy cho tôi biết ưu điểm lớn nhất của hệ thống Multi-Agent là gì?")
-        ]
-        response2 = llm2.invoke(messages2)
-        print("🤖 Llama 3 (Pinggy) trả lời:")
-        print("-" * 50)
-        print(response2.content)
-        print("-" * 50)
-    except Exception as e:
-        print(f"❌ Lỗi khi gọi Backup 2: {e}")
-
-if __name__ == "__main__":
-    test_kaggle_backups()
+# In câu trả lời
+print("\n🤖 Trả lời từ Llama 3:")
+print(response.choices[0].message.content)

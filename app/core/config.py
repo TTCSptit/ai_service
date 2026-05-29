@@ -27,7 +27,7 @@ class Settings:
     KAGGLE_BACKUP_URL_1: str = "https://tenesha-utterable-karlyn.ngrok-free.dev/v1"
     KAGGLE_BACKUP_KEY_1: str = "sk-no-key-required"
     
-    KAGGLE_BACKUP_URL_2: str = "https://bdhmo-34-143-209-227.run.pinggy-free.link/v1"
+    KAGGLE_BACKUP_URL_2: str = "https://yesgw-35-247-131-173.run.pinggy-free.link/v1"
     KAGGLE_BACKUP_KEY_2: str = "boc_phet"
 
 settings = Settings()

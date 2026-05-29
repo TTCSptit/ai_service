@@ -111,6 +111,7 @@ async def search_knowledge_advanced(query: str, k: int = 2) -> str:
                     best_docs[content] = dist
 
     # Lấy top 2 tốt nhất (đã sort)
+    sorted_docs = sorted(best_docs.items(), key=lambda item: item[1])
     top_candidates = [doc for doc, _ in sorted_docs[:2]] 
 
     if not top_candidates:

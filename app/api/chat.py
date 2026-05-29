@@ -71,10 +71,8 @@ async def chat_endpoint(
     db = Depends(get_db) 
 ):
     try:
-        # FIX Bug 6: sanitize input trước khi xử lý
         message = sanitize_input(message, max_length=2000)
         logger.info(f"\n[API] === NHẬN YÊU CẦU MỚI: {message} ===")
-        # FIX: Tính hash sơ bộ của CV (nếu có) để check cache ngay từ đầu
         cv_text_for_cache = ""
         if cv_file:
             cv_text_for_cache = await extract_text_from_cv(cv_file)
@@ -86,7 +84,7 @@ async def chat_endpoint(
         if cv_text_for_cache:
             cv_hash_for_cache = hashlib.sha256(cv_text_for_cache.encode('utf-8')).hexdigest()
 
-        # Tính toán context_hash dựa trên session_summary (hoặc message history nếu cần)
+        # Tính toán context_hash dựa trên sesson_summary (hoặc message history nếu cần)
         session_summary_for_cache = await memory_agent.get_session_summary(session_id, db) if session_id else ""
         context_hash = hashlib.sha256(session_summary_for_cache.encode('utf-8')).hexdigest()
 

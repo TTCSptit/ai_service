@@ -62,6 +62,9 @@ app.include_router(upload.router, prefix="/api")
 from app.api import interview
 app.include_router(interview.router, prefix="/api")
 
+from app.api import employer
+app.include_router(employer.router, prefix="/api/employer", tags=["Employer"])
+
 from app.api.chat import websocket_chat_endpoint
 @app.websocket("/ws/chat/{user_id}")
 async def websocket_fallback(websocket: WebSocket, user_id: str):
