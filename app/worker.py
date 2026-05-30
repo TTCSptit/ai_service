@@ -150,12 +150,19 @@ async def process_message(message: aio_pika.IncomingMessage):
                         if cv_resp.status_code == 200:
                             import pdfplumber
                             import io
+                            import logging
+                            # Tắt bớt log rác của pdfminer (lỗi font)
+                            logging.getLogger('pdfminer').setLevel(logging.ERROR)
+                            
                             with pdfplumber.open(io.BytesIO(cv_resp.content)) as pdf:
                                 for page in pdf.pages:
                                     page_text = page.extract_text()
                                     if page_text:
                                         cv_text += page_text + "\n"
                             cv_text = cv_text.strip()
+                            # Giới hạn text để tránh làm sập LLM (context quá dài hoặc lặp vô hạn)
+                            if len(cv_text) > 4000:
+                                cv_text = cv_text[:4000] + "\n...[Nội dung đã được cắt bớt do quá dài]..."
                         else:
                             logger.error(f"[RabbitMQ Worker] Lỗi tải CV qua static URL. Mã HTTP: {cv_resp.status_code}")
                     except Exception as e:
