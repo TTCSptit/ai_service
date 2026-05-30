@@ -201,7 +201,8 @@ async def main():
         return
 
     logger.info("[RabbitMQ Worker] Đang kết nối tới CloudAMQP và Redis...")
-    await ws_manager.connect_redis()
+    if not ws_manager.redis_client:
+        await ws_manager.connect_redis()
     connection = await aio_pika.connect_robust(RABBITMQ_URL)
 
     async with connection:
