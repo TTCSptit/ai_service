@@ -148,11 +148,14 @@ async def process_message(message: aio_pika.IncomingMessage):
                         
                         cv_resp = await client.get(static_cv_url)
                         if cv_resp.status_code == 200:
-                            with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmp_file:
-                                tmp_file.write(cv_resp.content)
-                                tmp_file_path = tmp_file.name
-                            cv_text = await extract_text_from_cv(tmp_file_path)
-                            os.remove(tmp_file_path)
+                            import pdfplumber
+                            import io
+                            with pdfplumber.open(io.BytesIO(cv_resp.content)) as pdf:
+                                for page in pdf.pages:
+                                    page_text = page.extract_text()
+                                    if page_text:
+                                        cv_text += page_text + "\n"
+                            cv_text = cv_text.strip()
                         else:
                             logger.error(f"[RabbitMQ Worker] Lỗi tải CV qua static URL. Mã HTTP: {cv_resp.status_code}")
                     except Exception as e:

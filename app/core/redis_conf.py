@@ -19,8 +19,8 @@ class ConnectionManager:
             logger.warning("[Redis] REDIS_URL chưa được cấu hình!")
             return
         try:
-            # Kết nối tới Upstash bằng redis.asyncio
-            # Với rediss:// (TLS), ssl_cert_reqs="none" giúp tránh lỗi SSL trên local
+            # Lưu trữ url để dùng lại khi reconnect
+            self.redis_url = settings.REDIS_URL
             self.redis_client = redis.from_url(settings.REDIS_URL, decode_responses=True, ssl_cert_reqs="none", health_check_interval=20)
             self.pubsub = self.redis_client.pubsub()
             await self.pubsub.subscribe("user_notifications")
@@ -33,23 +33,43 @@ class ConnectionManager:
     async def _listen_redis(self):
         while True:
             try:
-                if self.pubsub:
-                    async for message in self.pubsub.listen():
-                        if message["type"] == "message":
-                            try:
-                                data = json.loads(message["data"])
-                                user_id = data.get("user_id")
-                                payload = data.get("payload")
-                                
-                                if user_id and payload:
-                                    # Đẩy tin nhắn trực tiếp qua WebSocket tới user_id tương ứng
-                                    await self.send_personal_message(payload, user_id)
-                            except json.JSONDecodeError:
-                                logger.error("[Redis] Lỗi parse JSON từ Pub/Sub")
+                if not self.pubsub:
+                    # Reconnect if connection was lost
+                    self.redis_client = redis.from_url(self.redis_url, decode_responses=True, ssl_cert_reqs="none", health_check_interval=20)
+                    self.pubsub = self.redis_client.pubsub()
+                    await self.pubsub.subscribe("user_notifications")
+                    logger.info("📡 [Redis] Đã kết nối LẠI Pub/Sub thành công!")
+
+                async for message in self.pubsub.listen():
+                    if message["type"] == "message":
+                        try:
+                            data = json.loads(message["data"])
+                            user_id = data.get("user_id")
+                            payload = data.get("payload")
+                            
+                            if user_id and payload:
+                                # Đẩy tin nhắn trực tiếp qua WebSocket tới user_id tương ứng
+                                await self.send_personal_message(payload, user_id)
+                        except json.JSONDecodeError:
+                            logger.error("[Redis] Lỗi parse JSON từ Pub/Sub")
             except asyncio.CancelledError:
                 break
             except Exception as e:
                 logger.error(f"[Redis] Lỗi vòng lặp Pub/Sub: {e}")
+                
+                # Đóng kết nối lỗi
+                try:
+                    if self.pubsub:
+                        await self.pubsub.close()
+                    if self.redis_client:
+                        await self.redis_client.close()
+                except:
+                    pass
+                
+                # Reset objects to trigger reconnect on next loop
+                self.pubsub = None
+                self.redis_client = None
+                
                 # Đợi một chút rồi kết nối lại nếu bị đứt cáp hoặc Upstash timeout
                 await asyncio.sleep(5)
 
