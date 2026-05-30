@@ -151,7 +151,7 @@ async def process_message(message: aio_pika.IncomingMessage):
                             with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmp_file:
                                 tmp_file.write(cv_resp.content)
                                 tmp_file_path = tmp_file.name
-                            cv_text = extract_text_from_cv(tmp_file_path)
+                            cv_text = await extract_text_from_cv(tmp_file_path)
                             os.remove(tmp_file_path)
                         else:
                             logger.error(f"[RabbitMQ Worker] Lỗi tải CV qua static URL. Mã HTTP: {cv_resp.status_code}")
@@ -161,7 +161,7 @@ async def process_message(message: aio_pika.IncomingMessage):
                 # 3. Chạy AI Match CV vs JD
                 if jd_text and cv_text:
                     logger.info(f"[RabbitMQ Worker] Đang gọi LLM chấm điểm cho Application {application_id}...")
-                    match_result = await asyncio.to_thread(match_cv_to_jd, cv_text, jd_text)
+                    match_result = await match_cv_to_jd(cv_text, jd_text)
 
                     # 4. Push Kết quả về .NET Backend
                     update_payload = {
