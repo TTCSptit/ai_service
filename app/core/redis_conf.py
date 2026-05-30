@@ -38,7 +38,7 @@ class ConnectionManager:
                     self.redis_client = redis.from_url(self.redis_url, decode_responses=True, ssl_cert_reqs="none", health_check_interval=20)
                     self.pubsub = self.redis_client.pubsub()
                     await self.pubsub.subscribe("user_notifications")
-                    logger.info("📡 [Redis] Đã kết nối LẠI Pub/Sub thành công!")
+                    logger.debug("📡 [Redis] Đã kết nối lại Pub/Sub ngầm thành công.")
 
                 async for message in self.pubsub.listen():
                     if message["type"] == "message":
@@ -55,7 +55,11 @@ class ConnectionManager:
             except asyncio.CancelledError:
                 break
             except Exception as e:
-                logger.error(f"[Redis] Lỗi vòng lặp Pub/Sub: {e}")
+                error_msg = str(e).lower()
+                if "timeout" in error_msg or "closed by server" in error_msg:
+                    pass # Im lặng kết nối lại, không spam log rác ra màn hình
+                else:
+                    logger.error(f"[Redis] Lỗi vòng lặp Pub/Sub: {e}")
                 
                 # Đóng kết nối lỗi
                 try:
