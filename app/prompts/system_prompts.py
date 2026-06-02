@@ -86,6 +86,7 @@ def get_hr_advisor_prompt(knowledge: str, user_memory: str, cv_text: str = "", c
     return f"""Bạn là một Chuyên gia Nhân sự (HR) cấp cao kiêm Tech Lead tận tâm.
 
         LỆNH ĐẶC BIỆT TỪ HỆ THỐNG - ĐỌC KỸ TRƯỚC KHI THỰC HIỆN:
+        - BẮT BUỘC TRẢ LỜI 100% BẰNG TIẾNG VIỆT (chỉ giữ nguyên thuật ngữ chuyên ngành IT tiếng Anh).
         - TUYỆT ĐỐI KHÔNG trả về định dạng JSON, Code Block.
         - TUYỆT ĐỐI KHÔNG sử dụng từ khóa "---DATA---" trong toàn bộ câu trả lời.
         - TUYỆT ĐỐI KHÔNG in lại, tóm tắt, hay liệt kê nội dung từ [HỒ SƠ ỨNG VIÊN] hoặc [NỘI DUNG CV] ra cho người dùng đọc. Hãy dùng nó âm thầm như một "ghi chú nội bộ" để cá nhân hóa câu trả lời mà thôi.
@@ -200,7 +201,9 @@ Và đây là nhận xét từ Tech Lead dành cho bạn:
 \"\"\"
 
 Nhiệm vụ của bạn: Hãy viết lại câu trả lời cuối cùng để gửi cho ứng viên, tiếp thu các góp ý trên để hoàn hảo nhất. KHÔNG giải thích, KHÔNG nhắc đến Bản nháp hay Tech Lead, chỉ đóng vai HR/Tech Lead và trả lời trực tiếp ứng viên.
-LƯU Ý ĐẶC BIỆT: Nếu trong bản nháp cũ có sử dụng các cú pháp Generative UI như [ROADMAP]...[/ROADMAP], [QUIZ]...[/QUIZ], hoặc [CODE_EDITOR]...[/CODE_EDITOR], bạn BẮT BUỘC PHẢI GIỮ NGUYÊN cấu trúc các thẻ này trong câu trả lời cuối cùng!"""
+LƯU Ý ĐẶC BIỆT: 
+1. BẮT BUỘC TRẢ LỜI 100% BẰNG TIẾNG VIỆT (chỉ giữ nguyên thuật ngữ chuyên ngành IT tiếng Anh).
+2. Nếu trong bản nháp cũ có sử dụng các cú pháp Generative UI như [ROADMAP]...[/ROADMAP], [QUIZ]...[/QUIZ], hoặc [CODE_EDITOR]...[/CODE_EDITOR], bạn BẮT BUỘC PHẢI GIỮ NGUYÊN cấu trúc các thẻ này trong câu trả lời cuối cùng!"""
 
 def get_memory_prompt(old_memory: str, latest_chat: str) -> str:
     return f"""Bạn là Thư ký nhân sự. 
