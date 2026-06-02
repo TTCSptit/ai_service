@@ -130,9 +130,14 @@ async def chat_endpoint(
         cv_text = ""
         if cv_file:
             cv_text = await extract_text_from_cv(cv_file)
+            logger.info(f"[API] Đã extract từ cv_file đính kèm trực tiếp. Độ dài: {len(cv_text)}")
         elif cv_id and ws_manager.redis_client:
+            logger.info(f"[API] Đang thử lấy cv_text từ Redis với cv_id: {cv_id}")
             cv_text_bytes = await ws_manager.redis_client.get(f"cv:{cv_id}")
             cv_text = cv_text_bytes if cv_text_bytes else ""
+            logger.info(f"[API] Lấy từ Redis xong. Độ dài cv_text: {len(cv_text)}")
+        else:
+            logger.info(f"[API] Không có cv_file và cv_id, hoặc Redis không kết nối. (cv_id={cv_id}, redis={ws_manager.redis_client is not None})")
         
         # FIX Bug 6: sanitize CV text (giới hạn 3000 chars)
         if cv_text:
