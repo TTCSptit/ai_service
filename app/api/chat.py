@@ -131,13 +131,36 @@ async def chat_endpoint(
         if cv_file:
             cv_text = await extract_text_from_cv(cv_file)
             logger.info(f"[API] Đã extract từ cv_file đính kèm trực tiếp. Độ dài: {len(cv_text)}")
-        elif cv_id and ws_manager.redis_client:
+        elif cv_id:
+            from app.core.config import settings
+            import redis.asyncio as redis
+            
             logger.info(f"[API] Đang thử lấy cv_text từ Redis với cv_id: {cv_id}")
-            cv_text_bytes = await ws_manager.redis_client.get(f"cv:{cv_id}")
-            cv_text = cv_text_bytes if cv_text_bytes else ""
-            logger.info(f"[API] Lấy từ Redis xong. Độ dài cv_text: {len(cv_text)}")
+            r_client = ws_manager.redis_client
+            
+            # Khởi tạo client tạm nếu ws_manager bị mất kết nối (thường do Pub/Sub timeout)
+            temp_client = False
+            if not r_client and settings.REDIS_URL:
+                try:
+                    r_client = redis.from_url(settings.REDIS_URL, decode_responses=True, ssl_cert_reqs="none")
+                    temp_client = True
+                except Exception as e:
+                    logger.error(f"[API] Lỗi tạo Redis client tạm: {e}")
+            
+            if r_client:
+                try:
+                    cv_text_bytes = await r_client.get(f"cv:{cv_id}")
+                    cv_text = cv_text_bytes if cv_text_bytes else ""
+                    logger.info(f"[API] Lấy từ Redis xong. Độ dài cv_text: {len(cv_text)}")
+                except Exception as e:
+                    logger.error(f"[API] Lỗi khi truy vấn Redis: {e}")
+                finally:
+                    if temp_client:
+                        await r_client.close()
+            else:
+                logger.info(f"[API] Lỗi: Redis chưa được cấu hình hoặc không thể kết nối. (cv_id={cv_id})")
         else:
-            logger.info(f"[API] Không có cv_file và cv_id, hoặc Redis không kết nối. (cv_id={cv_id}, redis={ws_manager.redis_client is not None})")
+            logger.info(f"[API] Không có cv_file và cv_id.")
         
         # FIX Bug 6: sanitize CV text (giới hạn 3000 chars)
         if cv_text:
