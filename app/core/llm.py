@@ -94,7 +94,8 @@ def get_llm_kaggle_v1():
             api_key=settings.KAGGLE_BACKUP_KEY_1,
             model_name="my-llama3",
             temperature=0.7,
-            streaming=True
+            streaming=True,
+            default_headers={"ngrok-skip-browser-warning": "true"}
         )
     return _llm_kaggle_v1
 
