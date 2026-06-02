@@ -94,10 +94,12 @@ async def search_knowledge_advanced(query: str, k: int = 2) -> str:
         if not q.strip():
             continue
 
-        results = col.query(
+        # Sửa lỗi Blocking I/O: Đưa ChromaDB query vào Thread phụ
+        results = await asyncio.to_thread(
+            col.query,
             query_texts=[q],
             n_results=k,
-            include=["documents", "distances"]  # FIX: lấy distances để filter
+            include=["documents", "distances"]  # Lấy distances để filter
         )
 
         docs = results.get("documents", [[]])[0]

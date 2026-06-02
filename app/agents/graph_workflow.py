@@ -36,6 +36,23 @@ async def node_prepare_context(state: AgentState):
             "is_valid_topic": False
         }
         
+    if router_decision.get("needs_cv") and not state.get("cv_text"):
+        logger.warning("[Router Guardrail] Yêu cầu phân tích CV nhưng không có file đính kèm. Chặn luồng.")
+        return {
+            "internet_context": "",
+            "market_context": "",
+            "ai_data_json": '{"candidate_info":{},"matching_score":0,"extracted_skills":[],"missing_skills":[],"suggested_questions":[]}',
+            "graph_context": "",
+            "system_prompt_ref": "Bạn là AI hỗ trợ nhân sự. Người dùng muốn được phân tích CV, nhưng hệ thống không nhận được file đính kèm (có thể do lỗi kết nối hoặc người dùng quên chưa tải lên). Hãy lịch sự thông báo rằng bạn chưa nhận được file CV và mong họ tải lên lại để bạn có thể hỗ trợ.",
+            "user_prompt_ref": state["message"],
+            "retry_count": 0,
+            "draft_text": "",
+            "feedback": "",
+            "eval_pass": True,
+            "final_prompt": "",
+            "is_valid_topic": False
+        }
+        
     internet_ctx = router_decision.get("internet_context", "")
     
     task_analyzer = analyzer_agent.execute(state["cv_text"], state["knowledge"]) if (router_decision.get("needs_cv") and state["cv_text"]) else asyncio.sleep(0)

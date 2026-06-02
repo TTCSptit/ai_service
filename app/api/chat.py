@@ -7,6 +7,7 @@ from app.core.llm import get_llm_vip
 from langchain_core.messages import HumanMessage, SystemMessage, AIMessage
 from app.core.database import AsyncSessionLocal, ChatHistory, UserSkill, get_db
 from app.services.rag_engine import search_knowledge_advanced
+from app.services.cv_parser import extract_text_from_cv
 from sqlalchemy import select
 
 from app.prompts.system_prompts import get_hr_advisor_prompt, get_final_revision_prompt, sanitize_input

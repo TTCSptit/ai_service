@@ -1,4 +1,5 @@
 from pydantic import BaseModel, Field
+import asyncio
 from langchain_core.messages import HumanMessage, SystemMessage, ToolMessage
 from app.core.llm import get_llm_cheap_v1, get_llm_vip
 from app.prompts.system_prompts import get_evaluator_prompt
@@ -34,7 +35,8 @@ class TechLeadEvaluator:
                     tool_args = tool_call["args"]
                     logger.info(f"[Agent Groq] Dùng Tool: {tool_name}")
                     selected_tool = next(t for t in COMBINED_TOOLS if t.name == tool_name)
-                    tool_output = selected_tool.invoke(tool_args)
+                    # Sửa lỗi Blocking: Chuyển Tool execution (Synchronous I/O) sang Thread pool để tránh nghẽn Event Loop
+                    tool_output = await asyncio.to_thread(selected_tool.invoke, tool_args)
                     tool_check_messages.append(ToolMessage(content=tool_output, tool_call_id=tool_call["id"]))
                     
                     if tool_name == "analyze_github_profile":
