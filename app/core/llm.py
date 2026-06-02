@@ -19,6 +19,7 @@ def get_llm_cheap():
             api_key=settings.GROQ_API_KEY,
             model_name="llama-3.1-8b-instant",
             temperature=0.3,
+            max_tokens=4000,
             streaming=True
         ).with_fallbacks([get_llm_kaggle_v1(), get_llm_kaggle_v2()])
     return _llm_cheap
@@ -35,6 +36,7 @@ def get_llm_structured():
             api_key=settings.GROQ_API_KEY_V1,
             model_name="llama-3.3-70b-versatile",
             temperature=0.1,
+            max_tokens=4000,
             streaming=False  # PHẢI là False khi dùng with_structured_output
         ).with_fallbacks([get_llm_kaggle_v1(), get_llm_kaggle_v2()])
     return _llm_structured
@@ -48,6 +50,7 @@ def get_llm_cheap_v1():
             api_key=settings.GROQ_API_KEY_V1,
             model_name="llama-3.3-70b-versatile",
             temperature=0.3,
+            max_tokens=4000,
             streaming=True
         ).with_fallbacks([get_llm_kaggle_v1(), get_llm_kaggle_v2()])
     return _llm_cheap_v1
@@ -61,6 +64,7 @@ def get_llm_cheap_v2():
             api_key=settings.GROQ_API_KEY_V2,  
             model_name="llama-3.3-70b-versatile",
             temperature=0.3,
+            max_tokens=4000,
             streaming=True
         ).with_fallbacks([get_llm_kaggle_v1(), get_llm_kaggle_v2()])
     return _llm_cheap_v2
@@ -75,6 +79,7 @@ def get_llm_vip():
             base_url="https://models.inference.ai.azure.com",
             model_name="gpt-4o-mini",
             temperature=0.3,
+            max_tokens=4000,
             streaming=False # Đổi thành False để tránh lỗi Pydantic Serialization khi dùng structured output
         ).with_fallbacks([get_llm_kaggle_v1(), get_llm_kaggle_v2()])
     return _llm_vip
