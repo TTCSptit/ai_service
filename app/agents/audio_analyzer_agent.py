@@ -2,6 +2,7 @@ import os
 from groq import Groq
 from app.core.config import settings
 from app.core.llm import get_llm_kaggle_v1, get_llm_google_backup
+from langchain_groq import ChatGroq
 from pydantic import BaseModel, Field
 from langchain_core.messages import HumanMessage
 from app.core.logger import logger
@@ -53,8 +54,16 @@ class AudioAnalyzerAgent:
             - BẮT BUỘC PHẢI TRẢ LỜI CÁC TRƯỜNG VĂN BẢN (feedback_strengths, feedback_weaknesses, transcript_summary) BẰNG TIẾNG VIỆT TỰ NHIÊN, DỄ HIỂU. TUYỆT ĐỐI KHÔNG DÙNG TIẾNG ANH.
             """
             
+            groq_fallback = ChatGroq(
+                api_key=settings.GROQ_API_KEY_V1,
+                model_name="llama-3.3-70b-versatile",
+                temperature=0.1,
+                streaming=False
+            ).with_structured_output(InterviewReport)
+            
             structured_llm = get_llm_kaggle_v1().with_structured_output(InterviewReport).with_fallbacks([
-                get_llm_google_backup().with_structured_output(InterviewReport)
+                get_llm_google_backup().with_structured_output(InterviewReport),
+                groq_fallback
             ])
             report: InterviewReport = await structured_llm.ainvoke([HumanMessage(content=prompt)])
             
@@ -84,8 +93,16 @@ class AudioAnalyzerAgent:
             - BẮT BUỘC PHẢI TRẢ LỜI CÁC TRƯỜNG VĂN BẢN (feedback_strengths, feedback_weaknesses, transcript_summary) BẰNG TIẾNG VIỆT TỰ NHIÊN, DỄ HIỂU. TUYỆT ĐỐI KHÔNG DÙNG TIẾNG ANH.
             """
             
+            groq_fallback = ChatGroq(
+                api_key=settings.GROQ_API_KEY_V1,
+                model_name="llama-3.3-70b-versatile",
+                temperature=0.1,
+                streaming=False
+            ).with_structured_output(InterviewReport)
+
             structured_llm = get_llm_kaggle_v1().with_structured_output(InterviewReport).with_fallbacks([
-                get_llm_google_backup().with_structured_output(InterviewReport)
+                get_llm_google_backup().with_structured_output(InterviewReport),
+                groq_fallback
             ])
             report: InterviewReport = await structured_llm.ainvoke([HumanMessage(content=prompt)])
             
