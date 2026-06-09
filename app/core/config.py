@@ -23,6 +23,8 @@ class Settings:
     RABBITMQ_URL: str = os.getenv("RABBITMQ_URL","")
     REDIS_URL: str = os.getenv("REDIS_URL", "").strip().replace('"', '').replace("'", "")
     DOTNET_BACKEND_URL: str = os.getenv("DOTNET_BACKEND_URL", "https://jobptit-api-fbevbkfre0c4h4g4.southeastasia-01.azurewebsites.net")
+    GOOGLE_API_KEY: str = os.getenv("GOOGLE_API_KEY", "")
+    GOOGLE_CSE_ID: str = os.getenv("GOOGLE_CSE_ID", "")
     
     # Kaggle Backups
     KAGGLE_BACKUP_URL_1: str = "https://tenesha-utterable-karlyn.ngrok-free.dev/v1"

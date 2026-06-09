@@ -1,6 +1,7 @@
 from app.core.config import settings
 from langchain_openai import ChatOpenAI
 from langchain_groq import ChatGroq
+from langchain_google_genai import ChatGoogleGenerativeAI
 
 _llm_cheap = None
 _llm_cheap_v1 = None
@@ -21,7 +22,7 @@ def get_llm_cheap():
             temperature=0.3,
             max_tokens=4000,
             streaming=True
-        ).with_fallbacks([get_llm_kaggle_v1(), get_llm_kaggle_v2()])
+        ).with_fallbacks([get_llm_kaggle_v1(), get_llm_kaggle_v2(), get_llm_google_backup()])
     return _llm_cheap
 
 
@@ -38,7 +39,7 @@ def get_llm_structured():
             temperature=0.1,
             max_tokens=4000,
             streaming=False  # PHẢI là False khi dùng with_structured_output
-        ).with_fallbacks([get_llm_kaggle_v1(), get_llm_kaggle_v2()])
+        ).with_fallbacks([get_llm_kaggle_v1(), get_llm_kaggle_v2(), get_llm_google_backup()])
     return _llm_structured
 
 
@@ -52,7 +53,7 @@ def get_llm_cheap_v1():
             temperature=0.3,
             max_tokens=4000,
             streaming=True
-        ).with_fallbacks([get_llm_kaggle_v1(), get_llm_kaggle_v2()])
+        ).with_fallbacks([get_llm_kaggle_v1(), get_llm_kaggle_v2(), get_llm_google_backup()])
     return _llm_cheap_v1
 
 
@@ -66,7 +67,7 @@ def get_llm_cheap_v2():
             temperature=0.3,
             max_tokens=4000,
             streaming=True
-        ).with_fallbacks([get_llm_kaggle_v1(), get_llm_kaggle_v2()])
+        ).with_fallbacks([get_llm_kaggle_v1(), get_llm_kaggle_v2(), get_llm_google_backup()])
     return _llm_cheap_v2
 
 
@@ -81,7 +82,7 @@ def get_llm_vip():
             temperature=0.3,
             max_tokens=4000,
             streaming=False # Đổi thành False để tránh lỗi Pydantic Serialization khi dùng structured output
-        ).with_fallbacks([get_llm_kaggle_v1(), get_llm_kaggle_v2()])
+        ).with_fallbacks([get_llm_kaggle_v1(), get_llm_kaggle_v2(), get_llm_google_backup()])
     return _llm_vip
 
 
@@ -113,3 +114,18 @@ def get_llm_kaggle_v2():
         )
     return _llm_kaggle_v2
 
+
+_llm_google_backup = None
+
+def get_llm_google_backup():
+    """Gemini via Google GenAI (Backup 3)."""
+    global _llm_google_backup
+    if _llm_google_backup is None:
+        _llm_google_backup = ChatGoogleGenerativeAI(
+            model="gemini-1.5-flash",
+            google_api_key=settings.GOOGLE_API_KEY,
+            temperature=0.3,
+            max_tokens=4000,
+            streaming=True
+        )
+    return _llm_google_backup
