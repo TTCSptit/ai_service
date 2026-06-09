@@ -1,7 +1,7 @@
 import os
 from groq import Groq
 from app.core.config import settings
-from app.core.llm import get_llm_kaggle_v1
+from app.core.llm import get_llm_kaggle_v1, get_llm_google_backup
 from pydantic import BaseModel, Field
 from langchain_core.messages import HumanMessage
 from app.core.logger import logger
@@ -53,7 +53,9 @@ class AudioAnalyzerAgent:
             - BẮT BUỘC PHẢI TRẢ LỜI CÁC TRƯỜNG VĂN BẢN (feedback_strengths, feedback_weaknesses, transcript_summary) BẰNG TIẾNG VIỆT TỰ NHIÊN, DỄ HIỂU. TUYỆT ĐỐI KHÔNG DÙNG TIẾNG ANH.
             """
             
-            structured_llm = get_llm_kaggle_v1().with_structured_output(InterviewReport)
+            structured_llm = get_llm_kaggle_v1().with_structured_output(InterviewReport).with_fallbacks([
+                get_llm_google_backup().with_structured_output(InterviewReport)
+            ])
             report: InterviewReport = await structured_llm.ainvoke([HumanMessage(content=prompt)])
             
             logger.info(f"[AudioAnalyzer] Hoàn tất chấm điểm. Điểm giao tiếp: {report.communication_score}")
@@ -82,7 +84,9 @@ class AudioAnalyzerAgent:
             - BẮT BUỘC PHẢI TRẢ LỜI CÁC TRƯỜNG VĂN BẢN (feedback_strengths, feedback_weaknesses, transcript_summary) BẰNG TIẾNG VIỆT TỰ NHIÊN, DỄ HIỂU. TUYỆT ĐỐI KHÔNG DÙNG TIẾNG ANH.
             """
             
-            structured_llm = get_llm_kaggle_v1().with_structured_output(InterviewReport)
+            structured_llm = get_llm_kaggle_v1().with_structured_output(InterviewReport).with_fallbacks([
+                get_llm_google_backup().with_structured_output(InterviewReport)
+            ])
             report: InterviewReport = await structured_llm.ainvoke([HumanMessage(content=prompt)])
             
             logger.info(f"[AudioAnalyzer] Hoàn tất chấm điểm giả lập. Điểm giao tiếp: {report.communication_score}")
