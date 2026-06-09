@@ -36,5 +36,5 @@ class Settings:
 settings = Settings()
 
 
-if not settings.GEMINI_API_KEY:
-    raise ValueError("LỖI: Chưa tìm thấy GEMINI_API_KEY! Vui lòng thiết lập trong file .env hoặc thêm vào Environment Variables/Secrets trên server.")
+if not settings.GEMINI_API_KEY and not settings.GOOGLE_API_KEY:
+    raise ValueError("LỖI: Chưa tìm thấy GEMINI_API_KEY hoặc GOOGLE_API_KEY! Vui lòng thiết lập trong file .env hoặc thêm vào Environment Variables/Secrets trên server.")
